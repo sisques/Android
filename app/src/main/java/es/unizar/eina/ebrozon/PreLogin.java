@@ -17,7 +17,7 @@ public class PreLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_login);
 
-        iniciar = findViewById(R.id.email_sign_in_button);
+        iniciar = findViewById(R.id.iniciarSesion);
         registrar = findViewById(R.id.registrar);
     }
 
@@ -31,6 +31,6 @@ public class PreLogin extends AppCompatActivity {
     //Este método cambia a la actividad de registro.
     public void registrarCuenta(View view){
         startActivity(new Intent(PreLogin.this, Registro.class));
-        Toast.makeText(this, "Registro de cuenta", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Registro de cuenta", Toast.LENGTH_LONG).show();
     }
 }

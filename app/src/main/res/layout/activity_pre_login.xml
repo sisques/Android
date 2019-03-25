@@ -23,7 +23,7 @@
             android:layout_marginBottom="8dp"
             android:adjustViewBounds="false"
             android:contentDescription="@string/DescripcionLogo"
-            app:layout_constraintBottom_toTopOf="@+id/email_sign_in_button"
+            app:layout_constraintBottom_toTopOf="@+id/iniciarSesion"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -60,7 +60,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/email_sign_in_button"
+            android:id="@+id/iniciarSesion"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

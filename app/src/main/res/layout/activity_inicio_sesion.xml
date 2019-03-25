@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#d4ebf2"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="45dp">
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <ImageView
             android:id="@+id/logo"
@@ -26,14 +26,14 @@
             android:adjustViewBounds="false"
             android:contentDescription="@string/DescripcionLogo"
             android:src="@drawable/logo"
-            app:layout_constraintBottom_toTopOf="@+id/email"
+            app:layout_constraintBottom_toTopOf="@+id/UserName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.632" />
 
         <Button
-            android:id="@+id/email_sign_in_button"
+            android:id="@+id/iniciarSesion"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/email"
+            android:id="@+id/UserName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -73,7 +73,7 @@
             android:ems="10"
             android:hint="@string/Password"
             android:inputType="textPassword"
-            app:layout_constraintBottom_toTopOf="@+id/email_sign_in_button"
+            app:layout_constraintBottom_toTopOf="@+id/iniciarSesion"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
