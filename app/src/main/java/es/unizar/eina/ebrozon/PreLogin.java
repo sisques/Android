@@ -26,8 +26,8 @@ public class PreLogin extends AppCompatActivity {
     public void iniciarSesion(View view){
         startActivity(new Intent(PreLogin.this, InicioSesion.class));
         //Toast.makeText(this, "Inicio de sesión", Toast.LENGTH_LONG).show();
-
     }
+
     //Este método cambia a la actividad de registro.
     public void registrarCuenta(View view){
         startActivity(new Intent(PreLogin.this, Registro.class));

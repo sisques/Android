@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_mensajes"
+            android:icon="@drawable/ic_menu_mensajes"
+            android:title="Mensajes" />
+        <item
+            android:id="@+id/nav_envios"
+            android:icon="@drawable/ic_menu_envios"
+            android:title="Envíos" />
+        <item
+            android:id="@+id/nav_busquedas"
+            android:icon="@drawable/ic_menu_busquedas"
+            android:title="Búsquedas" />
+    </group>
+
+    <item android:title="Documentación">
+        <menu>
+            <item
+                android:id="@+id/nav_ayuda"
+                android:icon="@drawable/ic_menu_ayuda"
+                android:title="Ayuda" />
+            <item
+                android:id="@+id/nav_ajustes"
+                android:icon="@drawable/ic_menu_ajustes"
+                android:title="Ajustes" />
+        </menu>
+    </item>
+
+</menu>
