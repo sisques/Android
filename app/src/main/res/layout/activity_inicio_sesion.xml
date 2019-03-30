@@ -26,14 +26,14 @@
             android:adjustViewBounds="false"
             android:contentDescription="@string/DescripcionLogo"
             android:src="@drawable/logo"
-            app:layout_constraintBottom_toTopOf="@+id/UserName"
+            app:layout_constraintBottom_toTopOf="@+id/UserName_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.632" />
 
         <Button
-            android:id="@+id/iniciarSesion"
+            android:id="@+id/LogIn"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/UserName"
+            android:id="@+id/UserName_login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -59,12 +59,12 @@
             android:ems="10"
             android:hint="@string/NombreUsuario"
             android:inputType="text"
-            app:layout_constraintBottom_toTopOf="@+id/password"
+            app:layout_constraintBottom_toTopOf="@+id/Password_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/Password_login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -73,9 +73,25 @@
             android:ems="10"
             android:hint="@string/Password"
             android:inputType="textPassword"
-            app:layout_constraintBottom_toTopOf="@+id/iniciarSesion"
+            app:layout_constraintBottom_toTopOf="@+id/LogIn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/forgotPassword_login"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/olvidar"
+            android:textColor="#2a6ebc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LogIn" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
