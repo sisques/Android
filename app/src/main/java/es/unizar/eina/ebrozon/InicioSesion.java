@@ -3,6 +3,10 @@ package es.unizar.eina.ebrozon;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,18 +32,39 @@ public class InicioSesion extends AppCompatActivity {
     private Button olvidar;
     private EditText userName;
     private EditText password;
+    private Boolean mostrandoPasswd = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_sesion);
-
-
         userName = findViewById(R.id.UserName_login);
         password = findViewById(R.id.Password_login);
         iniciar = findViewById(R.id.LogIn);
         olvidar = findViewById(R.id.forgotPassword_login);
+
+        userName.addTextChangedListener(loginTextWatcher);
+        password.addTextChangedListener(loginTextWatcher);
     }
+
+    private TextWatcher loginTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String uname = userName.getText().toString().trim();
+            String passwd = password.getText().toString().trim();
+            iniciar.setEnabled(!uname.isEmpty() && !passwd.isEmpty());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 
     private void gestionLogin (String  estado, String msg){
         if (estado.equals("O")){
@@ -101,14 +126,20 @@ public class InicioSesion extends AppCompatActivity {
     }
 
 
+    public void mostrar(View view){
+        if (mostrandoPasswd){
+            password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            mostrandoPasswd = false;
+        }
+        else{
+            password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            mostrandoPasswd= true;
+        }
+    }
 
-    //Este método cambia a la actividad de pantalla principal.
     public void iniciarSesion(View view){
-        String uname = userName.getText().toString();
-        String passwd = password.getText().toString();
-        if(true){//TODO
-             }
-
+        String uname = userName.getText().toString().trim();
+        String passwd = password.getText().toString().trim();
         doPost(uname, passwd) ;
 
 
