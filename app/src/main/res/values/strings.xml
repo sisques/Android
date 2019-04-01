@@ -18,10 +18,12 @@
     <string name="Iniciar">Iniciar sesión</string>
     <string name="Preguntar">¿No tienes cuenta?</string>
     <string name="Registrar">Registrate</string>
+    <string name= "olvidar">¿Has olvidado tu contraseña?</string>
 
     <string name="DescripcionLogo">Logo</string>
     <string name="title_activity_inicio_sesion">Sign in</string>
     <string name="title_activity_registro">Registrarse</string>
+
 
     <string name="NombreUsuario">Nombre de usuario</string>
     <string name="Password">Contraseña</string>

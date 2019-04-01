@@ -16,7 +16,7 @@
         tools:layout_editor_absoluteY="86dp">
 
         <EditText
-            android:id="@+id/Username"
+            android:id="@+id/Username_register"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -26,7 +26,7 @@
             android:ems="10"
             android:hint="@string/NombreUsuario"
             android:inputType="text"
-            app:layout_constraintBottom_toTopOf="@+id/Email"
+            app:layout_constraintBottom_toTopOf="@+id/Email_register"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <EditText
-            android:id="@+id/Email"
+            android:id="@+id/Email_register"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -43,13 +43,13 @@
             android:ems="10"
             android:hint="@string/Email"
             android:inputType="textEmailSubject"
-            app:layout_constraintBottom_toTopOf="@+id/Contraseña"
+            app:layout_constraintBottom_toTopOf="@+id/Password_register"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/Contraseña"
+            android:id="@+id/Password_register"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -58,7 +58,7 @@
             android:ems="10"
             android:hint="@string/Password"
             android:inputType="textPassword"
-            app:layout_constraintBottom_toTopOf="@+id/RepetirContraseña"
+            app:layout_constraintBottom_toTopOf="@+id/RepeatPassword_registger"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent" />
@@ -79,7 +79,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/Ciudad"
+            android:id="@+id/City_register"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -93,7 +93,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/RepetirContraseña"
+            android:id="@+id/RepeatPassword_registger"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -102,7 +102,7 @@
             android:ems="10"
             android:hint="@string/Password2"
             android:inputType="textPassword"
-            app:layout_constraintBottom_toTopOf="@+id/Ciudad"
+            app:layout_constraintBottom_toTopOf="@+id/City_register"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent" />
