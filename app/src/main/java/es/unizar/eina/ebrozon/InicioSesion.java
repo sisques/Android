@@ -1,6 +1,5 @@
 package es.unizar.eina.ebrozon;
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class InicioSesion extends AppCompatActivity {
 
-    String url = "http://httpbin.org/post";
+    String url ="https://pruebaapp.free.beeceptor.com";
     //TUTORIAL https://www.itsalif.info/content/android-volley-tutorial-http-get-post-put
     private Button iniciar;
     private Button olvidar;
@@ -41,11 +41,19 @@ public class InicioSesion extends AppCompatActivity {
         olvidar = findViewById(R.id.forgotPassword_login);
     }
 
-    private void validate (String userName, String password){
-        doPost(userName, password);
+    private void gestionLogin (String  estado, String msg){
+        if (estado.equals("O")){
+            startActivity(new Intent(InicioSesion.this, PantallaPrincipal.class));
+        }
+        else if (estado.equals("E")){
+            Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_LONG).show();
+        }
+
     }
-    private void loginCorrecto(){ startActivity(new Intent(InicioSesion.this, PantallaPrincipal.class)); }
-    private void loginIncorrecto(){}
+
 
 
     private void doPost(final String uName, final String passwd) {
@@ -59,7 +67,10 @@ public class InicioSesion extends AppCompatActivity {
                     public void onResponse(String response) {
                         // response
                         Log.d("Response", response);
-                        loginCorrecto();
+                        response = response.replace("{","").replace("}","").replace("\"","");
+                        String estado = response.split(":")[0];
+                        String msg = response.replace(estado+":","");
+                        gestionLogin(estado, msg);
                     }
                 },
                 new Response.ErrorListener()
@@ -68,7 +79,7 @@ public class InicioSesion extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("Error.Response", error.getMessage());
-                        loginIncorrecto();
+                        gestionLogin();
                     }
                 }
         ) {
@@ -90,7 +101,7 @@ public class InicioSesion extends AppCompatActivity {
 
     //Este método cambia a la actividad de pantalla principal.
     public void iniciarSesion(View view){
-        validate(userName.getText().toString(), password.getText().toString()) ;
+        doPost(userName.getText().toString(), password.getText().toString()) ;
 
 
     }
