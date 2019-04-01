@@ -23,7 +23,7 @@ import java.util.Map;
 public class InicioSesion extends AppCompatActivity {
 
     String url ="https://pruebaapp.free.beeceptor.com";
-    //TUTORIAL https://www.itsalif.info/content/android-volley-tutorial-http-get-post-put
+
     private Button iniciar;
     private Button olvidar;
     private EditText userName;
@@ -79,7 +79,10 @@ public class InicioSesion extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("Error.Response", error.getMessage());
-                        gestionLogin();
+                        String response = error.getMessage().replace("{","").replace("}","").replace("\"","");
+                        String estado = response.split(":")[0];
+                        String msg = response.replace(estado+":","");
+                        gestionLogin(estado, msg);
                     }
                 }
         ) {
@@ -101,7 +104,12 @@ public class InicioSesion extends AppCompatActivity {
 
     //Este método cambia a la actividad de pantalla principal.
     public void iniciarSesion(View view){
-        doPost(userName.getText().toString(), password.getText().toString()) ;
+        String uname = userName.getText().toString();
+        String passwd = password.getText().toString();
+        if(true){//TODO
+             }
+
+        doPost(uname, passwd) ;
 
 
     }
