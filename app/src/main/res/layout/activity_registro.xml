@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
-    tools:context=".PreLogin">
+    tools:context=".Registro">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/Botones"
@@ -31,7 +31,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="1.0"
+            android:autofillHints="" tools:targetApi="o"/>
 
         <EditText
             android:id="@+id/Email_register"
@@ -46,7 +47,8 @@
             app:layout_constraintBottom_toTopOf="@+id/Password_register"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:autofillHints="" tools:targetApi="o"/>
 
         <EditText
             android:id="@+id/Password_register"
@@ -61,7 +63,8 @@
             app:layout_constraintBottom_toTopOf="@+id/RepeatPassword_registger"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:autofillHints="" tools:targetApi="o"/>
 
         <Button
             android:id="@+id/registrar"
@@ -90,7 +93,8 @@
             android:inputType="text"
             app:layout_constraintBottom_toTopOf="@+id/registrar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:autofillHints="" tools:targetApi="o"/>
 
         <EditText
             android:id="@+id/RepeatPassword_registger"
@@ -105,7 +109,8 @@
             app:layout_constraintBottom_toTopOf="@+id/City_register"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:autofillHints="" tools:targetApi="o"/>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

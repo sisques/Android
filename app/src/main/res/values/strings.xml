@@ -23,6 +23,7 @@
     <string name="DescripcionLogo">Logo</string>
     <string name="title_activity_inicio_sesion">Sign in</string>
     <string name="title_activity_registro">Registrarse</string>
+    <string name="mostrar">mostrarContraseña</string>
 
 
     <string name="NombreUsuario">Nombre de usuario</string>
