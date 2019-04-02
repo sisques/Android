@@ -80,7 +80,6 @@ public class InicioSesion extends AppCompatActivity {
     }
 
 
-
     private void doPost(final String uName, final String passwd) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
