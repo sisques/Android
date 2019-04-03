@@ -124,7 +124,6 @@ public class InicioSesion extends AppCompatActivity {
         queue.add(postRequest);
     }
 
-
     public void mostrar(View view){
         if (mostrandoPasswd){
             password.setTransformationMethod(PasswordTransformationMethod.getInstance());
