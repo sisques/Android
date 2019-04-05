@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class InicioSesion extends AppCompatActivity {
 
-    String url ="https://pruebaapp.free.beeceptor.com";
+    String url ="https://protected-caverns-60859.herokuapp.com/logear";
 
     private Button iniciar;
     private Button olvidar;
@@ -76,15 +76,20 @@ public class InicioSesion extends AppCompatActivity {
         else{
             Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_LONG).show();
         }
-
     }
 
+    public String parseParams(String un, String pass){
+        String aux = url;
+        aux = aux+"?un="+un+"&pass="+pass;
+        return aux;
+    }
 
     private void doPost(final String uName, final String passwd) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
+        String urlPetition = parseParams(uName, passwd);
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
                 new Response.Listener<String>()
                 {
                     @Override
@@ -95,6 +100,7 @@ public class InicioSesion extends AppCompatActivity {
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado+":","");
                         gestionLogin(estado, msg);
+                        iniciar.setEnabled(true);
                     }
                 },
                 new Response.ErrorListener()
@@ -107,20 +113,10 @@ public class InicioSesion extends AppCompatActivity {
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado+":","");
                         gestionLogin(estado, msg);
+                        iniciar.setEnabled(true);
                     }
                 }
-        ) {
-            @Override
-            protected Map<String, String> getParams()
-            {
-
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("un", uName );
-                params.put("pass", passwd );
-
-                return params;
-            }
-        };
+        );
         queue.add(postRequest);
     }
 
@@ -135,10 +131,16 @@ public class InicioSesion extends AppCompatActivity {
         }
     }
 
+
+
     public void iniciarSesion(View view){
+
+
         String uname = userName.getText().toString().trim();
         String passwd = password.getText().toString().trim();
+        iniciar.setEnabled(false);
         doPost(uname, passwd) ;
+
 
 
     }

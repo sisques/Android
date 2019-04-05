@@ -18,7 +18,7 @@
     <string name="Iniciar">Iniciar sesión</string>
     <string name="Preguntar">¿No tienes cuenta?</string>
     <string name="Registrar">Registrate</string>
-    <string name= "olvidar">¿Has olvidado tu contraseña?</string>
+    <string name="olvidar">¿Has olvidado tu contraseña?</string>
 
     <string name="DescripcionLogo">Logo</string>
     <string name="title_activity_inicio_sesion">Sign in</string>
@@ -98,6 +98,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="menu_button">Menu button</string>
+    <string name="title_activity_subir_producto">SubirProducto</string>
 
 
 </resources>
