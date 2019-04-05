@@ -145,7 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="92dp"
+            android:layout_marginBottom="72dp"
             android:entries="@array/ListaProvincias"
             android:spinnerMode="dropdown"
             app:layout_constraintBottom_toTopOf="@+id/registrar"
@@ -192,17 +192,79 @@
         <TextView
             android:id="@+id/mensajeBienvenida_register"
             android:layout_width="0dp"
-            android:layout_height="98dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="24dp"
+            android:layout_marginBottom="50dp"
             android:text="@string/Bienvenida"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="#2a6ebc"
+            app:layout_constraintBottom_toTopOf="@+id/Username_register"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/usuarioTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/TextoNombreUsuario"
+            android:text="@string/TextoNombreUsuario"
+            android:textColor="#2a6ebc"
+            app:layout_constraintBottom_toTopOf="@+id/Username_register"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/TextoNombreUsuario" />
+
+        <TextView
+            android:id="@+id/correoTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/TextoEmail"
+            android:text="@string/TextoEmail"
+            android:textColor="#2a6ebc"
+            app:layout_constraintBottom_toTopOf="@+id/Email_register"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/TextoEmail" />
+
+        <TextView
+            android:id="@+id/passTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/TextoPassword"
+            android:text="@string/TextoPassword"
+            android:textColor="#2a6ebc"
+            app:layout_constraintBottom_toTopOf="@+id/Password_register"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/TextoPassword" />
+
+        <TextView
+            android:id="@+id/pass2Texto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/TextoPassword2"
+            android:text="@string/TextoPassword2"
+            android:textColor="#2a6ebc"
+            app:layout_constraintBottom_toTopOf="@+id/confirmPassword_registger"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/TextoPassword2" />
+
+        <TextView
+            android:id="@+id/provinciaTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/TextoProvincia"
+            android:text="@string/TextoProvincia"
+            android:textColor="#2a6ebc"
+            app:layout_constraintBottom_toTopOf="@+id/city_register"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/TextoProvincia" />
 
     </android.support.constraint.ConstraintLayout>
 

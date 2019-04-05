@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class Registro extends AppCompatActivity {
 
-    String url ="https://pruebaregistroapp.free.beeceptor.com";
+    String url ="https://protected-caverns-60859.herokuapp.com/registrar";
 
     private Button registrar;
 
@@ -85,7 +85,7 @@ public class Registro extends AppCompatActivity {
         city.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                cityCheck = !(city.getSelectedItem().toString().equals("Provincia"));
+                cityCheck = !(city.getSelectedItem().toString().equals("..."));
                 registrar.setEnabled(!userNameEmpty && !passwordEmpty && !mailEmpty && !confirmEmpty && cityCheck);
             }
 
@@ -214,10 +214,10 @@ public class Registro extends AppCompatActivity {
             String email= mail.getText().toString().trim();
             String prov = city.getSelectedItem().toString();
 
+            registrar.setEnabled(false);
             doPost(uname,passwd,email,prov);
         }
     }
-
     private void gestionRegistro (String  estado, String msg){
         if (estado.equals("O")){
             startActivity(new Intent(Registro.this, PantallaPrincipal.class));
@@ -228,14 +228,21 @@ public class Registro extends AppCompatActivity {
         else{
             Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_LONG).show();
         }
+    }
 
+    public String parseParams(String un, String pass, String nom, String ap, String corr, String prov){
+        String aux = url;
+        aux = aux+"?un="+un+"&pass="+pass+"&cor="+corr+"&na="+nom+"&lna="+ap+"&pr="+prov;
+        return aux;
     }
 
     private void doPost(final String uName, final String passwd, final String email, final String provincia) {
 
-        RequestQueue queue = Volley.newRequestQueue(this);
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String urlPetition = parseParams(uName, passwd,"Nombre","Apellido",email,provincia);
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
                 new Response.Listener<String>()
                 {
                     @Override
@@ -246,6 +253,7 @@ public class Registro extends AppCompatActivity {
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado+":","");
                         gestionRegistro(estado, msg);
+                        registrar.setEnabled(true);
                     }
                 },
                 new Response.ErrorListener()
@@ -258,22 +266,10 @@ public class Registro extends AppCompatActivity {
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado+":","");
                         gestionRegistro(estado, msg);
+                        registrar.setEnabled(true);
                     }
                 }
-        ) {
-            @Override
-            protected Map<String, String> getParams()
-            {
-
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("un", uName);
-                params.put("pass", passwd);
-                params.put("cor", email);
-                params.put("pr", provincia);
-
-                return params;
-            }
-        };
+        );
         queue.add(postRequest);
     }
 
