@@ -5,29 +5,33 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_principal"
+            android:icon="@drawable/ic_menu_principal"
+            android:title="@string/Principal" />
+        <item
             android:id="@+id/nav_mensajes"
             android:icon="@drawable/ic_menu_mensajes"
-            android:title="Mensajes" />
+            android:title="@string/Mensajes" />
         <item
             android:id="@+id/nav_envios"
             android:icon="@drawable/ic_menu_envios"
-            android:title="Envíos" />
+            android:title="@string/Envios" />
         <item
             android:id="@+id/nav_busquedas"
             android:icon="@drawable/ic_menu_busquedas"
-            android:title="Búsquedas" />
+            android:title="@string/Busquedas" />
     </group>
 
-    <item android:title="Documentación">
+    <item android:title="@string/Documentacion">
         <menu>
             <item
                 android:id="@+id/nav_ayuda"
                 android:icon="@drawable/ic_menu_ayuda"
-                android:title="Ayuda" />
+                android:title="@string/Ayuda" />
             <item
                 android:id="@+id/nav_ajustes"
                 android:icon="@drawable/ic_menu_ajustes"
-                android:title="Ajustes" />
+                android:title="@string/Ajustes" />
         </menu>
     </item>
 

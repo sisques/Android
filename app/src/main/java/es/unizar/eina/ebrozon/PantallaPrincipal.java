@@ -56,8 +56,10 @@ public class PantallaPrincipal extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_ajustes) {
+        if (id == R.id.nav_principal) {
             // Handle the camera action
+        } else if (id == R.id.nav_ajustes) {
+
         } else if (id == R.id.nav_ayuda) {
 
         } else if (id == R.id.nav_busquedas) {
