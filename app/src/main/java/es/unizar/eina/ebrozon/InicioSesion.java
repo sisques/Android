@@ -80,6 +80,8 @@ public class InicioSesion extends AppCompatActivity {
 
     public String parseParams(String un, String pass){
         String aux = url;
+        un = un.replace(" ","%20");
+        pass = pass.replace(" ", "%20");
         aux = aux+"?un="+un+"&pass="+pass;
         return aux;
     }

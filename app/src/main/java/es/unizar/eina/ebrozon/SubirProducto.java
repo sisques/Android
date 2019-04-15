@@ -84,6 +84,9 @@ public class SubirProducto extends AppCompatActivity {
     public String parseParams(String prodName, String prodDesc, String prodPrice){
         String aux = url;
         String test = "admin";
+        prodName = prodName.replace(" ", "%20");
+        prodDesc = prodDesc.replace(" ", "%20");
+        prodPrice = prodPrice.replace(" ", "%20");
         aux = aux+"?un="+credentials.uName+"&prod="+prodName+"&desc="+prodDesc+"&pre="+prodPrice/*+"&arc="+test*/;
         return aux;
     }

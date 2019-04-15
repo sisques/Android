@@ -29,8 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.util.HashMap;
-import java.util.Map;
+import es.unizar.eina.ebrozon.credentials;
 
 
 public class Registro extends AppCompatActivity {
@@ -217,6 +216,8 @@ public class Registro extends AppCompatActivity {
             String passwd = password.getText().toString().trim();
             String email= mail.getText().toString().trim();
             String prov = city.getSelectedItem().toString();
+            credentials.uName = uname;
+            credentials.passwd= passwd;
 
             registrar.setEnabled(false);
             doPost(uname,passwd,email,prov);
@@ -236,6 +237,12 @@ public class Registro extends AppCompatActivity {
 
     public String parseParams(String un, String pass, String nom, String ap, String corr, String prov){
         String aux = url;
+        un = un.replace(" ","%20");
+        pass = pass.replace(" ", "%20");
+        nom = nom.replace(" ", "%20");
+        ap = ap.replace(" ", "%20");
+        corr = corr.replace(" ", "%20");
+        prov = prov.replace(" ", "%20");
         aux = aux+"?un="+un+"&pass="+pass+"&cor="+corr+"&na="+nom+"&lna="+ap+"&pr="+prov;
         return aux;
     }
