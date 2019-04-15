@@ -80,45 +80,47 @@ public class InicioSesion extends AppCompatActivity {
 
     public String parseParams(String un, String pass){
         String aux = url;
+        un = un.replace(" ","%20");
+        pass = pass.replace(" ", "%20");
         aux = aux+"?un="+un+"&pass="+pass;
         return aux;
     }
 
     private void doPost(final String uName, final String passwd) {
 
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String urlPetition = parseParams(uName, passwd);
+    RequestQueue queue = Volley.newRequestQueue(this);
+    String urlPetition = parseParams(uName, passwd);
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
-                new Response.Listener<String>()
-                {
-                    @Override
-                    public void onResponse(String response) {
-                        // response
-                        Log.d("Response", response);
-                        response = response.replace("{","").replace("}","").replace("\"","");
-                        String estado = response.split(":")[0];
-                        String msg = response.replace(estado+":","");
-                        gestionLogin(estado, msg);
-                        iniciar.setEnabled(true);
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error
-                        Log.d("Error.Response", error.getMessage());
-                        String response = error.getMessage().replace("{","").replace("}","").replace("\"","");
-                        String estado = response.split(":")[0];
-                        String msg = response.replace(estado+":","");
-                        gestionLogin(estado, msg);
-                        iniciar.setEnabled(true);
-                    }
+    StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+            new Response.Listener<String>()
+            {
+                @Override
+                public void onResponse(String response) {
+                    // response
+                    Log.d("Response", response);
+                    response = response.replace("{","").replace("}","").replace("\"","");
+                    String estado = response.split(":")[0];
+                    String msg = response.replace(estado+":","");
+                    gestionLogin(estado, msg);
+                    iniciar.setEnabled(true);
                 }
-        );
+            },
+            new Response.ErrorListener()
+            {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // error
+                    Log.d("Error.Response", error.getMessage());
+                    String response = error.getMessage().replace("{","").replace("}","").replace("\"","");
+                    String estado = response.split(":")[0];
+                    String msg = response.replace(estado+":","");
+                    gestionLogin(estado, msg);
+                    iniciar.setEnabled(true);
+                }
+            }
+    );
         queue.add(postRequest);
-    }
+}
 
     public void mostrar(View view){
         if (mostrandoPasswd){
