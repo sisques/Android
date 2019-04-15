@@ -43,6 +43,10 @@
     <string name="action_settings">Settings</string>
     <string name="menu_button">Menu button</string>
     <string name="title_activity_subir_producto">SubirProducto</string>
+    <string name="nombre_del_producto">Nombre del producto</string>
+    <string name="subir_producto">Subir producto</string>
+    <string name="precio_del_producto">Precio del producto</string>
+    <string name="descripcion_del_producto">Descripción del producto</string>
 
 
 </resources>
