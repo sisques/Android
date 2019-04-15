@@ -216,8 +216,7 @@ public class Registro extends AppCompatActivity {
             String passwd = password.getText().toString().trim();
             String email= mail.getText().toString().trim();
             String prov = city.getSelectedItem().toString();
-            credentials.uName = uname;
-            credentials.passwd= passwd;
+
 
             registrar.setEnabled(false);
             doPost(uname,passwd,email,prov);
@@ -225,6 +224,10 @@ public class Registro extends AppCompatActivity {
     }
     private void gestionRegistro (String  estado, String msg){
         if (estado.equals("O")){
+            String uname = userName.getText().toString().trim();
+            String passwd = password.getText().toString().trim();
+            credentials.uName = uname;
+            credentials.passwd= passwd;
             startActivity(new Intent(Registro.this, PantallaPrincipal.class));
         }
         else if (estado.equals("E")){

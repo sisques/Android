@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import es.unizar.eina.ebrozon.credentials;
 
 public class PreLogin extends AppCompatActivity {
 
@@ -15,9 +16,17 @@ public class PreLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_login);
+        Boolean logeado =   credentials.uName != null &&
+                            !credentials.uName.isEmpty() &&
+                            credentials.passwd != null &&
+                            !credentials.passwd.isEmpty();
+        if( logeado ) {
+            startActivity(new Intent(PreLogin.this, PantallaPrincipal.class));
+        }
 
         iniciar = findViewById(R.id.LogIn);
         registrar = findViewById(R.id.registrar);
+
     }
 
 

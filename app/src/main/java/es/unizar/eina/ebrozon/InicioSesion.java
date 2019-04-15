@@ -68,6 +68,10 @@ public class InicioSesion extends AppCompatActivity {
 
     private void gestionLogin (String  estado, String msg){
         if (estado.equals("O")){
+            String uname = userName.getText().toString().trim();
+            String passwd = password.getText().toString().trim();
+            credentials.uName = uname;
+            credentials.passwd = passwd;
             startActivity(new Intent(InicioSesion.this, PantallaPrincipal.class));
         }
         else if (estado.equals("E")){
@@ -140,8 +144,7 @@ public class InicioSesion extends AppCompatActivity {
 
         String uname = userName.getText().toString().trim();
         String passwd = password.getText().toString().trim();
-        credentials.uName = uname;
-        credentials.passwd = passwd;
+
         iniciar.setEnabled(false);
         doPost(uname, passwd) ;
 
