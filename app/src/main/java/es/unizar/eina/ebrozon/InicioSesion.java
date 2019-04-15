@@ -20,8 +20,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.util.HashMap;
-import java.util.Map;
+import es.unizar.eina.ebrozon.credentials;
+
 
 
 public class InicioSesion extends AppCompatActivity {
@@ -138,6 +138,8 @@ public class InicioSesion extends AppCompatActivity {
 
         String uname = userName.getText().toString().trim();
         String passwd = password.getText().toString().trim();
+        credentials.uName = uname;
+        credentials.passwd = passwd;
         iniciar.setEnabled(false);
         doPost(uname, passwd) ;
 

@@ -16,6 +16,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import es.unizar.eina.ebrozon.credentials;
+
+
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
 
@@ -28,6 +31,7 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class Registro extends AppCompatActivity {
 
