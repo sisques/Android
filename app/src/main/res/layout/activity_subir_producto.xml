@@ -41,13 +41,19 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="32dp"
             android:autofillHints=""
+            android:gravity="top"
             android:hint="@string/descripcion_del_producto"
-            android:inputType="text"
+            android:inputType="textMultiLine|text"
             app:layout_constraintBottom_toTopOf="@+id/Precio"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             tools:targetApi="o" />
+
+
+
+
+
 
         <EditText
             android:id="@+id/Precio"

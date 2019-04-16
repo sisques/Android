@@ -1,6 +1,9 @@
 package es.unizar.eina.ebrozon;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,8 +20,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import es.unizar.eina.ebrozon.credentials;
 
+
+//decidir entre subasta y compra normal
+// etiquetas
 
 public class SubirProducto extends AppCompatActivity {
 
@@ -27,6 +32,14 @@ public class SubirProducto extends AppCompatActivity {
     private EditText nombreProducto;
     private EditText descripcionProducto;
     private EditText precioProducto;
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Name = "nameKey";
+    public static final String Password= "passwordKey";
+    SharedPreferences sharedpreferences;
+
+    private Boolean prodNameCheckLength = false;
+    private Boolean prodDescCheckLength = false;
 
 
     @Override
@@ -45,6 +58,8 @@ public class SubirProducto extends AppCompatActivity {
         descripcionProducto.addTextChangedListener(uploadProductTextWatcher);
         precioProducto.addTextChangedListener(uploadProductTextWatcher);
 
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
     }
 
     private TextWatcher uploadProductTextWatcher = new TextWatcher() {
@@ -62,6 +77,12 @@ public class SubirProducto extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
+
+            String prod = nombreProducto.getText().toString().trim();
+            String desc = descripcionProducto.getText().toString().trim();
+
+            prodNameCheckLength = (prod.length() >= 3 && prod.length() <= 100);;
+            prodDescCheckLength = (desc.length() >= 10);
 
         }
     };
@@ -83,11 +104,14 @@ public class SubirProducto extends AppCompatActivity {
 
     public String parseParams(String prodName, String prodDesc, String prodPrice){
         String aux = url;
-        String test = "admin";
-        prodName = prodName.replace(" ", "%20");
-        prodDesc = prodDesc.replace(" ", "%20");
-        prodPrice = prodPrice.replace(" ", "%20");
-        aux = aux+"?un="+credentials.uName+"&prod="+prodName+"&desc="+prodDesc+"&pre="+prodPrice/*+"&arc="+test*/;
+
+        //Urlificar los parametros
+        prodName = Uri.encode(prodName);
+        prodDesc =  Uri.encode(prodDesc);
+        prodPrice =  Uri.encode(prodPrice);
+        String uName = sharedpreferences.getString(Name, null);
+        aux = aux+"?un="+uName+"&prod="+prodName+"&desc="+prodDesc+"&pre="+prodPrice;
+        Log.d("URL", aux);
         return aux;
     }
 
@@ -129,11 +153,19 @@ public class SubirProducto extends AppCompatActivity {
 
     public void subirProducto(View view){
 
-        String prod = nombreProducto.getText().toString().trim();
-        String desc = descripcionProducto.getText().toString().trim();
-        String prec = precioProducto.getText().toString().trim();
-        subirProducto.setEnabled(false);
-        doPost(prod, desc, prec) ;
+        if(!prodNameCheckLength){
+            Toast.makeText(getApplicationContext(),"El nombre del producto debe tener entre 3 y 100 caracteres", Toast.LENGTH_LONG).show();
+        }
+        else if(!prodDescCheckLength){
+            Toast.makeText(getApplicationContext(),"La descripción del producto debe tener como mínimo 10 caracteres", Toast.LENGTH_LONG).show();
+        }
+        else {
+            String prod = nombreProducto.getText().toString().trim();
+            String desc = descripcionProducto.getText().toString().trim();
+            String prec = precioProducto.getText().toString().trim();
+            subirProducto.setEnabled(false);
+            doPost(prod, desc, prec);
+        }
 
 
     }

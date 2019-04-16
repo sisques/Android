@@ -1,9 +1,9 @@
 package es.unizar.eina.ebrozon;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,10 +12,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import es.unizar.eina.ebrozon.credentials;
+import android.content.SharedPreferences;
 
 public class PantallaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Name = "nameKey";
+    public static final String Password= "passwordKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +27,9 @@ public class PantallaPrincipal extends AppCompatActivity
         setContentView(R.layout.activity_pantalla_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.principal_add);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +61,14 @@ public class PantallaPrincipal extends AppCompatActivity
         }
     }
 
+    public  void logout(){
+        SharedPreferences    sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.clear();
+        editor.commit();
+        startActivity(new Intent(PantallaPrincipal.this, PreLogin.class));
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -71,6 +86,8 @@ public class PantallaPrincipal extends AppCompatActivity
 
         } else if (id == R.id.nav_mensajes) {
 
+        }else if (id == R.id.nav_cerrar_sesion) {
+            logout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
