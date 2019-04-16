@@ -1,5 +1,6 @@
 package es.unizar.eina.ebrozon;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,13 +21,19 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import es.unizar.eina.ebrozon.credentials;
+import android.content.SharedPreferences;
 
 
 
 public class InicioSesion extends AppCompatActivity {
 
     String url ="https://protected-caverns-60859.herokuapp.com/logear";
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Name = "nameKey";
+    public static final String Password= "passwordKey";
+    SharedPreferences sharedpreferences;
+
 
     private Button iniciar;
     private Button olvidar;
@@ -42,6 +49,7 @@ public class InicioSesion extends AppCompatActivity {
         password = findViewById(R.id.Password_login);
         iniciar = findViewById(R.id.LogIn);
         olvidar = findViewById(R.id.forgotPassword_login);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         userName.addTextChangedListener(loginTextWatcher);
         password.addTextChangedListener(loginTextWatcher);
@@ -70,8 +78,15 @@ public class InicioSesion extends AppCompatActivity {
         if (estado.equals("O")){
             String uname = userName.getText().toString().trim();
             String passwd = password.getText().toString().trim();
-            credentials.uName = uname;
-            credentials.passwd = passwd;
+
+
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(Name, uname);
+            editor.putString(Password, passwd);
+            editor.commit();
+
+
+
             startActivity(new Intent(InicioSesion.this, PantallaPrincipal.class));
         }
         else if (estado.equals("E")){

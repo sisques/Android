@@ -2,6 +2,7 @@ package es.unizar.eina.ebrozon;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,8 +17,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import es.unizar.eina.ebrozon.credentials;
-
 
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
@@ -29,7 +28,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import es.unizar.eina.ebrozon.credentials;
+import android.content.SharedPreferences;
+import android.content.Context;
 
 
 public class Registro extends AppCompatActivity {
@@ -37,6 +37,11 @@ public class Registro extends AppCompatActivity {
     String url ="https://protected-caverns-60859.herokuapp.com/registrar";
 
     private Button registrar;
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Name = "nameKey";
+    public static final String Password= "passwordKey";
+    SharedPreferences sharedpreferences;
 
     private EditText userName;
     private EditText mail;
@@ -48,11 +53,15 @@ public class Registro extends AppCompatActivity {
     private Boolean mostrandoPass1 = false;
     private Boolean mostrandoPass2 = false;
 
-    private Boolean userNameCheck = false;
-    private Boolean passwordCheck = false;
-    private Boolean mailCheck = false;
+    private Boolean userNameCheckLength = false;
+    private Boolean passwordCheckLength = false;
+    private Boolean mailCheckLength = false;
     private Boolean confirmCheck = false;
+    private Boolean userNameCheckValue = false;
+    private Boolean passwordCheckValue = false;
+    private Boolean mailCheckValue = false;
     private Boolean cityCheck = false;
+
 
     private Boolean userNameEmpty = true;
     private Boolean passwordEmpty = true;
@@ -79,6 +88,9 @@ public class Registro extends AppCompatActivity {
         limitMail = findViewById(R.id.limMail);
         limitPass = findViewById(R.id.limContra1);
         limitPass2 = findViewById(R.id.limContra2);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+
 
         userName.addTextChangedListener(registerTextWatcher);
         mail.addTextChangedListener(registerTextWatcher);
@@ -165,12 +177,18 @@ public class Registro extends AppCompatActivity {
             confirmEmpty = passwd2.isEmpty();
         }
 
-        @Override
+        @Override // Soloo puede tener letras mayusculas, minusci,as si n acentuar numeros y _-.
         public void afterTextChanged(Editable s) {
-            userNameCheck = (uname.length() <= 30 && uname.length() >= 3);
-            mailCheck = (email.length() <= 100 && email.length() >= 3);
-            passwordCheck = (passwd.length() <= 100 && passwd.length() >= 8);
+
+            userNameCheckLength = (uname.length() <= 30 && uname.length() >= 3);
+            passwordCheckLength = (passwd.length() <= 100 && passwd.length() >= 8);
+            mailCheckLength = (email.length() <= 100 && email.length() >= 3);
             confirmCheck = passwd.equals(passwd2);
+
+            userNameCheckValue = uname.matches("[a-zA-Z0-9_]+");
+            passwordCheckValue = passwd.matches("[a-zA-Z0-9_]+");
+            mailCheckValue = email.matches("[a-zA-Z0-9_]+@[a-zA-Z0-9_.]+");;
+
 
             registrar.setEnabled(!userNameEmpty && !passwordEmpty && !mailEmpty && !confirmEmpty && cityCheck);
         }
@@ -199,18 +217,32 @@ public class Registro extends AppCompatActivity {
     }
 
     public void registrarCuenta(View view){
-        if (!userNameCheck) {
-            Toast.makeText(getApplicationContext(),"Nombre de usuario inválido.", Toast.LENGTH_LONG).show();
+
+        if (!userNameCheckLength) {
+            Toast.makeText(getApplicationContext(),"El nombre tiene que tener entre 3 y 30 caracteres.", Toast.LENGTH_LONG).show();
         }
-        else if (!mailCheck) {
-            Toast.makeText(getApplicationContext(),"Dirección de correo inválida.", Toast.LENGTH_LONG).show();
+        else if (!userNameCheckValue) {
+            Toast.makeText(getApplicationContext(),"El nombre solo puede tener letras mayúsculas o minúsculas sin acentuar, números, y los caracteres _ y -.", Toast.LENGTH_LONG).show();
         }
-        else if (!passwordCheck) {
-            Toast.makeText(getApplicationContext(),"Contraseña inválida.", Toast.LENGTH_LONG).show();
+
+        else if (!mailCheckLength) {
+            Toast.makeText(getApplicationContext(),"La dirección de correo tiene que tener entre 3 y 100 caracteres.", Toast.LENGTH_LONG).show();
         }
+        else if (!mailCheckValue) {
+            Toast.makeText(getApplicationContext(),"La dirección correo tiene que seguir el patron example@example.example.", Toast.LENGTH_LONG).show();
+        }
+
+        else if (!passwordCheckLength) {
+            Toast.makeText(getApplicationContext(),"La contraseña tiene que tener entre 8 y 100 caracteres.", Toast.LENGTH_LONG).show();
+        }
+        else if (!passwordCheckValue) {
+            Toast.makeText(getApplicationContext(),"La contraseña solo puede tener letras mayúsculas o minúsculas sin acentuar, números, y los caracteres _ y -.", Toast.LENGTH_LONG).show();
+        }
+
         else if (!confirmCheck) {
             Toast.makeText(getApplicationContext(),"Contraseñas no coinciden.", Toast.LENGTH_LONG).show();
         }
+
         else {
             String uname = userName.getText().toString().trim();
             String passwd = password.getText().toString().trim();
@@ -226,8 +258,15 @@ public class Registro extends AppCompatActivity {
         if (estado.equals("O")){
             String uname = userName.getText().toString().trim();
             String passwd = password.getText().toString().trim();
-            credentials.uName = uname;
-            credentials.passwd= passwd;
+
+
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(Name, uname);
+            editor.putString(Password, passwd);
+            editor.commit();
+
+
+
             startActivity(new Intent(Registro.this, PantallaPrincipal.class));
         }
         else if (estado.equals("E")){
@@ -240,7 +279,7 @@ public class Registro extends AppCompatActivity {
 
     public String parseParams(String un, String pass, String nom, String ap, String corr, String prov){
         String aux = url;
-        un = un.replace(" ","%20");
+        un = Uri.encode(un);
         pass = pass.replace(" ", "%20");
         nom = nom.replace(" ", "%20");
         ap = ap.replace(" ", "%20");
@@ -276,11 +315,11 @@ public class Registro extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("Error.Response", error.getMessage());
-                        String response = error.getMessage().replace("{","").replace("}","").replace("\"","");
+                        /*String response = error.getMessage().replace("{","").replace("}","").replace("\"","");
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado+":","");
                         gestionRegistro(estado, msg);
-                        registrar.setEnabled(true);
+                        registrar.setEnabled(true);*/
                     }
                 }
         );

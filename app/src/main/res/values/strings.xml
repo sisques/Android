@@ -119,6 +119,7 @@
     <string name="Documentacion">Documentación</string>
     <string name="Ayuda">Ayuda</string>
     <string name="Ajustes">Ajustes</string>
+    <string name="Cerrar_sesion">Cerrar sesión</string>
 
 
 </resources>
