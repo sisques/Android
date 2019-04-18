@@ -34,7 +34,7 @@ import android.content.Context;
 
 public class Registro extends AppCompatActivity {
 
-    String url ="https://protected-caverns-60859.herokuapp.com/registrar";
+    String url = Ajustes.url + "/registrar";
 
     private Button registrar;
 

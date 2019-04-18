@@ -27,7 +27,7 @@ import android.content.SharedPreferences;
 
 public class InicioSesion extends AppCompatActivity {
 
-    String url ="https://protected-caverns-60859.herokuapp.com/logear";
+    String url = Ajustes.url + "/logear";
 
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String Name = "nameKey";
