@@ -11,7 +11,7 @@ public class Ventas {
     private List<HashMap<String, String>> ventas;
     private List<HashMap<String, String>> resumenes; // Información duplicada pero muestra más rápido
 
-    private final String[] atributos =
+    private final static String[] atributos =
             {"identificador", "usuario", "fechainicio", "fechaventa", "producto", "descripcion",
              "precio", "preciofinal", "comprador", "fechapago", "tienearchivo", "activa",
              "es_subasta", "ciudad", "user"};
@@ -61,5 +61,29 @@ public class Ventas {
 
     public String[] getAtributos() {
         return atributos;
+    }
+
+    public HashMap<String, String> getVenta(int index) {
+        return ventas.get(index);
+    }
+
+    public static String getId(HashMap<String, String> v) {
+        return v.get(atributos[0]);
+    }
+
+    public static String getNombre(HashMap<String, String> v) {
+        return v.get(atributos[4]);
+    }
+
+    public static String getPrecio(HashMap<String, String> v) {
+        return v.get(atributos[6]) + " €";
+    }
+
+    public static String getDescricpion(HashMap<String, String> v) {
+        return v.get(atributos[5]);
+    }
+
+    public static String getImagen(HashMap<String, String> v) {
+        return v.get("imagen");
     }
 }
