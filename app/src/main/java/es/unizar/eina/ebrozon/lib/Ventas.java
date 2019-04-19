@@ -31,7 +31,7 @@ public class Ventas {
             venta.put(atributos[i], producto[i]);
         }
         resumen.put(atributos[4], producto[4]);
-        resumen.put(atributos[6], producto[6]);
+        resumen.put(atributos[6], producto[6] + " €");
         resumen.put(atributos[5], producto[5]);
         //TODO: Falta imagen
         resumen.put("imagen", Integer.toString(R.drawable.logo));

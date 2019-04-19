@@ -8,14 +8,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import es.unizar.eina.ebrozon.lib.Common;
+
 public class PreLogin extends AppCompatActivity {
 
     private Button iniciar;
     private Button registrar;
 
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String Name = "nameKey";
-    public static final String Password= "passwordKey";
     SharedPreferences sharedpreferences;
 
     @Override
@@ -23,10 +22,10 @@ public class PreLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pre_login);
 
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
-        String uName = sharedpreferences.getString(Name, null);
-        String passwd = sharedpreferences.getString(Password, null);
+        String uName = sharedpreferences.getString(Common.un, null);
+        String passwd = sharedpreferences.getString(Common.pass, null);
 
         if( uName != null && passwd != null && !uName.isEmpty() &&  !passwd.isEmpty() ) {
             startActivity(new Intent(PreLogin.this, PantallaPrincipal.class));

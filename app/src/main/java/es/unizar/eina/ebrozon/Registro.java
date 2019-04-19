@@ -31,16 +31,15 @@ import com.android.volley.toolbox.Volley;
 import android.content.SharedPreferences;
 import android.content.Context;
 
+import es.unizar.eina.ebrozon.lib.Common;
+
 
 public class Registro extends AppCompatActivity {
 
-    String url = Ajustes.url + "/registrar";
+    String url = Common.url + "/registrar";
 
     private Button registrar;
 
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String Name = "nameKey";
-    public static final String Password= "passwordKey";
     SharedPreferences sharedpreferences;
 
     private EditText fullName;
@@ -97,7 +96,7 @@ public class Registro extends AppCompatActivity {
         limitMail = findViewById(R.id.limMail);
         limitPass = findViewById(R.id.limContra1);
         limitPass2 = findViewById(R.id.limContra2);
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
         fullName.addTextChangedListener(registerTextWatcher);
         userName.addTextChangedListener(registerTextWatcher);
@@ -289,13 +288,36 @@ public class Registro extends AppCompatActivity {
     }
     private void gestionRegistro (String  estado, String msg){
         if (estado.equals("O")){
-            String uname = userName.getText().toString().trim();
-            String passwd = password.getText().toString().trim();
+            // Utilizando notación Documentacion/Peticiones back end.txt
+            String un = userName.getText().toString().trim();
+            String cor = mail.getText().toString().trim();
+            String pass = password.getText().toString().trim();
+            String tel = ""; // Serán modificados en la pantalla de perfil
+            String fullname = fullName.getText().toString().trim();
+            // Separar el nombre completo en 2
+            String na = fullname.split(" ")[0];
+            String lna = fullname.split(" ")[1];
+            String cp = "";
+            String ci = "";
+            String pr = city.getSelectedItem().toString();
+            String lat = "";
+            String lon = "";
+            String im = "";
 
 
             SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(Name, uname);
-            editor.putString(Password, passwd);
+            editor.putString(Common.un, un);
+            editor.putString(Common.cor, cor);
+            editor.putString(Common.tel, tel);
+            editor.putString(Common.pass, pass);
+            editor.putString(Common.na, na);
+            editor.putString(Common.lna, lna);
+            editor.putString(Common.cp, cp);
+            editor.putString(Common.ci, ci);
+            editor.putString(Common.pr, pr);
+            editor.putString(Common.lat, lat);
+            editor.putString(Common.lon, lon);
+            editor.putString(Common.im, im);
             editor.commit();
 
 
