@@ -14,8 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.content.SharedPreferences;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,16 +26,20 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.Map;
+
+import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
 
 public class PantallaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String Name = "nameKey";
-    public static final String Password= "passwordKey";
+    SharedPreferences sharedpreferences;
 
-    private static final String Ciudad= "Zaragoza"; // TODO: Obtenida de la configuracion del usuario
+    private String un;
+    private String cor;
+    private String pr;
+    private String im;
 
     private Ventas productos;
 
@@ -44,14 +50,15 @@ public class PantallaPrincipal extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listarProductosCiudad(Ciudad);
+        sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+
+        recuperarUsuario();
+        listarProductosCiudad(pr);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.principal_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
                 startActivity(new Intent(PantallaPrincipal.this, SubirProducto.class));
             }
         });
@@ -62,8 +69,31 @@ public class PantallaPrincipal extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.drawerMenu);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View menuArriba = navigationView.getHeaderView(0);
+        TextView menuNombre = (TextView) menuArriba.findViewById(R.id.menuNombre);
+        menuNombre.setText(un);
+        TextView menuCorreo = (TextView) menuArriba.findViewById(R.id.menuCorreo);
+        menuCorreo.setText(cor);
+        if (im != null && !im.equals("")) {
+            ImageView menuImagen = (ImageView) menuArriba.findViewById(R.id.menuImagen);
+            //menuImagen.setImageDrawable();
+        }
+    }
+
+    private void recuperarUsuario() {
+        Map<String, ?> m = sharedpreferences.getAll();
+
+        un = (String) m.get(Common.un);
+        cor = (String) m.get(Common.cor);
+        pr = (String) m.get(Common.pr);
+        im = (String) m.get(Common.im);
+
+        if (pr == null || pr.equals("")) {
+            pr = "Zaragoza";
+        }
     }
 
     private void gestionarRespuesta(String response) {
@@ -117,7 +147,7 @@ public class PantallaPrincipal extends AppCompatActivity
     }
 
     private void listarProductosCiudad(String ciudad) {
-        gestionarListar(Ajustes.url + "/listarProductosCiudad?ci=" + ciudad);
+        gestionarListar(Common.url + "/listarProductosCiudad?ci=" + ciudad);
     }
 
     private void listarProductos() {
@@ -141,7 +171,7 @@ public class PantallaPrincipal extends AppCompatActivity
     }
 
     public void logout(){
-        SharedPreferences    sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences    sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.clear();
         editor.commit();
