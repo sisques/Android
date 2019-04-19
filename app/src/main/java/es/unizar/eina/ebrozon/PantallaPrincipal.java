@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.content.SharedPreferences;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -26,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import es.unizar.eina.ebrozon.lib.Common;
@@ -150,14 +152,30 @@ public class PantallaPrincipal extends AppCompatActivity
         gestionarListar(Common.url + "/listarProductosCiudad?ci=" + ciudad);
     }
 
+    private void listarProductosUsuario(String usuario) {
+        gestionarListar(Common.url + "/listarProductosUsuario?un=" + usuario);
+    }
+
     private void listarProductos() {
         String[] from = productos.getResumenAtributos();
         int[] to = {R.id.ProductoResumenTitulo, R.id.ProductoResumenPrecio,
                 R.id.ProductoResumenDescripcion, R.id.ProductoResumenImagen};
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), productos.getResumenes(), R.layout.content_producto_resumen, from, to);
-        ListView androidListView = (ListView) findViewById(R.id.listaProductos);
+        final ListView androidListView = (ListView) findViewById(R.id.listaProductos);
         androidListView.setAdapter(simpleAdapter);
+
+        androidListView.setClickable(true);
+        androidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                HashMap<String, String> venta = productos.getVenta(position);
+
+                Intent intent = new Intent(PantallaPrincipal.this, Producto.class);
+                intent.putExtra("Venta", venta);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
