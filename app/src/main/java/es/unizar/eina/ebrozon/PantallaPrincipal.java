@@ -24,9 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import es.unizar.eina.ebrozon.lib.Ventas;
 
 public class PantallaPrincipal extends AppCompatActivity
@@ -162,9 +159,9 @@ public class PantallaPrincipal extends AppCompatActivity
 
         } else if (id == R.id.nav_ayuda) {
 
-        } else if (id == R.id.nav_busquedas) {
+        } else if (id == R.id.nav_en_venta) {
 
-        } else if (id == R.id.nav_envios) {
+        } else if (id == R.id.nav_siguiendo) {
 
         } else if (id == R.id.nav_mensajes) {
 
