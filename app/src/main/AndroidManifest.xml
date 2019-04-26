@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Producto"></activity>
+        <activity android:name=".Filtros"></activity>
+        <activity android:name=".Producto" />
         <activity
             android:name=".SubirProducto"
             android:label="@string/title_activity_subir_producto"
