@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.content.SharedPreferences;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -37,6 +39,7 @@ public class PantallaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     SharedPreferences sharedpreferences;
+    private SwipeRefreshLayout swipeLayout;
 
     private String un;
     private String cor;
@@ -57,6 +60,26 @@ public class PantallaPrincipal extends AppCompatActivity
         recuperarUsuario();
         listarProductosCiudad(pr);
 
+        // Refresh
+        swipeLayout = findViewById(R.id.listaProductosRefresh);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() { // Cada vez que se realiza el gesto para refrescar
+                listarProductosCiudad(pr);
+                swipeLayout.setRefreshing(false);
+            }
+        });
+
+        // Filtros
+        Button botonFiltros = findViewById(R.id.principal_filtros);
+        botonFiltros.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PantallaPrincipal.this, Filtros.class));
+            }
+        });
+
+        // Subir producto
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.principal_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +88,7 @@ public class PantallaPrincipal extends AppCompatActivity
             }
         });
 
+        // Menu hamburguesa
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -74,6 +98,7 @@ public class PantallaPrincipal extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.drawerMenu);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Parte de arriba del menu hamburguesa
         View menuArriba = navigationView.getHeaderView(0);
         TextView menuNombre = (TextView) menuArriba.findViewById(R.id.menuNombre);
         menuNombre.setText(un);
@@ -89,6 +114,7 @@ public class PantallaPrincipal extends AppCompatActivity
         Map<String, ?> m = sharedpreferences.getAll();
 
         un = (String) m.get(Common.un);
+        // Petición de recuperar usuario (un) y actualizar los demás datos
         cor = (String) m.get(Common.cor);
         pr = (String) m.get(Common.pr);
         im = (String) m.get(Common.im);
@@ -141,7 +167,7 @@ public class PantallaPrincipal extends AppCompatActivity
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        Log.d("Error.Response", error.getMessage());
+                        Log.d("Error.Response", "Error al recibir la lista de productos");
                     }
                 }
         );
