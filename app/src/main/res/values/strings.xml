@@ -122,5 +122,14 @@
     <string name="Ajustes">Ajustes</string>
     <string name="Cerrar_sesion">Cerrar sesión</string>
 
+    <!-- Perfil de usuario -->
+    <string name="TituloPerfil">Tu perfil</string>
+    <string name="NombrePerfil">NOMBRE</string>
+    <string name="EmailPerfil">DIRECCIÓN DE CORREO</string>
+    <string name="ProvinciaPerfil">PROVINCIA</string>
+    <string name="CiudadPerfil">CIUDAD</string>
+
+
+
 
 </resources>

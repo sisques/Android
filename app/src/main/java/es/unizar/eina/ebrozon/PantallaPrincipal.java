@@ -77,7 +77,7 @@ public class PantallaPrincipal extends AppCompatActivity
         if (id == R.id.nav_principal) {
             // Handle the camera action
         } else if (id == R.id.nav_ajustes) {
-
+            startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
         } else if (id == R.id.nav_ayuda) {
 
         } else if (id == R.id.nav_busquedas) {
