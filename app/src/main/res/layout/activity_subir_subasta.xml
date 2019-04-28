@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
-    tools:context=".SubirProducto">
+    tools:context=".SubirSubasta">
 
 
     <android.support.constraint.ConstraintLayout
@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#d4ebf2"
-        tools:layout_editor_absoluteX="53dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="46dp">
 
         <EditText
             android:id="@+id/NombreProducto"
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="20dp"
             android:autofillHints=""
             android:hint="@string/nombre_del_producto"
             android:inputType="text"
@@ -36,15 +36,15 @@
         <EditText
             android:id="@+id/Descripcion"
             android:layout_width="0dp"
-            android:layout_height="136dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="20dp"
             android:autofillHints=""
             android:gravity="top"
             android:hint="@string/descripcion_del_producto"
             android:inputType="textMultiLine|text"
-            app:layout_constraintBottom_toTopOf="@+id/precioVenta"
+            app:layout_constraintBottom_toTopOf="@+id/precioInicial"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,13 +57,63 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="60dp"
             android:autofillHints=""
-            android:hint="@string/precio_del_producto"
+            android:hint="@string/precio_de_venta_instantanea"
             android:inputType="number|numberDecimal"
             app:layout_constraintBottom_toTopOf="@+id/SubirProducto"
+            app:layout_constraintEnd_toStartOf="@+id/textView3"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:targetApi="o" />
+
+        <EditText
+            android:id="@+id/precioInicial"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="20dp"
+            android:autofillHints=""
+            android:hint="@string/precio_inicial_del_producto"
+            android:inputType="number|numberDecimal"
+            app:layout_constraintBottom_toTopOf="@+id/precioVenta"
             app:layout_constraintEnd_toStartOf="@+id/textView2"
             app:layout_constraintStart_toStartOf="parent"
+            tools:targetApi="o" />
+
+        <TextView
+            android:id="@+id/horaFinSubasta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="20dp"
+            android:autofillHints=""
+            android:hint="@string/hora_limite_subasta"
+            android:inputType="datetime"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/SubirProducto"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/precioVenta"
+            app:layout_constraintVertical_bias="1.0"
+            tools:targetApi="o" />
+
+        <TextView
+            android:id="@+id/fechaFinSubasta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:autofillHints=""
+            android:hint="@string/fecha_limite_subasta"
+            android:inputType="date"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/SubirProducto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/precioVenta"
+            app:layout_constraintVertical_bias="1.0"
             tools:targetApi="o" />
 
         <Button
@@ -73,7 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="44dp"
+            android:layout_marginBottom="36dp"
             android:backgroundTint="#2a6ebc"
             android:onClick="subirProducto"
             android:text="@string/subir_producto"
@@ -92,7 +142,7 @@
             android:layout_marginBottom="18dp"
             app:layout_constraintBottom_toTopOf="@+id/Archivo_3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.071"
+            app:layout_constraintHorizontal_bias="0.069"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -102,8 +152,14 @@
             android:id="@+id/Archivo_2"
             android:layout_width="179dp"
             android:layout_height="80dp"
-            tools:layout_editor_absoluteX="211dp"
-            tools:layout_editor_absoluteY="32dp">
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="18dp"
+            app:layout_constraintBottom_toTopOf="@+id/Archivo_4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.941"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
         </FrameLayout>
 
@@ -112,10 +168,8 @@
             android:layout_width="179dp"
             android:layout_height="80dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="128dp"
+            android:layout_marginTop="120dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="40dp"
-            app:layout_constraintBottom_toTopOf="@+id/NombreProducto"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.069"
             app:layout_constraintStart_toStartOf="parent"
@@ -128,10 +182,8 @@
             android:layout_width="179dp"
             android:layout_height="80dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="128dp"
+            android:layout_marginTop="120dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="40dp"
-            app:layout_constraintBottom_toTopOf="@+id/NombreProducto"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.939"
             app:layout_constraintStart_toStartOf="parent"
@@ -141,14 +193,25 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="0dp"
+            android:layout_width="24dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="34dp"
-            android:text="€"
+            android:text="@string/dienrrrrs"
             android:textSize="36sp"
-            app:layout_constraintBottom_toTopOf="@+id/SubirProducto"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Descripcion" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/dineros"
+            android:textSize="36sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/precioInicial" />
 
 
     </android.support.constraint.ConstraintLayout>

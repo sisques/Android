@@ -21,7 +21,11 @@
         <activity
             android:screenOrientation="portrait"
             android:name=".SubirProducto"
-            android:label="@string/title_activity_subir_producto"></activity>
+            android:label="@string/title_activity_subir_producto"/>
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".SubirSubasta"
+            android:label="@string/title_activity_subir_subasta"/>
         <activity
             android:screenOrientation="portrait"
             android:name=".PantallaPrincipal"

@@ -45,15 +45,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/principal_add"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:scaleX="4"
-            android:scaleY="2"
+            android:scaleX="3.95"
+            android:scaleY="1.8"
             android:src="@android:color/transparent"
+            app:srcCompat="@drawable/rounded_shape"
             app:backgroundTint="@color/design_default_color_primary" />
 
         <TextView

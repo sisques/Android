@@ -50,7 +50,7 @@ public class SubirProducto extends AppCompatActivity {
 
         nombreProducto = findViewById(R.id.NombreProducto);
         descripcionProducto = findViewById(R.id.Descripcion);
-        precioProducto = findViewById(R.id.Precio);
+        precioProducto = findViewById(R.id.precioVenta);
         subirProducto = findViewById(R.id.SubirProducto);
 
         subirProducto.setEnabled(false);
