@@ -104,6 +104,7 @@
     <string name="action_settings">Settings</string>
     <string name="menu_button">Menu button</string>
     <string name="title_activity_subir_producto">SubirProducto</string>
+    <string name="title_activity_subir_subasta">SubirSubasta</string>
 
     <string name="nombre_del_producto">Nombre del producto</string>
     <string name="subir_producto">Subir producto</string>
@@ -122,6 +123,14 @@
     <string name="Ayuda">Ayuda</string>
     <string name="Ajustes">Ajustes</string>
     <string name="Cerrar_sesion">Cerrar sesión</string>
+    <string name="crear_nueva_venta">Crear nueva venta</string>
+    <string name="crear_nueva_subasta">Crear nueva subasta</string>
+    <string name="precio_de_venta_instantanea">Precio de venta instantanea</string>
+    <string name="precio_inicial_del_producto">Precio inicial del producto</string>
+    <string name="fecha_limite_subasta">Fecha limite subasta</string>
+    <string name="dineros">€</string>
+    <string name="dienrrrrs">€</string>
+    <string name="hora_limite_subasta">Hora limite subasta</string>
 
 
 </resources>

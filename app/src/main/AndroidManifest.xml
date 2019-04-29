@@ -20,8 +20,13 @@
         <activity android:name=".Producto" />
         <activity
             android:name=".SubirProducto"
-            android:label="@string/title_activity_subir_producto"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_subir_producto"/>
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".SubirSubasta"
+            android:label="@string/title_activity_subir_subasta"/>
+
         <activity
             android:name=".PantallaPrincipal"
             android:label="@string/title_activity_pantalla_principal"

@@ -209,7 +209,7 @@ public class Registro extends AppCompatActivity {
             fullNameCheckValue = fullname.matches("[a-zA-Z]+ [a-zA-Z]+");
             userNameCheckValue = uname.matches("[a-zA-Z0-9_]+");
             passwordCheckValue = passwd.matches("[a-zA-Z0-9_]+");
-            mailCheckValue = email.matches("[a-zA-Z0-9_]+@[a-zA-Z0-9_.]+");;
+            mailCheckValue = email.matches("[a-zA-Z0-9_.]+@[a-zA-Z0-9_.]+");;
 
 
             registrar.setEnabled(!userNameEmpty && !passwordEmpty && !mailEmpty && !confirmEmpty && !fullNameEmpty && cityCheck);
