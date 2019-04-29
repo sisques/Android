@@ -23,15 +23,13 @@ import com.android.volley.toolbox.Volley;
 
 import android.content.SharedPreferences;
 
+import es.unizar.eina.ebrozon.lib.Common;
 
 
 public class InicioSesion extends AppCompatActivity {
 
-    String url ="https://protected-caverns-60859.herokuapp.com/logear";
+    String url = Common.url + "/logear";
 
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String Name = "nameKey";
-    public static final String Password= "passwordKey";
     SharedPreferences sharedpreferences;
 
 
@@ -49,7 +47,7 @@ public class InicioSesion extends AppCompatActivity {
         password = findViewById(R.id.Password_login);
         iniciar = findViewById(R.id.LogIn);
         olvidar = findViewById(R.id.forgotPassword_login);
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
         userName.addTextChangedListener(loginTextWatcher);
         password.addTextChangedListener(loginTextWatcher);
@@ -76,13 +74,34 @@ public class InicioSesion extends AppCompatActivity {
 
     private void gestionLogin (String  estado, String msg){
         if (estado.equals("O")){
-            String uname = userName.getText().toString().trim();
-            String passwd = password.getText().toString().trim();
+            // Utilizando notación Documentacion/Peticiones back end.txt
+            String un = userName.getText().toString().trim();
+            String cor = ""; //TODO: Obtener perfil del servidor
+            String pass = password.getText().toString().trim();
+            String tel = "";
+            String na = "";
+            String lna = "";
+            String cp = "";
+            String ci = "";
+            String pr = "";
+            String lat = "";
+            String lon = "";
+            String im = "";
 
 
             SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(Name, uname);
-            editor.putString(Password, passwd);
+            editor.putString(Common.un, un);
+            editor.putString(Common.cor, cor);
+            editor.putString(Common.tel, tel);
+            editor.putString(Common.pass, pass);
+            editor.putString(Common.na, na);
+            editor.putString(Common.lna, lna);
+            editor.putString(Common.cp, cp);
+            editor.putString(Common.ci, ci);
+            editor.putString(Common.pr, pr);
+            editor.putString(Common.lat, lat);
+            editor.putString(Common.lon, lon);
+            editor.putString(Common.im, im);
             editor.commit();
 
 

@@ -21,21 +21,20 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import es.unizar.eina.ebrozon.lib.Common;
+
 
 //decidir entre subasta y compra normal
 // etiquetas
 
 public class SubirProducto extends AppCompatActivity {
 
-    String url ="https://protected-caverns-60859.herokuapp.com/publicarVenta";
+    String url = Common.url + "/publicarVenta";
     private Button subirProducto;
     private EditText nombreProducto;
     private EditText descripcionProducto;
     private EditText precioProducto;
 
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String Name = "nameKey";
-    public static final String Password= "passwordKey";
     SharedPreferences sharedpreferences;
 
     private Boolean prodNameCheckLength = false;
@@ -49,8 +48,10 @@ public class SubirProducto extends AppCompatActivity {
 
 
         nombreProducto = findViewById(R.id.NombreProducto);
+
         descripcionProducto = findViewById(R.id.Descripcion);
         precioProducto = findViewById(R.id.precioVenta);
+
         subirProducto = findViewById(R.id.SubirProducto);
 
         subirProducto.setEnabled(false);
@@ -58,7 +59,7 @@ public class SubirProducto extends AppCompatActivity {
         descripcionProducto.addTextChangedListener(uploadProductTextWatcher);
         precioProducto.addTextChangedListener(uploadProductTextWatcher);
 
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
     }
 
@@ -109,7 +110,7 @@ public class SubirProducto extends AppCompatActivity {
         prodName = Uri.encode(prodName);
         prodDesc =  Uri.encode(prodDesc);
         prodPrice =  Uri.encode(prodPrice);
-        String uName = sharedpreferences.getString(Name, null);
+        String uName = sharedpreferences.getString(Common.un, null);
         aux = aux+"?un="+uName+"&prod="+prodName+"&desc="+prodDesc+"&pre="+prodPrice;
         Log.d("URL", aux);
         return aux;

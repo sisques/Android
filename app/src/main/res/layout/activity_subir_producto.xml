@@ -27,14 +27,14 @@
             android:autofillHints=""
             android:hint="@string/nombre_del_producto"
             android:inputType="text"
-            app:layout_constraintBottom_toTopOf="@+id/Descripcion"
+            app:layout_constraintBottom_toTopOf="@+id/ProductoResumenDescripcion"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             tools:targetApi="o" />
 
         <EditText
-            android:id="@+id/Descripcion"
+            android:id="@+id/ProductoResumenDescripcion"
             android:layout_width="0dp"
             android:layout_height="136dp"
             android:layout_marginStart="8dp"
@@ -44,7 +44,9 @@
             android:gravity="top"
             android:hint="@string/descripcion_del_producto"
             android:inputType="textMultiLine|text"
+
             app:layout_constraintBottom_toTopOf="@+id/precioVenta"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,8 +54,10 @@
 
 
         <EditText
+
             android:id="@+id/precioVenta"
             android:layout_width="0dp"
+
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
