@@ -28,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -80,7 +81,17 @@ public class SubirSubasta extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-                        horaLimite.setText(hourOfDay+":"+minute);
+                        String hora = String.valueOf(hourOfDay);
+                        String mins = String.valueOf(minute);
+                        if( hora.length() == 1 ){
+                            hora = '0'+hora;
+                        }
+                        if( mins.length() == 1 ){
+                            mins = '0'+mins;
+                        }
+
+
+                        horaLimite.setText(hora+":"+mins);
                     }
                 },Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), true);
                 timePickerDialog.show();
@@ -114,8 +125,19 @@ public class SubirSubasta extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-
-                String date = day + "/" + month + "/" + year;
+                String dia = String.valueOf(day);
+                String mes = String.valueOf(month);
+                String anyo = String.valueOf(year);
+                if( dia.length() == 1 ){
+                    dia = '0'+dia;
+                }
+                if( mes.length() == 1 ){
+                    mes = '0'+mes;
+                }
+                while( anyo.length() != 4){
+                    anyo = '0'+anyo;
+                }
+                String date = dia + "/" + mes + "/" + anyo;
                 fechaLimite.setText(date);
             }
         };
@@ -194,10 +216,14 @@ public class SubirSubasta extends AppCompatActivity {
         prodDesc =  Uri.encode(prodDesc);
         prodInitialPrice =  Uri.encode(prodInitialPrice);
         prodSellPrice = Uri.encode(prodSellPrice);
-        prodLimitDate =  Uri.encode(prodLimitDate);
-        prodLimitHour =  Uri.encode(prodLimitHour);
 
-        String fecha =prodLimitDate+prodLimitHour;
+        String fecha =  prodLimitDate.substring(6,10)   +
+                        prodLimitDate.substring(3, 5)   +
+                        prodLimitDate.substring(0, 2)   +
+                        prodLimitHour.substring(0, 2)   +
+                        prodLimitHour.substring(3, 5)   ;
+
+        fecha =  Uri.encode(fecha);
 
         String uName = sharedpreferences.getString(Name, null);
         aux = aux+"?un="+uName+"&prod="+prodName+"&desc="+prodDesc+"&pre="+prodSellPrice+"&pin="+prodInitialPrice+
@@ -259,17 +285,47 @@ public class SubirSubasta extends AppCompatActivity {
 
             String fecha = fechaLimite.getText().toString().trim();
             String hora = horaLimite.getText().toString().trim();
-//TODO
             //ARREGLAR PETICION
-            //COMPROBAR FECHAS
-            //if(!fechaLimiteCheckDate){
-             //   Toast.makeText(getApplicationContext(),"La fecha limite no puede ser anterior a la fecha actual", Toast.LENGTH_LONG).show();
-            //}
+
+            if(!checkDate(fecha, hora)){
+               Toast.makeText(getApplicationContext(),"La fecha limite no puede ser anterior a la fecha actual", Toast.LENGTH_LONG).show();
+            }
+
             subirProducto.setEnabled(false);
             doPost(prod, desc, precioInicial, precioVenta, fecha, hora);
         }
 
 
+    }
+
+
+    private boolean checkDate(String fecha, String hora) {
+
+        int dia_input = Integer.parseInt(  fecha.substring(0,2) );
+        int mes_input = Integer.parseInt(  fecha.substring(3,5) );
+        int anyo_input = Integer.parseInt(  fecha.substring(6,10) );
+        int hora_input = Integer.parseInt(  hora.substring(0, 2) );
+        int min_input = Integer.parseInt(  hora.substring(3, 5) );
+
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+        String dateString = format.format( new Date()   );
+        int dia_hoy = Integer.parseInt(  dateString.substring(0,2) );
+        int mes_hoy = Integer.parseInt(  dateString.substring(3,5) );
+        int anyo_hoy = Integer.parseInt(  dateString.substring(6,10) );
+
+        format = new SimpleDateFormat("HH:mm");
+
+        dateString = format.format( new Date()   );
+        int hora_hoy = Integer.parseInt(  dateString.substring(0, 2) );
+        int min_hoy = Integer.parseInt(  dateString.substring(3, 5) );
+
+        if (anyo_input >= anyo_hoy  && mes_input >= mes_hoy && dia_input >= dia_hoy && hora_input >= hora_hoy && min_input >= min_hoy){
+            return true;
+        }
+
+
+        return  false;
     }
 
 
