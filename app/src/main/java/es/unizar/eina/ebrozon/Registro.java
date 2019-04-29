@@ -206,7 +206,7 @@ public class Registro extends AppCompatActivity {
             mailCheckLength = (email.length() <= 100 && email.length() >= 3);
             confirmCheck = passwd.equals(passwd2);
 
-            fullNameCheckValue = fullname.matches("[a-zA-Z]+ [a-zA-Z]+");
+            fullNameCheckValue = fullname.matches("\\p{L}+ \\p{L}+");
             userNameCheckValue = uname.matches("[a-zA-Z0-9_]+");
             passwordCheckValue = passwd.matches("[a-zA-Z0-9_]+");
             mailCheckValue = email.matches("[a-zA-Z0-9_.]+@[a-zA-Z0-9_.]+");;

@@ -49,7 +49,7 @@ public class SubirProducto extends AppCompatActivity {
 
         nombreProducto = findViewById(R.id.NombreProducto);
 
-        descripcionProducto = findViewById(R.id.Descripcion);
+        descripcionProducto = findViewById(R.id.ProductoResumenDescripcion);
         precioProducto = findViewById(R.id.precioVenta);
 
         subirProducto = findViewById(R.id.SubirProducto);

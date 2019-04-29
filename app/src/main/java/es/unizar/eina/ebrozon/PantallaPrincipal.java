@@ -65,21 +65,7 @@ public class PantallaPrincipal extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.principal_add);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
-
-                showPopup(view);
-
-
-            }
-        });
-
-
-        sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+          sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
         recuperarUsuario();
         listarProductosCiudad(pr);
@@ -108,7 +94,7 @@ public class PantallaPrincipal extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PantallaPrincipal.this, SubirProducto.class));
+                showPopup(view);
             }
         });
 

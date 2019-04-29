@@ -34,10 +34,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import es.unizar.eina.ebrozon.lib.Common;
+
 
 public class SubirSubasta extends AppCompatActivity {
 
-    String url ="https://protected-caverns-60859.herokuapp.com/publicarSubasta";
+    String url = Common.url + "/publicarSubasta";
     private Button subirProducto;
     private EditText nombreProducto;
     private EditText descripcionProducto;
@@ -225,7 +227,7 @@ public class SubirSubasta extends AppCompatActivity {
 
         fecha =  Uri.encode(fecha);
 
-        String uName = sharedpreferences.getString(Name, null);
+        String uName = sharedpreferences.getString(Common.un, null);
         aux = aux+"?un="+uName+"&prod="+prodName+"&desc="+prodDesc+"&pre="+prodSellPrice+"&pin="+prodInitialPrice+
         "&end="+fecha;
         Log.d("URL", aux);
