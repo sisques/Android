@@ -124,12 +124,16 @@
 
     <!-- Perfil de usuario -->
     <string name="TituloPerfil">Tu perfil</string>
+    <string name="TituloOpinion">Valoraciones</string>
     <string name="NombrePerfil">NOMBRE</string>
     <string name="EmailPerfil">DIRECCIÓN DE CORREO</string>
     <string name="ProvinciaPerfil">PROVINCIA</string>
     <string name="CiudadPerfil">CIUDAD</string>
+    <string name="VentasRealizadas">Compras: </string>
+    <string name="ComprasRealizadas">Ventas: </string>
 
-
+    <string name="BotonValoraciones2">Mis Valoraciones</string>
+    <string name="BotonValoraciones1">Valoraciones de usuarios</string>
 
 
 </resources>

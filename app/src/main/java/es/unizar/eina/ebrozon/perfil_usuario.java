@@ -1,11 +1,14 @@
 package es.unizar.eina.ebrozon;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -38,6 +41,8 @@ public class perfil_usuario extends AppCompatActivity {
     private double user_rating;
 
     private ImageButton editar;
+    private Button verValoracionesUsuarios;
+    private Button verMisValoraciones;
 
     private ImageView star1;
     private ImageView star2;
@@ -55,7 +60,12 @@ public class perfil_usuario extends AppCompatActivity {
         user_email = findViewById(R.id.profileEmail);
         user_province = findViewById(R.id.profileProvince);
         user_city = findViewById(R.id.profileCity);
+
         editar = findViewById(R.id.profileEditButton);
+        verValoracionesUsuarios = findViewById(R.id.profileOpinionButton1);
+        verMisValoraciones = findViewById(R.id.profileOpinionButton2);
+        verValoracionesUsuarios.setPaintFlags(verValoracionesUsuarios.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        verMisValoraciones.setPaintFlags(verMisValoraciones.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         star1 = findViewById(R.id.profileStar1);
         star2 = findViewById(R.id.profileStar2);
@@ -66,6 +76,7 @@ public class perfil_usuario extends AppCompatActivity {
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         recuperarUsuario();
+        recuperarValoracionesUsuarios();
     }
 
     private void recuperarUsuario() {
@@ -171,4 +182,29 @@ public class perfil_usuario extends AppCompatActivity {
             star5.setImageResource(android.R.drawable.star_big_on);
         }
     }
+
+    private void recuperarValoracionesUsuarios() {
+        //
+    }
+
+    private void recuperarMisValoraciones() {
+        //
+    }
+
+    public void editarPerfil(View view) {
+        startActivity(new Intent(perfil_usuario.this, editar_perfil.class));
+    }
+
+    public void mostrarValoracionesUsuarios() {
+        verValoracionesUsuarios.setEnabled(false);
+        recuperarValoracionesUsuarios();
+        verValoracionesUsuarios.setEnabled(true);
+    }
+
+    public void mostrarMisValoraciones() {
+        verMisValoraciones.setEnabled(false);
+        recuperarMisValoraciones();
+        verMisValoraciones.setEnabled(true);
+    }
+
 }

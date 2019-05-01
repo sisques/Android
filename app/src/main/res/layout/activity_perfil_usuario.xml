@@ -9,6 +9,23 @@
     tools:context=".perfil_usuario">
 
     <TextView
+        android:id="@+id/profileTitleOpinion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/TituloPerfil"
+        android:text="@string/TituloOpinion"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileStatCompras"
+        tools:text="@string/TituloOpinion" />
+
+    <TextView
         android:id="@+id/profileTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +37,7 @@
         android:textColor="@color/colorPrimary"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/TituloPerfil" />
@@ -33,6 +50,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:background="@null"
+        android:onClick="editarPerfil"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/profileTitle"
@@ -43,17 +61,17 @@
         android:id="@+id/profileCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="200dp"
         android:background="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.369">
+        app:layout_constraintTop_toBottomOf="@+id/profileTitle"
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageView
             android:id="@+id/profileStar1"
@@ -121,7 +139,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars[3]" />
+            app:srcCompat="@android:drawable/sym_def_app_icon"
+            tools:srcCompat="@android:drawable/sym_def_app_icon" />
 
         <TextView
             android:id="@+id/profileUsername"
@@ -131,6 +150,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="username"
+            android:textAppearance="@style/TextAppearance.AppCompat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profilePic" />
@@ -141,7 +161,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/NombrePerfil"
         android:text="@string/NombrePerfil"
@@ -149,7 +169,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/profileCard"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileTitle"
         tools:text="@string/NombrePerfil" />
 
     <TextView
@@ -207,6 +227,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="user_fullname"
+        android:textAppearance="@style/TextAppearance.AppCompat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/profileCard"
@@ -219,6 +240,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="user_email"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/profileCard"
@@ -231,6 +254,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="user_province"
+        android:textAppearance="@style/TextAppearance.AppCompat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/profileCard"
@@ -243,9 +267,128 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="user_city"
+        android:textAppearance="@style/TextAppearance.AppCompat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/profileCard"
         app:layout_constraintTop_toBottomOf="@+id/profileTextCity" />
+
+    <LinearLayout
+        android:id="@+id/profileStatCompras"
+        android:layout_width="150dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileCard">
+
+        <TextView
+            android:id="@+id/profileTextCompras"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/ComprasRealizadas"
+            android:text="@string/ComprasRealizadas"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/colorPrimary"
+            tools:layout_editor_absoluteX="269dp"
+            tools:layout_editor_absoluteY="343dp"
+            tools:text="@string/ComprasRealizadas" />
+
+        <TextView
+            android:id="@+id/profileCompras"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            tools:layout_editor_absoluteX="202dp"
+            tools:layout_editor_absoluteY="343dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/profileStatVentas"
+        android:layout_width="150dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileCard">
+
+        <TextView
+            android:id="@+id/profileTextVentas"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/VentasRealizadas"
+            android:text="@string/VentasRealizadas"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/colorPrimary"
+            tools:layout_editor_absoluteX="135dp"
+            tools:layout_editor_absoluteY="343dp"
+            tools:text="@string/VentasRealizadas" />
+
+        <TextView
+            android:id="@+id/profileVentas"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            tools:layout_editor_absoluteX="59dp"
+            tools:layout_editor_absoluteY="478dp" />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/profileOpinions"
+        android:layout_width="match_parent"
+        android:layout_height="276dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:alwaysDrawnWithCache="true"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileTitleOpinion">
+
+        <TableRow
+            android:id="@+id/profileOpinionsButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/profileOpinionButton1"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/BotonValoraciones1"
+                android:text="@string/BotonValoraciones1"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="10sp"
+                android:onClick="mostrarValoracionesUsuarios"
+                tools:layout_editor_absoluteX="37dp"
+                tools:layout_editor_absoluteY="392dp"
+                tools:text="@string/BotonValoraciones1" />
+
+            <Button
+                android:id="@+id/profileOpinionButton2"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/BotonValoraciones2"
+                android:text="@string/BotonValoraciones2"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="10sp"
+                android:onClick="mostrarMisValoraciones"
+                tools:text="@string/BotonValoraciones2" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/profileOpinionList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </TableLayout>
 
 </android.support.constraint.ConstraintLayout>
