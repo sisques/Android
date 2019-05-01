@@ -94,7 +94,7 @@ public class PantallaPrincipal extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopup(view);
+                startActivity(new Intent(PantallaPrincipal.this, SubirProd1_3.class));
             }
         });
 
@@ -217,31 +217,6 @@ public class PantallaPrincipal extends AppCompatActivity
 
 
 
-    public void showPopup(View view){
-
-        LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.popup_subir_producto, null);
-
-        final PopupWindow popupWindow = new PopupWindow(popupView,-1,-2,true);
-        popupWindow.showAtLocation(view, Gravity.BOTTOM, 20, 20);
-
-        // dismiss the popup window when touched
-        popupView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                popupWindow.dismiss();
-                return true;
-            }
-        });
-    }
-
-    public void subirProducto(View view){
-         startActivity(new Intent(this, SubirProducto.class));
-    }
-
-    public void subirSubasta(View view){
-        startActivity(new Intent(this, SubirSubasta.class) );
-    }
 
 
     @Override
