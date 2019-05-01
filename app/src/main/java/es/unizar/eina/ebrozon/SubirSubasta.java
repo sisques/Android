@@ -1,5 +1,5 @@
 package es.unizar.eina.ebrozon;
-
+/*
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -28,8 +28,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -332,3 +330,4 @@ public class SubirSubasta extends AppCompatActivity {
 
 
 }
+*/
