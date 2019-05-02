@@ -14,47 +14,42 @@ public class Ventas {
     private static List<HashMap<String, Object>> resumenes
             = new ArrayList<HashMap<String, Object>>(); // Información duplicada pero muestra más rápido
 
-    private static ArrayList<Bitmap> imagenDefault = null;
+    private static Bitmap imagenDefault = null;
 
     private final static String[] atributos =
             {"identificador", "usuario", "fechainicio", "fechaventa", "producto", "descripcion",
              "precio", "preciofinal", "comprador", "fechapago", "tienearchivo", "activa",
-             "es_subasta", "ciudad", "user", "imagenes"};
+             "es_subasta", "ciudad", "provincia", "user", "archivos"};
 
     public void clear() {
         ventas.clear();
         resumenes.clear();
     }
 
-    public void anyadirVenta(String[] producto, ArrayList<Bitmap> imagenes) {
+    public void anyadirVenta(String[] producto, Bitmap imagen) {
         if (atributos.length != producto.length) System.err.println("WARNING VENTA");
 
         HashMap<String, Object> venta = new HashMap<String, Object>();
         HashMap<String, Object> resumen = new HashMap<String, Object>();
 
-        for (int i=0; i<producto.length; i++) {
+        for (int i=0; i<atributos.length; i++) {
             venta.put(atributos[i], producto[i]);
         }
-        if (imagenes != null && imagenes.size() > 0)
-            venta.put(atributos[atributos.length-1], imagenes);
-        else
-            venta.put(atributos[atributos.length-1], imagenDefault);
 
         resumen.put(atributos[4], producto[4]);
         resumen.put(atributos[6], producto[6] + " €");
         resumen.put(atributos[5], producto[5]);
-        if (imagenes != null && imagenes.size() > 0)
-            resumen.put("imagen", imagenes.get(0));
+        if (imagen != null)
+            resumen.put("imagen", imagen);
         else
-            resumen.put("imagen", imagenDefault.get(0));
+            resumen.put("imagen", imagenDefault);
 
         ventas.add(venta);
         resumenes.add(resumen);
     }
 
     public void setImagenDefault(Bitmap imagen) {
-        imagenDefault = new ArrayList<Bitmap>();
-        imagenDefault.add(imagen);
+        imagenDefault = imagen;
     }
 
     public List<HashMap<String, Object>> getVentas() {
@@ -83,6 +78,10 @@ public class Ventas {
         return ventas.get(index);
     }
 
+    public HashMap<String, Object> getResumen(int index) {
+        return resumenes.get(index);
+    }
+
     public static String getId(HashMap<String, Object> v) {
         return (String) v.get(atributos[0]);
     }
@@ -103,7 +102,7 @@ public class Ventas {
         return (Bitmap) v.get("imagen");
     }
 
-    public static ArrayList<Bitmap> getImagenes(HashMap<String, Object> v) {
-        return (ArrayList<Bitmap>) v.get(atributos[atributos.length-1]);
+    public static ArrayList<String> getImagenes(HashMap<String, Object> v) {
+        return (ArrayList<String>) v.get(atributos[atributos.length-1]);
     }
 }
