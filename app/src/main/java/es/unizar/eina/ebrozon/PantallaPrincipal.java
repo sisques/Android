@@ -56,7 +56,7 @@ public class PantallaPrincipal extends AppCompatActivity
     private String pr;
     private String im;
 
-    private Ventas productos; //develop
+    private Ventas productos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
