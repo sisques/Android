@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
-                android:background="@drawable/button_transparente"
+                android:background="@drawable/button_filtros"
                 android:text="@string/Filtros"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
