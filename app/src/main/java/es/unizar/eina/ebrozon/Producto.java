@@ -21,13 +21,15 @@ public class Producto extends AppCompatActivity {
 
         productos = new Ventas();
 
-        // Recibe como atributo la posición de la venta
-        HashMap<String, Object> venta =
-                productos.getVenta((Integer) getIntent().getSerializableExtra("Venta"));
+        Integer posVenta = (Integer) getIntent().getSerializableExtra("Venta");
 
-        ArrayList<Bitmap> imagenes = Ventas.getImagenes(venta);
+        // Recibe como atributo la posición de la venta
+        HashMap<String, Object> venta = productos.getVenta(posVenta);
+
+        // TODO: Preparar para varias imagenes
+        Bitmap imagen = Ventas.getImagen(productos.getResumen(posVenta));
         ImageView ProductoImagen = (ImageView) findViewById(R.id.ProductoImagen);
-        ProductoImagen.setImageBitmap(imagenes.get(0));
+        ProductoImagen.setImageBitmap(imagen);
 
         TextView ProductoNombre = (TextView) findViewById(R.id.ProductoNombre);
         ProductoNombre.setText(Ventas.getNombre(venta));
