@@ -136,28 +136,30 @@ public class PantallaPrincipal extends AppCompatActivity
     }
 
     private void gestionarRespuesta(String response) {
-        response = response.replace("[","").replace("]","");
-        response = response.replace("{","").replace("\"","");
+        if (!response.equals("[]")) {
+            response = response.replace("[", "").replace("]", "");
+            response = response.replace("{", "").replace("\"", "");
 
-        String[] listaProductos = response.split("\\}");
+            String[] listaProductos = response.split("\\}");
 
-        for (int i=1; i<listaProductos.length; i++) {
-            listaProductos[i] = listaProductos[i].substring(1);
-        }
-
-        productos = new Ventas();
-        String[] producto;
-
-        for (int i=0; i<listaProductos.length; i++) {
-            producto = listaProductos[i].split(",");
-            for (int j=0; j<producto.length; j++) {
-                producto[j] = producto[j].split(":", 2)[1];
-                if (producto[j].equals("null")) producto[j] = "";
+            for (int i = 1; i < listaProductos.length; i++) {
+                listaProductos[i] = listaProductos[i].substring(1);
             }
-            productos.anyadirVenta(producto);
-        }
 
-        listarProductos();
+            productos = new Ventas();
+            String[] producto;
+
+            for (int i = 0; i < listaProductos.length; i++) {
+                producto = listaProductos[i].split(",");
+                for (int j = 0; j < producto.length; j++) {
+                    producto[j] = producto[j].split(":", 2)[1];
+                    if (producto[j].equals("null")) producto[j] = "";
+                }
+                productos.anyadirVenta(producto);
+            }
+
+            listarProductos();
+        }
     }
 
     private void gestionarListar(String urlPetition) {
