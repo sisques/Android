@@ -8,9 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 
 import android.util.Base64;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -24,8 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.content.SharedPreferences;
-
-import android.widget.PopupWindow;
 
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -43,8 +38,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
@@ -74,6 +68,8 @@ public class PantallaPrincipal extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        productos = new Ventas();
+        productos.setImagenDefault(BitmapFactory.decodeResource(getResources(),R.drawable.logo));
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
         // Filtros
@@ -95,7 +91,6 @@ public class PantallaPrincipal extends AppCompatActivity
         });
 
         // Menu hamburguesa
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -111,34 +106,31 @@ public class PantallaPrincipal extends AppCompatActivity
         menuCorreo = (TextView) menuArriba.findViewById(R.id.menuCorreo);
         menuImagen = (ImageView) menuArriba.findViewById(R.id.menuImagen);
 
-        recuperarUsuario();
-        listarProductosCiudad(pr);
-
         // Refresh
         swipeLayout = findViewById(R.id.listaProductosRefresh);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() { // Cada vez que se realiza el gesto para refrescar
+                productos.clear();
                 recuperarUsuario();
-                listarProductosCiudad(pr);
+                if (ci != null && !ci.equals("...")) {
+                    listarProductosCiudad(ci);
+                }
+                else {
+                    listarProductosCiudad(pr);
+                }
                 swipeLayout.setRefreshing(false);
             }
         });
-    }
 
-    /*private void recuperarUsuario() {
-        Map<String, ?> m = sharedpreferences.getAll();
-
-        un = (String) m.get(Common.un);
-        // Petición de recuperar usuario (un) y actualizar los demás datos
-        cor = (String) m.get(Common.cor);
-        pr = (String) m.get(Common.pr);
-        im = (String) m.get(Common.im);
-
-        if (pr == null || pr.equals("")) {
-            pr = "Zaragoza";
+        recuperarUsuario();
+        if (ci != null && !ci.equals("...")) {
+            listarProductosCiudad(ci);
         }
-    }*/
+        else {
+            listarProductosCiudad(pr);
+        }
+    }
 
     private Bitmap StringToBitMap(String encodedString) {
         try {
@@ -201,7 +193,9 @@ public class PantallaPrincipal extends AppCompatActivity
                             if (ci.isEmpty()) {
                                 ci = "...";
                             }
-                            bajarFotoServidor(usuario.getString("urlArchivo"), menuImagen);
+                            im = usuario.getString("urlArchivo");
+
+                            bajarFotoServidor(im, menuImagen);
 
                             SharedPreferences.Editor editor = sharedpreferences.edit();
                             editor.putString(Common.cor, cor);
@@ -247,16 +241,16 @@ public class PantallaPrincipal extends AppCompatActivity
                 listaProductos[i] = listaProductos[i].substring(1);
             }
 
-            productos = new Ventas();
             String[] producto;
 
+            // TODO: Añadir imagen al producto
             for (int i = 0; i < listaProductos.length; i++) {
                 producto = listaProductos[i].split(",");
                 for (int j = 0; j < producto.length; j++) {
                     producto[j] = producto[j].split(":", 2)[1];
                     if (producto[j].equals("null")) producto[j] = "";
                 }
-                productos.anyadirVenta(producto);
+                productos.anyadirVenta(producto, null);
             }
 
             listarProductos();
@@ -302,6 +296,21 @@ public class PantallaPrincipal extends AppCompatActivity
                 R.id.ProductoResumenDescripcion, R.id.ProductoResumenImagen};
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), productos.getResumenes(), R.layout.content_producto_resumen, from, to);
+        simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Object data,String textRepresentation)
+            { // Para el tratamiento de imágenes
+                if((view instanceof ImageView) & (data instanceof Bitmap))
+                {
+                    ImageView iv = (ImageView) view;
+                    Bitmap bm = (Bitmap) data;
+                    iv.setImageBitmap(bm);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         final ListView androidListView = (ListView) findViewById(R.id.listaProductos);
         androidListView.setAdapter(simpleAdapter);
 
@@ -309,10 +318,8 @@ public class PantallaPrincipal extends AppCompatActivity
         androidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                HashMap<String, String> venta = productos.getVenta(position);
-
                 Intent intent = new Intent(PantallaPrincipal.this, Producto.class);
-                intent.putExtra("Venta", venta);
+                intent.putExtra("Venta", position);
                 startActivity(intent);
             }
         });
