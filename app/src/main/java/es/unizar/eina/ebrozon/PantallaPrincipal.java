@@ -2,9 +2,12 @@ package es.unizar.eina.ebrozon;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -38,6 +41,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,12 +56,16 @@ public class PantallaPrincipal extends AppCompatActivity
     SharedPreferences sharedpreferences;
     private SwipeRefreshLayout swipeLayout;
 
-    private String un;
-    private String cor;
-    private String pr;
-    private String im;
+    private String un; // usuario
+    private String cor; // correo
+    private String pr; // provincia
+    private String ci; // ciudad
+    private String im; // imagen perfil
 
     private Ventas productos;
+    private TextView menuNombre;
+    private TextView menuCorreo;
+    private ImageView menuImagen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,20 +74,7 @@ public class PantallaPrincipal extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-          sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
-
-        recuperarUsuario();
-        listarProductosCiudad(pr);
-
-        // Refresh
-        swipeLayout = findViewById(R.id.listaProductosRefresh);
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() { // Cada vez que se realiza el gesto para refrescar
-                listarProductosCiudad(pr);
-                swipeLayout.setRefreshing(false);
-            }
-        });
+        sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
         // Filtros
         Button botonFiltros = findViewById(R.id.principal_filtros);
@@ -111,17 +107,26 @@ public class PantallaPrincipal extends AppCompatActivity
 
         // Parte de arriba del menu hamburguesa
         View menuArriba = navigationView.getHeaderView(0);
-        TextView menuNombre = (TextView) menuArriba.findViewById(R.id.menuNombre);
-        menuNombre.setText(un);
-        TextView menuCorreo = (TextView) menuArriba.findViewById(R.id.menuCorreo);
-        menuCorreo.setText(cor);
-        if (im != null && !im.equals("")) {
-            ImageView menuImagen = (ImageView) menuArriba.findViewById(R.id.menuImagen);
-            //menuImagen.setImageDrawable();
-        }
+        menuNombre = (TextView) menuArriba.findViewById(R.id.menuNombre);
+        menuCorreo = (TextView) menuArriba.findViewById(R.id.menuCorreo);
+        menuImagen = (ImageView) menuArriba.findViewById(R.id.menuImagen);
+
+        recuperarUsuario();
+        listarProductosCiudad(pr);
+
+        // Refresh
+        swipeLayout = findViewById(R.id.listaProductosRefresh);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() { // Cada vez que se realiza el gesto para refrescar
+                recuperarUsuario();
+                listarProductosCiudad(pr);
+                swipeLayout.setRefreshing(false);
+            }
+        });
     }
 
-    private void recuperarUsuario() {
+    /*private void recuperarUsuario() {
         Map<String, ?> m = sharedpreferences.getAll();
 
         un = (String) m.get(Common.un);
@@ -133,6 +138,102 @@ public class PantallaPrincipal extends AppCompatActivity
         if (pr == null || pr.equals("")) {
             pr = "Zaragoza";
         }
+    }*/
+
+    private Bitmap StringToBitMap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+    private void bajarFotoServidor(String id, final ImageView imagen) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String urlPetition = Common.url + "/loadArchivoTemp?id=" + id;
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        response = response.replace(" ","+");
+                        Bitmap result = StringToBitMap(response);
+                        if (result != null) {
+                            imagen.setImageBitmap(result);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error con imagen de perfil");
+                    }
+                }
+        );
+        queue.add(postRequest);
+    }
+
+    private void recuperarUsuario() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        un = sharedpreferences.getString(Common.un, null);
+
+        String urlPetition = Common.url+"/recuperarUsuario?un="+un;
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        try {
+                            JSONObject usuario = new JSONObject(response);
+                            cor = usuario.getString("correo");
+                            pr = usuario.getString("provincia");
+                            ci = usuario.getString("ciudad");
+                            if (ci.isEmpty()) {
+                                ci = "...";
+                            }
+                            bajarFotoServidor(usuario.getString("urlArchivo"), menuImagen);
+
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putString(Common.cor, cor);
+                            editor.putString(Common.ci, ci);
+                            editor.putString(Common.pr, pr);
+                            editor.putString(Common.im, im);
+                            editor.commit();
+                        }
+                        catch(Exception e) {
+                            cor = sharedpreferences.getString(Common.cor, null);
+                            pr = sharedpreferences.getString(Common.pr, null);
+                            ci = sharedpreferences.getString(Common.ci, null);
+                            im = sharedpreferences.getString(Common.im, null);
+                        }
+
+                        if (pr == null || pr.equals("")) {
+                            pr = "Zaragoza";
+                        }
+                        menuNombre.setText(un);
+                        menuCorreo.setText(cor);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error al recuperar usuario");
+                    }
+                }
+        );
+        queue.add(postRequest);
     }
 
     private void gestionarRespuesta(String response) {
