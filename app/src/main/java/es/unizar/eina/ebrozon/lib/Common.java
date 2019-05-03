@@ -16,4 +16,8 @@ public final class Common {
     public static final String lat = "lat_key";
     public static final String lon = "lon_key";
     public static final String im = "im_key";
+
+    public static final int RESULTADO_NOK = -2;
+    public static final int RESULTADO_OK = -1;
+    public static final int RESULTADO_CANCELADO = 0;
 }

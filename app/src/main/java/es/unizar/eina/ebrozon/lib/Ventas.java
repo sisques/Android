@@ -13,6 +13,7 @@ public class Ventas {
             = new ArrayList<HashMap<String, Object>>();
     private static List<HashMap<String, Object>> resumenes
             = new ArrayList<HashMap<String, Object>>(); // Información duplicada pero muestra más rápido
+    private static Integer idMax = 0; // id máxima entre todas las ventas
 
     private static Bitmap imagenDefault = null;
 
@@ -24,6 +25,7 @@ public class Ventas {
     public void clear() {
         ventas.clear();
         resumenes.clear();
+        idMax = 0;
     }
 
     public void anyadirVenta(String[] producto, Bitmap imagen) {
@@ -31,6 +33,10 @@ public class Ventas {
 
         HashMap<String, Object> venta = new HashMap<String, Object>();
         HashMap<String, Object> resumen = new HashMap<String, Object>();
+
+        Integer id = Integer.parseInt(producto[0]);
+        if (id > idMax)
+            idMax = id;
 
         for (int i=0; i<atributos.length; i++) {
             venta.put(atributos[i], producto[i]);
@@ -56,6 +62,10 @@ public class Ventas {
 
     public void setImagenDefault(Bitmap imagen) {
         imagenDefault = imagen;
+    }
+
+    public Integer getIdMax() {
+        return idMax;
     }
 
     public List<HashMap<String, Object>> getVentas() {
