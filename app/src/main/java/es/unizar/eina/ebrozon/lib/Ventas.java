@@ -2,6 +2,10 @@ package es.unizar.eina.ebrozon.lib;
 
 import android.graphics.Bitmap;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,8 +13,7 @@ import java.util.List;
 
 public class Ventas {
     // Son static para mantener la misma lista sin duplicar
-    private static List<HashMap<String, Object>> ventas
-            = new ArrayList<HashMap<String, Object>>();
+    private static List<JSONObject> ventas = new ArrayList<JSONObject>();
     private static List<HashMap<String, Object>> resumenes
             = new ArrayList<HashMap<String, Object>>(); // Información duplicada pero muestra más rápido
     private static Integer idMax = 0; // id máxima entre todas las ventas
@@ -28,36 +31,35 @@ public class Ventas {
         idMax = 0;
     }
 
-    public void anyadirVenta(String[] producto, Bitmap imagen) {
-        if (atributos.length != producto.length) System.err.println("WARNING VENTA");
+    public void anyadirVentas(JSONArray productos) {
+        HashMap<String, Object> resumen;
+        JSONObject producto;
+        String aux;
+        Integer id;
 
-        HashMap<String, Object> venta = new HashMap<String, Object>();
-        HashMap<String, Object> resumen = new HashMap<String, Object>();
+        for (int i=0; i<productos.length(); i++) {
+            try {
+                producto = productos.getJSONObject(i);
+                ventas.add(producto);
 
-        Integer id = Integer.parseInt(producto[0]);
-        if (id > idMax)
-            idMax = id;
+                id = producto.getInt(atributos[0]);
+                if (id > idMax)
+                    idMax = id;
 
-        for (int i=0; i<atributos.length; i++) {
-            venta.put(atributos[i], producto[i]);
+                resumen = new HashMap<String, Object>();
+                resumen.put(atributos[4], producto.get(atributos[4]).toString());
+                resumen.put(atributos[6], producto.get(atributos[6]).toString());
+                resumen.put(atributos[5], producto.get(atributos[5]).toString());
+                aux = producto.get(atributos[13]).toString();
+                if (!aux.equals(""))
+                    resumen.put(atributos[13], producto.get(atributos[13]).toString());
+                else
+                    resumen.put(atributos[13], producto.get(atributos[14]).toString());
+                resumen.put("imagen", imagenDefault);
+                resumenes.add(resumen);
+            }
+            catch (Exception ignored) { }
         }
-
-        resumen.put(atributos[4], producto[4]);
-        resumen.put(atributos[6], producto[6]);
-        resumen.put(atributos[5], producto[5]);
-
-        if (!atributos[13].equals(""))
-            resumen.put(atributos[13], producto[13]);
-        else
-            resumen.put(atributos[13], producto[14]);
-
-        if (imagen != null)
-            resumen.put("imagen", imagen);
-        else
-            resumen.put("imagen", imagenDefault);
-
-        ventas.add(venta);
-        resumenes.add(resumen);
     }
 
     public void setImagenDefault(Bitmap imagen) {
@@ -66,10 +68,6 @@ public class Ventas {
 
     public Integer getIdMax() {
         return idMax;
-    }
-
-    public List<HashMap<String, Object>> getVentas() {
-        return ventas;
     }
 
     public List<HashMap<String, Object>> getResumenes() {
@@ -91,7 +89,7 @@ public class Ventas {
         return atributos;
     }
 
-    public HashMap<String, Object> getVenta(int index) {
+    public JSONObject getVenta(int index) {
         return ventas.get(index);
     }
 
@@ -99,27 +97,23 @@ public class Ventas {
         return resumenes.get(index);
     }
 
-    public static String getId(HashMap<String, Object> v) {
-        return (String) v.get(atributos[0]);
+    public String getId(int index) throws JSONException {
+        return ventas.get(index).get(atributos[0]).toString();
     }
 
-    public static String getNombre(HashMap<String, Object> v) {
-        return (String) v.get(atributos[4]);
+    public String getNombreVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[4]).toString();
     }
 
-    public static String getPrecio(HashMap<String, Object> v) {
-        return (String) v.get(atributos[6]) + " €";
+    public String getPrecioVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[6]).toString();
     }
 
-    public static String getDescricpion(HashMap<String, Object> v) {
-        return (String) v.get(atributos[5]);
+    public String getDescripcionVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[5]).toString();
     }
 
-    public static Bitmap getImagen(HashMap<String, Object> v) {
-        return (Bitmap) v.get("imagen");
-    }
-
-    public static ArrayList<String> getImagenes(HashMap<String, Object> v) {
-        return (ArrayList<String>) v.get(atributos[atributos.length-1]);
+    public Bitmap getImagenResumen(int index) {
+        return (Bitmap) resumenes.get(index).get("imagen");
     }
 }

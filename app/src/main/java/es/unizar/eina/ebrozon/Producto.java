@@ -6,38 +6,37 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import es.unizar.eina.ebrozon.lib.Ventas;
 
 public class Producto extends AppCompatActivity {
-    private Ventas productos;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_producto);
 
-        productos = new Ventas();
-
-        Integer posVenta = (Integer) getIntent().getSerializableExtra("Venta");
+        Ventas productos = new Ventas();
 
         // Recibe como atributo la posición de la venta
-        HashMap<String, Object> venta = productos.getVenta(posVenta);
+        Integer posVenta = (Integer) getIntent().getSerializableExtra("Venta");
 
         // TODO: Preparar para varias imagenes
-        Bitmap imagen = Ventas.getImagen(productos.getResumen(posVenta));
+        Bitmap imagen = productos.getImagenResumen(posVenta);
         ImageView ProductoImagen = (ImageView) findViewById(R.id.ProductoImagen);
         ProductoImagen.setImageBitmap(imagen);
 
         TextView ProductoNombre = (TextView) findViewById(R.id.ProductoNombre);
-        ProductoNombre.setText(Ventas.getNombre(venta));
+        try {
+            ProductoNombre.setText(productos.getNombreVenta(posVenta));
+        } catch (Exception ignored) { }
 
         TextView ProductoPrecio = (TextView) findViewById(R.id.ProductoPrecio);
-        ProductoPrecio.setText(Ventas.getPrecio(venta));
+        try {
+            ProductoPrecio.setText(productos.getPrecioVenta(posVenta));
+        } catch (Exception ignored) { }
 
         TextView ProductoDescripcion = (TextView) findViewById(R.id.ProductoDescripcion);
-        ProductoDescripcion.setText(Ventas.getDescricpion(venta));
+        try {
+            ProductoDescripcion.setText(productos.getDescripcionVenta(posVenta));
+        } catch (Exception ignored) { }
     }
 }
