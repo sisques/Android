@@ -14,8 +14,8 @@ import java.util.List;
 public class Ventas {
     // Son static para mantener la misma lista sin duplicar
     private static List<JSONObject> ventas = new ArrayList<JSONObject>();
-    private static List<HashMap<String, Object>> resumenes
-            = new ArrayList<HashMap<String, Object>>(); // Información duplicada pero muestra más rápido
+    private static List<HashMap<String, String>> resumenes
+            = new ArrayList<HashMap<String, String>>(); // Información duplicada pero muestra más rápido
     private static Integer idMax = 0; // id máxima entre todas las ventas
 
     private static Bitmap imagenDefault = null;
@@ -32,7 +32,7 @@ public class Ventas {
     }
 
     public void anyadirVentas(JSONArray productos) {
-        HashMap<String, Object> resumen;
+        HashMap<String, String> resumen;
         JSONObject producto;
         String aux;
         Integer id;
@@ -46,7 +46,7 @@ public class Ventas {
                 if (id > idMax)
                     idMax = id;
 
-                resumen = new HashMap<String, Object>();
+                resumen = new HashMap<String, String>();
                 resumen.put(atributos[4], producto.get(atributos[4]).toString());
                 resumen.put(atributos[6], producto.get(atributos[6]).toString());
                 resumen.put(atributos[5], producto.get(atributos[5]).toString());
@@ -55,7 +55,7 @@ public class Ventas {
                     resumen.put(atributos[13], producto.get(atributos[13]).toString());
                 else
                     resumen.put(atributos[13], producto.get(atributos[14]).toString());
-                resumen.put("imagen", imagenDefault);
+                resumen.put("imagen", producto.getJSONArray(atributos[atributos.length-1]).get(0).toString());
                 resumenes.add(resumen);
             }
             catch (Exception ignored) { }
@@ -70,7 +70,7 @@ public class Ventas {
         return idMax;
     }
 
-    public List<HashMap<String, Object>> getResumenes() {
+    public List<HashMap<String, String>> getResumenes() {
         return resumenes;
     }
 
@@ -93,7 +93,7 @@ public class Ventas {
         return ventas.get(index);
     }
 
-    public HashMap<String, Object> getResumen(int index) {
+    public HashMap<String, String> getResumen(int index) {
         return resumenes.get(index);
     }
 
@@ -113,7 +113,16 @@ public class Ventas {
         return ventas.get(index).get(atributos[5]).toString();
     }
 
-    public Bitmap getImagenResumen(int index) {
-        return (Bitmap) resumenes.get(index).get("imagen");
+    public String getImagenVenta(int index) {
+        try {
+            return ventas.get(index).getJSONArray(atributos[atributos.length - 1]).get(0).toString();
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getImagenResumen(int index) {
+        return (String) resumenes.get(index).get("imagen");
     }
 }

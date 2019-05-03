@@ -1,5 +1,21 @@
 package es.unizar.eina.ebrozon.lib;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
+import android.widget.ImageView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.Objects;
+
 public final class Common {
     public static final String url ="https://protected-caverns-60859.herokuapp.com";
 
@@ -20,4 +36,69 @@ public final class Common {
     public static final int RESULTADO_NOK = -2;
     public static final int RESULTADO_OK = -1;
     public static final int RESULTADO_CANCELADO = 0;
+
+    // Funciones de uso general
+    public static Bitmap StringToBitMap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+    public static void obtenerFotoServidor(Context context, String id, final Bitmap imagen) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String urlPetition = Common.url + "/loadArchivoTemp?id=" + id;
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        response = response.replace(" ","+");
+                        imagen.setConfig(Objects.requireNonNull(StringToBitMap(response)).getConfig());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error con imagen de perfil");
+                    }
+                }
+        );
+        queue.add(postRequest);
+    }
+
+    public static void establecerFotoServidor(Context context, String id, final ImageView imagen) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String urlPetition = Common.url + "/loadArchivoTemp?id=" + id;
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        response = response.replace(" ","+");
+                        Bitmap result = StringToBitMap(response);
+                        if (result != null) {
+                            imagen.setImageBitmap(result);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error con imagen de perfil");
+                    }
+                }
+        );
+        queue.add(postRequest);
+    }
 }

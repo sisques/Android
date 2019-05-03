@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
 
 public class Producto extends AppCompatActivity {
@@ -20,9 +21,11 @@ public class Producto extends AppCompatActivity {
         Integer posVenta = (Integer) getIntent().getSerializableExtra("Venta");
 
         // TODO: Preparar para varias imagenes
-        Bitmap imagen = productos.getImagenResumen(posVenta);
+        //Bitmap imagen = productos.getImagenResumen(posVenta);
         ImageView ProductoImagen = (ImageView) findViewById(R.id.ProductoImagen);
-        ProductoImagen.setImageBitmap(imagen);
+        //ProductoImagen.setImageBitmap(imagen);
+        Common.establecerFotoServidor(getApplicationContext(), productos.getImagenResumen(posVenta),
+                ProductoImagen);
 
         TextView ProductoNombre = (TextView) findViewById(R.id.ProductoNombre);
         try {
