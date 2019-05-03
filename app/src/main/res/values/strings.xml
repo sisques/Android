@@ -136,9 +136,12 @@
     <string name="hora_limite_subasta">HORA LIMITE SUBASTA</string>
     <string name="anterior">ANTERIOR</string>
     <string name="siguiente">SIGUIENTE</string>
+    <string name="subir">SUBIR</string>
     <string name="paso_1_de_3">PASO 1 DE 3</string>
-    <string name="todo">TODO</string>
     <string name="paso_2_de_3">PASO 2 DE 3</string>
+    <string name="paso_3_de_3">PASO 3 DE 3</string>
+    <string name="todo">TODO</string>
+
     <string name="publicar_como_subasta">Publicar como subasta</string>
     <string name="textview">TextView</string>
 
