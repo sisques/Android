@@ -135,45 +135,6 @@ public class PantallaPrincipal extends AppCompatActivity
         listarProductos();
     }
 
-    private Bitmap StringToBitMap(String encodedString) {
-        try {
-            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
-
-    private void bajarFotoServidor(String id, final ImageView imagen) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String urlPetition = Common.url + "/loadArchivoTemp?id=" + id;
-
-        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // response
-                        Log.d("Response", response);
-                        response = response.replace(" ","+");
-                        Bitmap result = StringToBitMap(response);
-                        if (result != null) {
-                            imagen.setImageBitmap(result);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error
-                        Log.d("Error.Response", "Error con imagen de perfil");
-                    }
-                }
-        );
-        queue.add(postRequest);
-    }
-
     private void recuperarUsuario() {
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -198,7 +159,7 @@ public class PantallaPrincipal extends AppCompatActivity
                             }
                             im = usuario.getString("urlArchivo");
 
-                            bajarFotoServidor(im, menuImagen);
+                            Common.establecerFotoServidor(getApplicationContext(), im, menuImagen);
 
                             SharedPreferences.Editor editor = sharedpreferences.edit();
                             editor.putString(Common.cor, cor);
@@ -303,13 +264,11 @@ public class PantallaPrincipal extends AppCompatActivity
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), productos.getResumenes(), R.layout.content_producto_resumen, from, to);
         simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
             @Override
-            public boolean setViewValue(View view, Object data,String textRepresentation)
+            public boolean setViewValue(View view, Object data, String textRepresentation)
             { // Para el tratamiento de imágenes
-                if((view instanceof ImageView) & (data instanceof Bitmap))
+                if((view instanceof ImageView) & (data instanceof String))
                 {
-                    ImageView iv = (ImageView) view;
-                    Bitmap bm = (Bitmap) data;
-                    iv.setImageBitmap(bm);
+                    Common.establecerFotoServidor(getApplicationContext(), (String) data, (ImageView) view);
                     return true;
                 }
                 return false;
