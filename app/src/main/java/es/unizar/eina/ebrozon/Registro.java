@@ -60,7 +60,7 @@ public class Registro extends AppCompatActivity {
 
     private Boolean confirmCheck = false;
 
-    private Boolean fullNameCheckValue = false;
+
     private Boolean userNameCheckValue = false;
     private Boolean passwordCheckValue = false;
     private Boolean mailCheckValue = false;
@@ -206,7 +206,6 @@ public class Registro extends AppCompatActivity {
             mailCheckLength = (email.length() <= 100 && email.length() >= 3);
             confirmCheck = passwd.equals(passwd2);
 
-            fullNameCheckValue = fullname.matches("\\p{L}+ \\p{L}+");
             userNameCheckValue = uname.matches("[a-zA-Z0-9_]+");
             passwordCheckValue = passwd.matches("[a-zA-Z0-9_]+");
             mailCheckValue = email.matches("[a-zA-Z0-9_.]+@[a-zA-Z0-9_.]+");;
@@ -242,9 +241,6 @@ public class Registro extends AppCompatActivity {
 
         if (!fullNameCheckLength) {
             Toast.makeText(getApplicationContext(),"El nombre completo tiene que tener entre 3 y 75 caracteres.", Toast.LENGTH_LONG).show();
-        }
-        else if (!fullNameCheckValue) {
-            Toast.makeText(getApplicationContext(),"El nombre completo tiene que seguir el patrón Nombre Apellido.", Toast.LENGTH_LONG).show();
         }
         else if (!userNameCheckLength) {
             Toast.makeText(getApplicationContext(),"El nombre de usuario tiene que tener entre 3 y 30 caracteres.", Toast.LENGTH_LONG).show();

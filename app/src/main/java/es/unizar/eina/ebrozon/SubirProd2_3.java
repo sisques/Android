@@ -76,9 +76,9 @@ public class SubirProd2_3 extends AppCompatActivity {
 
         Calendar cal = Calendar.getInstance();
 
-        fecha.setText( cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.YEAR) );
+        fecha.setText( "INTRODUCE UNA FECHA PULSANDO AQUI" );
 
-        hora.setText( cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE));
+        hora.setText( "INTRODUCE UNA HORA PULSANDO AQUI" );
 
         anterior.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +90,11 @@ public class SubirProd2_3 extends AppCompatActivity {
         siguiente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pasoSiguiente();
+                try {
+                    pasoSiguiente();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -117,7 +121,6 @@ public class SubirProd2_3 extends AppCompatActivity {
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         dateSetListener,
                         year,month,day);
-                dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -165,7 +168,6 @@ public class SubirProd2_3 extends AppCompatActivity {
                             m = '0'+m;
                         }
 
-
                         horaSet = true;
 
                         hora.setText(h+":"+m);
@@ -208,7 +210,7 @@ public class SubirProd2_3 extends AppCompatActivity {
         }
     };
 
-    private void pasoSiguiente(){
+    private void pasoSiguiente() throws  ParseException{
 
         boolean fechaOk = true;
 
@@ -220,11 +222,7 @@ public class SubirProd2_3 extends AppCompatActivity {
             inicial = precioInicial.getText().toString().trim();
             String fechaCompleta = fecha.getText().toString().trim() + " " + hora.getText().toString().trim();
             SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            try {
-                fechaLimite = formatter1.parse(fechaCompleta);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            fechaLimite = formatter1.parse(fechaCompleta);
             if ( fechaLimite.before(new Date())){
                 Toast.makeText(getApplicationContext(),"La fecha limite debe ser posterior al dia de hoy", Toast.LENGTH_LONG).show();
                 fechaOk = false;
@@ -232,26 +230,25 @@ public class SubirProd2_3 extends AppCompatActivity {
         }
         if(fechaOk) {
 
+
+
             Intent intentAnterior = getIntent();
             String producto = intentAnterior.getStringExtra("nombreProducto");
             String descripcion = intentAnterior.getStringExtra("descripcionProducto");
-            Bitmap imagen1_bm = (Bitmap) intentAnterior.getParcelableExtra("foto1");
-            Bitmap imagen2_bm = (Bitmap) intentAnterior.getParcelableExtra("foto2");
-            Bitmap imagen3_bm = (Bitmap) intentAnterior.getParcelableExtra("foto3");
-            Bitmap imagen4_bm = (Bitmap) intentAnterior.getParcelableExtra("foto4");
+            int sync  =  intentAnterior.getIntExtra("bigdata:synccode",-1);
 
 
             Intent intent = new Intent(SubirProd2_3.this, SubirProd3_3.class);
             intent.putExtra("nombreProducto", producto);
             intent.putExtra("descripcionProducto", descripcion);
-            intent.putExtra("foto1", imagen1_bm);
-            intent.putExtra("foto2", imagen2_bm);
-            intent.putExtra("foto3", imagen3_bm);
-            intent.putExtra("foto4", imagen4_bm);
+            intent.putExtra("bigdata:synccode", sync);
             intent.putExtra("precioProducto", venta);
             intent.putExtra("esSubasta", subasta);
             intent.putExtra("precioInicial", inicial);
-            intent.putExtra("fechaLimite", fechaLimite);
+            long f = -1;
+            if (fechaLimite != null){ f = fechaLimite.getTime();}
+
+            intent.putExtra("fechaLimite", f);
 
             startActivity(intent);
         }
