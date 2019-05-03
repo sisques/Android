@@ -113,6 +113,11 @@
     <string name="descripcion_del_producto">DESCRIPCIÓN DEL PRODUCTO</string>
     <string name="Ejemplo">Ejemplo</string>
     <string name="Filtros">Filtros</string>
+    <string name="Icono">Icono</string>
+    <string name="Aplicar">Aplicar</string>
+    <string name="Restablecer">Restablecer</string>
+    <string name="FiltroTexto">Filtros para la búsqueda de productos.</string>
+    <string name="FiltroTodos">Mostrar productos de todas las ciudades</string>
 
     <string name="Precio">Precio</string>
     <string name="Producto">Producto</string>

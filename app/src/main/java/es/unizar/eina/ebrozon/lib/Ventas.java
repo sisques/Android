@@ -37,8 +37,14 @@ public class Ventas {
         }
 
         resumen.put(atributos[4], producto[4]);
-        resumen.put(atributos[6], producto[6] + " €");
+        resumen.put(atributos[6], producto[6]);
         resumen.put(atributos[5], producto[5]);
+
+        if (!atributos[13].equals(""))
+            resumen.put(atributos[13], producto[13]);
+        else
+            resumen.put(atributos[13], producto[14]);
+
         if (imagen != null)
             resumen.put("imagen", imagen);
         else
@@ -61,11 +67,12 @@ public class Ventas {
     }
 
     public String[] getResumenAtributos() {
-        String[] resumenAtributos = new String[4];
+        String[] resumenAtributos = new String[5];
         resumenAtributos[0] = atributos[4];
         resumenAtributos[1] = atributos[6];
         resumenAtributos[2] = atributos[5];
-        resumenAtributos[3] = "imagen";
+        resumenAtributos[3] = atributos[13];
+        resumenAtributos[4] = "imagen";
 
         return resumenAtributos;
     }
