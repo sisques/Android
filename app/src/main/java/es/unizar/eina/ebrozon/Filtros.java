@@ -7,19 +7,34 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Switch;
+
+import es.unizar.eina.ebrozon.lib.Common;
 
 public class Filtros extends AppCompatActivity {
 
     private Spinner spinnerCi; // spinner ciudad
     private String filtroCi; // filtro ciudad
+    private Boolean filtroPorCiudad; // Mostrar por ciudad
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filtros);
 
-        // TODO: Acabar interruptor, y tratar los diferentes estados
+        filtroPorCiudad = getIntent().getBooleanExtra("listarPorCiudad", false);
+
+        // Switch mostrar todos los productos
+        Switch mostrarTodos = findViewById(R.id.FiltroTodos);
+        mostrarTodos.setChecked(!filtroPorCiudad);
+        mostrarTodos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filtroPorCiudad = !isChecked;
+            }
+        });
 
         // Botón aplicar
         Button botonAplicar = findViewById(R.id.FiltroBotonAplicar);
@@ -28,10 +43,8 @@ public class Filtros extends AppCompatActivity {
             public void onClick(View view) {
                 Intent data = new Intent();
                 data.setData(Uri.parse(filtroCi));
-                if (!filtroCi.equals("..."))
-                    setResult(RESULT_OK, data);
-                else
-                    setResult(RESULT_CANCELED, data);
+                data.putExtra("listarPorCiudad", filtroPorCiudad);
+                setResult(Common.RESULTADO_OK, data);
                 finish();
             }
         });
@@ -43,7 +56,7 @@ public class Filtros extends AppCompatActivity {
             public void onClick(View view) {
                 Intent data = new Intent();
                 data.setData(Uri.parse(filtroCi));
-                setResult(RESULT_CANCELED, data);
+                setResult(Common.RESULTADO_CANCELADO, data);
                 finish();
             }
         });
@@ -65,7 +78,7 @@ public class Filtros extends AppCompatActivity {
     public void onBackPressed() {
         Intent data = new Intent();
         data.setData(Uri.parse(filtroCi));
-        setResult(RESULT_CANCELED, data);
+        setResult(Common.RESULTADO_NOK, data);
         finish();
     }
 }
