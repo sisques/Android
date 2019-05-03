@@ -36,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import es.unizar.eina.ebrozon.lib.Common;
@@ -275,28 +276,10 @@ public class PantallaPrincipal extends AppCompatActivity
                         // response
                         Log.d("Response", response);
                         if (!response.equals("[]")) {
-                            response = response.replace("[", "").replace("]", "");
-                            response = response.replace("{", "").replace("\"", "");
-
-                            String[] listaProductos = response.split("\\}");
-
-                            for (int i = 1; i < listaProductos.length; i++) {
-                                listaProductos[i] = listaProductos[i].substring(1);
-                            }
-
-                            String[] producto;
-
-                            // TODO: Añadir imagen al producto
-                            for (int i = 0; i < listaProductos.length; i++) {
-                                producto = listaProductos[i].split(",");
-                                for (int j = 0; j < producto.length; j++) {
-                                    producto[j] = producto[j].split(":", 2)[1];
-                                    if (producto[j].equals("null")) producto[j] = "";
-                                }
-                                productos.anyadirVenta(producto, null);
-                            }
-
-                            gestionarListarTrasPeticion();
+                            try {
+                                productos.anyadirVentas(new JSONArray(response));
+                                gestionarListarTrasPeticion();
+                            }catch (Exception ignored) { }
                         }
                     }
                 },
