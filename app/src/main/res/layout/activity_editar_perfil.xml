@@ -2,51 +2,189 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/editProfile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorFondo"
     tools:context=".editar_perfil">
 
-    <ImageView
-        android:id="@+id/editPic"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/editConfirm"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:maxWidth="100dp"
-        android:maxHeight="100dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:onClick="subirCambios"
+        android:text="@string/BotonConfirmarEditar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher" />
+        tools:text="@string/BotonConfirmarEditar" />
 
-    <Button
-        android:id="@+id/editPicButton"
+    <LinearLayout
+        android:id="@+id/editInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editInfoTitle">
+
+        <TextView
+            android:id="@+id/editPicText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/EditarFoto"
+            android:textColor="@color/colorPrimary" />
+
+        <ImageButton
+            android:id="@+id/editPic"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:maxWidth="100dp"
+            android:maxHeight="100dp"
+            android:minWidth="100dp"
+            android:minHeight="100dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@android:drawable/sym_def_app_icon"
+            tools:srcCompat="@android:drawable/sym_def_app_icon" />
+
+        <TextView
+            android:id="@+id/editNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/NombrePerfil"
+            android:text="@string/NombrePerfil"
+            android:textColor="@color/colorPrimary"
+            tools:text="@string/NombrePerfil" />
+
+        <EditText
+            android:id="@+id/editName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NombreCompleto"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/editProvinceText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/ProvinciaPerfil"
+            android:text="@string/ProvinciaPerfil"
+            android:textColor="@color/colorPrimary"
+            tools:text="@string/ProvinciaPerfil" />
+
+        <AutoCompleteTextView
+            android:id="@+id/editProvince"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:completionThreshold="1"
+            android:dropDownWidth="wrap_content"
+            android:dropDownHeight="wrap_content" />
+
+        <TextView
+            android:id="@+id/editCityText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/CiudadPerfil"
+            android:text="@string/CiudadPerfil"
+            android:textColor="@color/colorPrimary"
+            tools:text="@string/CiudadPerfil" />
+
+        <AutoCompleteTextView
+            android:id="@+id/editCity"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:completionThreshold="1"
+            android:dropDownWidth="wrap_content"
+            android:dropDownHeight="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/editTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="Subir"
+        android:contentDescription="@string/TituloEditarPerfil"
+        android:text="@string/TituloEditarPerfil"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editPic" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/TituloEditarPerfil" />
 
-    <ImageView
-        android:id="@+id/editPicResult"
+    <TextView
+        android:id="@+id/editInfoTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:maxWidth="100dp"
-        android:maxHeight="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/editPic"
+        android:contentDescription="@string/TituloEditarInfo"
+        android:text="@string/TituloEditarInfo"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTitle"
+        tools:text="@string/TituloEditarInfo" />
+
+    <TextView
+        android:id="@+id/editSettingsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/TituloEditarAjustes"
+        android:text="@string/TituloEditarAjustes"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editInfo"
+        tools:text="@string/TituloEditarAjustes" />
+
+    <LinearLayout
+        android:id="@+id/editSettings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/editConfirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_help" />
+        app:layout_constraintTop_toBottomOf="@+id/editSettingsTitle">
+
+        <Button
+            android:id="@+id/editPassword"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/CambiarContraseña" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
