@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="colorPrimary">#2a6ebc</color>
     <color name="colorPrimaryDark">#225896</color>
     <color name="colorAccent">#bc7829</color>
@@ -7,5 +8,6 @@
     <color name="colorFondo">#d4ebf2</color>
     <color name="colorTextos">@color/secondary_text_default_material_light</color>
     <color name="colorRojo">#c62828</color>
+
 
 </resources>

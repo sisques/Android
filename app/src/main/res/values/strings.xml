@@ -145,5 +145,310 @@
     <string name="publicar_como_subasta">Publicar como subasta</string>
     <string name="textview">TextView</string>
 
+    <!-- Perfil de usuario -->
+    <string name="TituloPerfil">Tu perfil</string>
+    <string name="TituloOpinion">Valoraciones</string>
+    <string name="NombrePerfil">NOMBRE</string>
+    <string name="EmailPerfil">DIRECCIÓN DE CORREO</string>
+    <string name="ProvinciaPerfil">PROVINCIA</string>
+    <string name="CiudadPerfil">CIUDAD</string>
+    <string name="VentasRealizadas">Ventas: </string>
+    <string name="ComprasRealizadas">Compras: </string>
 
+    <string name="BotonValoraciones2">Mis Valoraciones</string>
+    <string name="BotonValoraciones1">Valoraciones de usuarios</string>
+
+    <!-- Editar perfil de usuario -->
+    <string name="TituloEditarPerfil">Edita tu perfil</string>
+    <string name="TituloEditarInfo">Información</string>
+    <string name="TituloEditarAjustes">Ajustes de seguridad</string>
+    <string name="BotonConfirmarEditar">Aplicar cambios</string>
+    <string name="EditarFoto">FOTO DE PERFIL</string>
+    <string name="CambiarContraseña">Cambiar tu contraseña</string>
+
+    <string-array name="ListaCiudades">
+        <item>Almería</item>
+        <item>Avilés</item>
+        <item>A Coruña</item>
+        <item>Albacete</item>
+        <item>Alicante</item>
+        <item>Adra </item>
+        <item>Allora</item>
+        <item>Albir </item>
+        <item>Alhama</item>
+        <item>Altea</item>
+        <item>Aranjuez</item>
+        <item>Antequera</item>
+        <item>Aguadulce</item>
+        <item>Alberca</item>
+        <item>Almerimar</item>
+        <item>Almodovar</item>
+        <item>Almuñecar</item>
+        <item>Arenys de Mar</item>
+        <item>Alba de Tormes</item>
+        <item>Alcalá de Henares</item>
+        <item>Altamira</item>
+        <item>El HierroEspejo</item>
+        <item>El Toyo </item>
+        <item>Escalona </item>
+        <item>El Toboso</item>
+        <item>Esquivias </item>
+        <item>Estella</item>
+        <item>Estepona</item>
+        <item>El Rompido</item>
+        <item>Escatrón</item>
+        <item>El Escorial</item>
+        <item>El Campello</item>
+        <item>El Puerto de Santa María</item>
+        <item>Ejea de los Caballeros</item>
+        <item>Espinosa de los Monteros</item>
+        <item>IbizaItero</item>
+        <item>Illora</item>
+        <item>Isaba</item>
+        <item>Illanoz</item>
+        <item>Illescas</item>
+        <item>Itálica</item>
+        <item>Islantilla</item>
+        <item>Isla Canela</item>
+        <item>Isla Cristina</item>
+        <item>Madrid</item>
+        <item>Málaga</item>
+        <item>Menorca</item>
+        <item>Murcia</item>
+        <item>Mallorca</item>
+        <item>Mijas </item>
+        <item>Maqueda </item>
+        <item>Mecina </item>
+        <item>Mérida </item>
+        <item>Marbella </item>
+        <item>Mazarrón </item>
+        <item>Montoro </item>
+        <item>Moriles </item>
+        <item>Mataró </item>
+        <item>Montilla </item>
+        <item>Montefrío </item>
+        <item>Morella </item>
+        <item>Mogarraz </item>
+        <item>Matalascañas</item>
+        <item>Montserrat</item>
+        <item>Medina Azahara </item>
+        <item>Medina de Pomar</item>
+        <item>Moradillo de Sedano </item>
+        <item>Miranda del Castañar </item>
+        <item>Quintanar de la Orden</item>
+        <item>Quintanilla de las Viñas</item>
+        <item>Ujue </item>
+        <item>Uncastillo</item>
+        <item>Yesa</item>
+        <item>Burgos</item>
+        <item>Barcelona</item>
+        <item>Baza </item>
+        <item>Baena </item>
+        <item>Bolonia </item>
+        <item>Bilbao </item>
+        <item>Borja </item>
+        <item>Bubión </item>
+        <item>Bejar </item>
+        <item>Belorado </item>
+        <item>Barciense </item>
+        <item>Belagua </item>
+        <item>Briviesca </item>
+        <item>Benidorm </item>
+        <item>Badalona </item>
+        <item>Benalmádena </item>
+        <item>Burjasot </item>
+        <item>Baelo Claudia </item>
+        <item>Formentera</item>
+        <item>Fuerteventura</item>
+        <item>Frías </item>
+        <item>Figueres </item>
+        <item>Fuengirola </item>
+        <item>Finestrat </item>
+        <item>Fuentetodos </item>
+        <item>JaénJávea </item>
+        <item>Játiva </item>
+        <item>Jerez de la Frontera</item>
+        <item>Nerja </item>
+        <item>Nuevalos </item>
+        <item>Nuevo Portil </item>
+        <item>Rota </item>
+        <item>Ronda</item>
+        <item>Roncal </item>
+        <item>Roncesvalles</item>
+        <item>Roquetas de Mar</item>
+        <item>Redecilla del Camino</item>
+        <item>Rebolledo de la Torre</item>
+        <item>Rincón de la Victoria</item>
+        <item>Valencia</item>
+        <item>ValladolidVera</item>
+        <item>Vélez</item>
+        <item>Valor</item>
+        <item>Viana</item>
+        <item>Vigo</item>
+        <item>Villafranca</item>
+        <item>Vilafranca </item>
+        <item>Vitoria-Gasteiz</item>
+        <item>Zamora</item>
+        <item>Zaragoza</item>
+        <item>Zahara de Los Atunes</item>
+        <item>Cádiz</item>
+        <item>Cuenca</item>
+        <item>Cabrera</item>
+        <item>Cáceres</item>
+        <item>Córdoba</item>
+        <item>Castellón</item>
+        <item>Ciudad Real</item>
+        <item>Costa Brava</item>
+        <item>Costa Vasca</item>
+        <item>Costa Verde</item>
+        <item>Costa Blanca</item>
+        <item>Costa Cálida</item>
+        <item>Costa Dorada</item>
+        <item>Costa del Sol</item>
+        <item>Cabra</item>
+        <item>Costa de la LuzCalpe</item>
+        <item>Casares</item>
+        <item>Caspe</item>
+        <item>Chiclana</item>
+        <item>Carmona</item>
+        <item>Chinchón</item>
+        <item>Carihuela</item>
+        <item>Cartagena</item>
+        <item>Consuegra</item>
+        <item>Costa Almería</item>
+        <item>Costa AzaharCugat</item>
+        <item>Calahonda</item>
+        <item>Capileira</item>
+        <item>Cariñena</item>
+        <item>Carratraca</item>
+        <item>Castillejo</item>
+        <item>Castrojeriz</item>
+        <item>Calatayud</item>
+        <item>Covarrubias</item>
+        <item>Casarabonela</item>
+        <item>Costa Ballena</item>
+        <item>Candelario</item>
+        <item>Castell de Ferro</item>
+        <item>Ciudad Rodrigo</item>
+        <item>Conil de La Frontera</item>
+        <item>Castillo de Javier</item>
+        <item>Gijón</item>
+        <item>Gerona</item>
+        <item>Granada</item>
+        <item>Guadalajara</item>
+        <item>Gran Canaria</item>
+        <item>Guadix</item>
+        <item>Guadamur</item>
+        <item>Guadalupe(Cáceres)</item>
+        <item>Guardamar del Segura</item>
+        <item>Ourense</item>
+        <item>Oviedo</item>
+        <item>Ojén</item>
+        <item>Ocaña</item>
+        <item>Orgaz</item>
+        <item>Osuna</item>
+        <item>Olite</item>
+        <item>Oropesa</item>
+        <item>Orvija</item>
+        <item>Olmillos</item>
+        <item>Oropesa</item>
+        <item>Ochagavía</item>
+        <item>Soria</item>
+        <item>Segovia</item>
+        <item>Sevilla</item>
+        <item>Salamanca</item>
+        <item>Santander</item>
+        <item>Silos</item>
+        <item>Sedano</item>
+        <item>Sagunto</item>
+        <item>Santa Fe</item>
+        <item>Sitges</item>
+        <item>Salobreña</item>
+        <item>Sangüesa</item>
+        <item>Soportuja</item>
+        <item>Sabadell</item>
+        <item>Santiponce</item>
+        <item>Sequeros</item>
+        <item>Santa Pola</item>
+        <item>Sigüenza</item>
+        <item>Sierra Nevada</item>
+        <item>San Sebastián</item>
+        <item>San Juan de Ortega</item>
+        <item>Salas de los Infantes</item>
+        <item>San José del Monte</item>
+        <item>Sant Pere de Ribes</item>
+        <item>Santillana del Mar</item>
+        <item>San Pedro de Alcántara</item>
+        <item>San Salvador de Leyre</item>
+        <item>Sant Sadurní d\'Anoia</item>
+        <item>Sos del Rey Católicos</item>
+        <item>antiago de Compostela</item>
+        <item>Denia</item>
+        <item>Daroca</item>
+        <item>Doñana</item>
+        <item>Huelva</item>
+        <item>Huesca</item>
+        <item>Huéscar</item>
+        <item>León</item>
+        <item>Lugo</item>
+        <item>Lérida</item>
+        <item>Logroño</item>
+        <item>La Palma</item>
+        <item>La Gomera</item>
+        <item>Lanzarote</item>
+        <item>Lerma</item>
+        <item>Loja</item>
+        <item>La Manga</item>
+        <item>La Rábida</item>
+        <item>Lagartera</item>
+        <item>Lanjarón</item>
+        <item>La Antilla</item>
+        <item>La Alpujarra</item>
+        <item>La Calahorra</item>
+        <item>La Herradura</item>
+        <item>Lloret de Mar</item>
+        <item>La Albufeira</item>
+        <item>Las Batuecas</item>
+        <item>Palencia</item>
+        <item>Pamplona</item>
+        <item>Pontevedra</item>
+        <item>Pizarra</item>
+        <item>Priego</item>
+        <item>Palmar</item>
+        <item>Penedés</item>
+        <item>Plasencia</item>
+        <item>Pampaneira</item>
+        <item>Peñíscola</item>
+        <item>Puentearenas</item>
+        <item>Puerto Banús</item>
+        <item>Pinos Puente</item>
+        <item>Punta Umbría</item>
+        <item>Puente la Reina</item>
+        <item>Peñaranda del Duero</item>
+        <item>Palos de la Frontera</item>
+        <item>Puente del Arzobispo</item>
+        <item>Picos de Europa </item>
+        <item>Pilar de Horadada</item>
+        <item>Teruel</item>
+        <item>Toledo</item>
+        <item>Tenerife</item>
+        <item>Tarragona</item>
+        <item>Tarifa</item>
+        <item>Tauste</item>
+        <item>Torrijos</item>
+        <item>Tabarca</item>
+        <item>Tafalla</item>
+        <item>Tembleque</item>
+        <item>Trévelez</item>
+        <item>Trujillo</item>
+        <item>Tudela</item>
+        <item>Tarazona</item>
+        <item>Terrasa</item>
+        <item>Torrenueva</item>
+        <item>Torremolinos</item>
+        <item>Torrevieja</item>
+        <item>Tossa de Mar</item>
+        <item>Torcal de Antequera</item>
+        <item>Talavera de la Reina</item>
+    </string-array>
 </resources>

@@ -319,7 +319,7 @@ public class PantallaPrincipal extends AppCompatActivity
             misProductos = false;
             resetPantalla();
         } else if (id == R.id.nav_ajustes) {
-
+            startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
         } else if (id == R.id.nav_ayuda) {
 
         } else if (id == R.id.nav_en_venta) {
