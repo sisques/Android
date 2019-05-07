@@ -252,11 +252,11 @@ public class perfil_usuario extends AppCompatActivity {
     }
 
     private void recuperarValoracionesUsuarios() {
-        //
+        // Falta
     }
 
     private void recuperarMisValoraciones() {
-        //
+        // Falta
     }
 
     public void editarPerfil(View view) {
