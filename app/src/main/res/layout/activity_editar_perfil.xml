@@ -86,6 +86,7 @@
         <AutoCompleteTextView
             android:id="@+id/editProvince"
             android:inputType="text"
+            android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:completionThreshold="1"
@@ -104,6 +105,7 @@
         <AutoCompleteTextView
             android:id="@+id/editCity"
             android:inputType="text"
+            android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:completionThreshold="1"

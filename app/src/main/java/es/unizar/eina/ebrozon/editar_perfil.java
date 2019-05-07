@@ -370,9 +370,7 @@ public class editar_perfil extends AppCompatActivity {
                         params.put("na",fullname.split(" ")[0]);
                         params.put("lna",fullname.split(" ")[1]);
                         params.put("pr",province);
-                        if (!city.isEmpty()) {
-                            params.put("ci",city);
-                        }
+                        params.put("ci",city);
                         if (actualizarFoto) {
                             String cadenaFoto = BitMapToString(foto);
                             params.put("im",cadenaFoto);
@@ -384,6 +382,7 @@ public class editar_perfil extends AppCompatActivity {
     }
 
     private void bajarFotoServidor(String id) {
+        confirm.setEnabled(false);
         RequestQueue queue = Volley.newRequestQueue(this);
         String urlPetition = "http://protected-caverns-60859.herokuapp.com/loadArchivoTemp?id="+id;
 
@@ -397,6 +396,7 @@ public class editar_perfil extends AppCompatActivity {
                         int longitud = response.length();
                         Bitmap result = StringToBitMap(response);
                         uploadPicture.setImageBitmap(result);
+                        confirm.setEnabled(true);
                     }
                 },
                 new Response.ErrorListener() {
