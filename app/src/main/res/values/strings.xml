@@ -146,6 +146,7 @@
     <string name="textview">TextView</string>
 
     <!-- Perfil de usuario -->
+    <string name="title_activity_perfil">Tu perfil</string>
     <string name="TituloPerfil">Tu perfil</string>
     <string name="TituloOpinion">Valoraciones</string>
     <string name="NombrePerfil">NOMBRE</string>
@@ -159,6 +160,7 @@
     <string name="BotonValoraciones1">Valoraciones de usuarios</string>
 
     <!-- Editar perfil de usuario -->
+    <string name="title_activity_editarperfil">Edita tu perfil</string>
     <string name="TituloEditarPerfil">Edita tu perfil</string>
     <string name="TituloEditarInfo">Información</string>
     <string name="TituloEditarAjustes">Ajustes de seguridad</string>

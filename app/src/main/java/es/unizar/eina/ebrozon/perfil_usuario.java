@@ -1,6 +1,8 @@
 package es.unizar.eina.ebrozon;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -30,6 +32,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 
+import es.unizar.eina.ebrozon.lib.Common;
+
 public class perfil_usuario extends AppCompatActivity {
 
     String urlRecuperarUsuario ="https://protected-caverns-60859.herokuapp.com/recuperarUsuario";
@@ -38,8 +42,6 @@ public class perfil_usuario extends AppCompatActivity {
     String urlLoadArchivoTemp ="http://protected-caverns-60859.herokuapp.com/loadArchivoTemp";
     String user_idPic = "";
 
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String Name = "nameKey";
     SharedPreferences sharedpreferences;
 
     private TextView username;
@@ -63,6 +65,11 @@ public class perfil_usuario extends AppCompatActivity {
     private ImageView star5;
 
     private ImageView foto;
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(perfil_usuario.this, PantallaPrincipal.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +99,7 @@ public class perfil_usuario extends AppCompatActivity {
 
         foto = findViewById(R.id.profilePic);
 
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
         recuperarUsuario();
         recuperarValoracionesUsuarios();
@@ -100,7 +107,7 @@ public class perfil_usuario extends AppCompatActivity {
 
     private void recuperarUsuario() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String currentUser = sharedpreferences.getString(Name, null);
+        String currentUser = sharedpreferences.getString(Common.un, null);
         String urlPetition1 = urlRecuperarUsuario+"?un="+currentUser;
         String urlPetition2 = urlNumeroComprasUsuario+"?un="+currentUser;
         String urlPetition3 = urlNumeroVentasUusuario+"?un="+currentUser;

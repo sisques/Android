@@ -23,6 +23,14 @@ package="es.unizar.eina.ebrozon">
     <activity android:name=".Filtros" />
     <activity android:name=".Producto" />
     <activity
+        android:name=".perfil_usuario"
+        android:label="@string/title_activity_perfil"
+        android:screenOrientation="portrait" />
+    <activity
+        android:name=".editar_perfil"
+        android:label="@string/title_activity_editarperfil"
+        android:screenOrientation="portrait" />
+    <activity
         android:name=".SubirProd1_3"
         android:label="@string/title_activity_subir_producto_1_3"
         android:screenOrientation="portrait" />

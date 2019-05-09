@@ -60,12 +60,12 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
+import es.unizar.eina.ebrozon.lib.Common;
+
 public class editar_perfil extends AppCompatActivity {
 
     String urlPetition = "https://protected-caverns-60859.herokuapp.com/actualizarUsuario";
 
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String Name = "nameKey";
     SharedPreferences sharedpreferences;
 
     private String[] cities;
@@ -129,8 +129,8 @@ public class editar_perfil extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
 
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        currentUser = sharedpreferences.getString(Name, null);
+        sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+        currentUser = sharedpreferences.getString(Common.un, null);
 
         confirm = findViewById(R.id.editConfirm);
         confirm.setEnabled(false);
