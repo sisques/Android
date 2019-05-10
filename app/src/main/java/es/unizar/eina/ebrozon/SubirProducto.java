@@ -1,5 +1,5 @@
 package es.unizar.eina.ebrozon;
-
+/*
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,8 +48,10 @@ public class SubirProducto extends AppCompatActivity {
 
 
         nombreProducto = findViewById(R.id.NombreProducto);
+
         descripcionProducto = findViewById(R.id.ProductoResumenDescripcion);
-        precioProducto = findViewById(R.id.ProductoResumenPrecio);
+        precioProducto = findViewById(R.id.precioVenta);
+
         subirProducto = findViewById(R.id.SubirProducto);
 
         subirProducto.setEnabled(false);
@@ -171,3 +173,4 @@ public class SubirProducto extends AppCompatActivity {
 
 
 }
+*/

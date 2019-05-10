@@ -4,7 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +21,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.content.SharedPreferences;
+
+import android.widget.PopupWindow;
+
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -26,22 +38,25 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
 
+
 public class PantallaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     SharedPreferences sharedpreferences;
+    private SwipeRefreshLayout swipeLayout;
 
     private String un;
     private String cor;
     private String pr;
     private String im;
 
-    private Ventas productos;
+    private Ventas productos; //develop
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +65,40 @@ public class PantallaPrincipal extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+          sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
         recuperarUsuario();
         listarProductosCiudad(pr);
 
+        // Refresh
+        swipeLayout = findViewById(R.id.listaProductosRefresh);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() { // Cada vez que se realiza el gesto para refrescar
+                listarProductosCiudad(pr);
+                swipeLayout.setRefreshing(false);
+            }
+        });
+
+        // Filtros
+        Button botonFiltros = findViewById(R.id.principal_filtros);
+        botonFiltros.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PantallaPrincipal.this, Filtros.class));
+            }
+        });
+
+        // Subir producto
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.principal_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PantallaPrincipal.this, SubirProducto.class));
+                startActivity(new Intent(PantallaPrincipal.this, SubirProd1_3.class));
             }
         });
+
+        // Menu hamburguesa
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -72,6 +109,7 @@ public class PantallaPrincipal extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.drawerMenu);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Parte de arriba del menu hamburguesa
         View menuArriba = navigationView.getHeaderView(0);
         TextView menuNombre = (TextView) menuArriba.findViewById(R.id.menuNombre);
         menuNombre.setText(un);
@@ -87,6 +125,7 @@ public class PantallaPrincipal extends AppCompatActivity
         Map<String, ?> m = sharedpreferences.getAll();
 
         un = (String) m.get(Common.un);
+        // Petición de recuperar usuario (un) y actualizar los demás datos
         cor = (String) m.get(Common.cor);
         pr = (String) m.get(Common.pr);
         im = (String) m.get(Common.im);
@@ -139,7 +178,7 @@ public class PantallaPrincipal extends AppCompatActivity
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        Log.d("Error.Response", error.getMessage());
+                        Log.d("Error.Response", "Error al recibir la lista de productos");
                     }
                 }
         );
@@ -150,23 +189,44 @@ public class PantallaPrincipal extends AppCompatActivity
         gestionarListar(Common.url + "/listarProductosCiudad?ci=" + ciudad);
     }
 
+    private void listarProductosUsuario(String usuario) {
+        gestionarListar(Common.url + "/listarProductosUsuario?un=" + usuario);
+    }
+
     private void listarProductos() {
         String[] from = productos.getResumenAtributos();
         int[] to = {R.id.ProductoResumenTitulo, R.id.ProductoResumenPrecio,
                 R.id.ProductoResumenDescripcion, R.id.ProductoResumenImagen};
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), productos.getResumenes(), R.layout.content_producto_resumen, from, to);
-        ListView androidListView = (ListView) findViewById(R.id.listaProductos);
+        final ListView androidListView = (ListView) findViewById(R.id.listaProductos);
         androidListView.setAdapter(simpleAdapter);
+
+        androidListView.setClickable(true);
+        androidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                HashMap<String, String> venta = productos.getVenta(position);
+
+                Intent intent = new Intent(PantallaPrincipal.this, Producto.class);
+                intent.putExtra("Venta", venta);
+                startActivity(intent);
+            }
+        });
     }
+
+
+
+
 
     @Override
     public void onBackPressed() {
+        //mantener en esta paginna
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+           // super.onBackPressed();
         }
     }
 
