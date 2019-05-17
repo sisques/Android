@@ -67,11 +67,6 @@ public class perfil_usuario extends AppCompatActivity {
     private ImageView foto;
 
     @Override
-    public void onBackPressed() {
-        startActivity(new Intent(perfil_usuario.this, PantallaPrincipal.class));
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_usuario);
