@@ -67,6 +67,11 @@ public class perfil_usuario extends AppCompatActivity {
     private ImageView foto;
 
     @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_usuario);
@@ -268,6 +273,7 @@ public class perfil_usuario extends AppCompatActivity {
         intent.putExtra("user_city", user_city.getText());
         intent.putExtra("user_idPic", user_idPic);
         startActivity(intent);
+        finish();
     }
 
     public void mostrarValoracionesUsuarios(View view) {
