@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorFondo"
+    tools:context=".perfil_usuario">
+
+    <TextView
+        android:id="@+id/profileTitleOpinion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/TituloPerfil"
+        android:text="@string/TituloOpinion"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileCard"
+        tools:text="@string/TituloOpinion" />
+
+    <TextView
+        android:id="@+id/profileTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/TituloPerfil"
+        android:text="@string/TituloPerfil"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/TituloPerfil" />
+
+    <ImageButton
+        android:id="@+id/profileEditButton"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@null"
+        android:onClick="editarPerfil"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/profileTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/profileCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="200dp"
+        android:background="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileTitle"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/profileStar1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/profileStar2"
+            app:layout_constraintTop_toBottomOf="@+id/profileUsername"
+            app:srcCompat="@android:drawable/star_off" />
+
+        <ImageView
+            android:id="@+id/profileStar2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/profileStar3"
+            app:layout_constraintTop_toBottomOf="@+id/profileUsername"
+            app:srcCompat="@android:drawable/star_off" />
+
+        <ImageView
+            android:id="@+id/profileStar3"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profileUsername"
+            app:srcCompat="@android:drawable/star_off" />
+
+        <ImageView
+            android:id="@+id/profileStar4"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@+id/profileStar3"
+            app:layout_constraintTop_toBottomOf="@+id/profileUsername"
+            app:srcCompat="@android:drawable/star_off" />
+
+        <ImageView
+            android:id="@+id/profileStar5"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@+id/profileStar4"
+            app:layout_constraintTop_toBottomOf="@+id/profileUsername"
+            app:srcCompat="@android:drawable/star_off" />
+
+        <ImageView
+            android:id="@+id/profilePic"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:maxWidth="100dp"
+            android:maxHeight="100dp"
+            android:minWidth="100dp"
+            android:minHeight="100dp"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/sym_def_app_icon"
+            tools:srcCompat="@android:drawable/sym_def_app_icon" />
+
+        <TextView
+            android:id="@+id/profileUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="username"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profilePic" />
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/profileTextName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/NombrePerfil"
+        android:text="@string/NombrePerfil"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/profileCard"
+        app:layout_constraintTop_toBottomOf="@+id/profileTitle"
+        tools:text="@string/NombrePerfil" />
+
+    <TextView
+        android:id="@+id/profileTextMail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/EmailPerfil"
+        android:text="@string/EmailPerfil"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/profileCard"
+        app:layout_constraintTop_toBottomOf="@+id/profileTextName"
+        tools:text="@string/EmailPerfil" />
+
+    <TextView
+        android:id="@+id/profileTextCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/CiudadPerfil"
+        android:text="@string/CiudadPerfil"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/profileCard"
+        app:layout_constraintTop_toBottomOf="@+id/profileTextProvincia"
+        tools:text="@string/CiudadPerfil" />
+
+    <TextView
+        android:id="@+id/profileTextProvincia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/ProvinciaPerfil"
+        android:text="@string/ProvinciaPerfil"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/profileCard"
+        app:layout_constraintTop_toBottomOf="@+id/profileTextMail"
+        tools:text="@string/ProvinciaPerfil" />
+
+    <TextView
+        android:id="@+id/profileFullName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="user_fullname"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/profileCard"
+        app:layout_constraintTop_toBottomOf="@+id/profileTextName" />
+
+    <TextView
+        android:id="@+id/profileEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="user_email"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/profileCard"
+        app:layout_constraintTop_toBottomOf="@+id/profileTextMail" />
+
+    <TextView
+        android:id="@+id/profileProvince"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="user_province"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/profileCard"
+        app:layout_constraintTop_toBottomOf="@+id/profileTextProvincia" />
+
+    <TextView
+        android:id="@+id/profileCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="user_city"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/profileCard"
+        app:layout_constraintTop_toBottomOf="@+id/profileTextCity" />
+
+    <LinearLayout
+        android:id="@+id/profileStatCompras"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/profileCard"
+        app:layout_constraintTop_toTopOf="@+id/profileCity">
+
+        <TextView
+            android:id="@+id/profileTextCompras"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/ComprasRealizadas"
+            android:text="@string/ComprasRealizadas"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/colorPrimary"
+            tools:layout_editor_absoluteX="269dp"
+            tools:layout_editor_absoluteY="343dp"
+            tools:text="@string/ComprasRealizadas" />
+
+        <TextView
+            android:id="@+id/profileCompras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            tools:layout_editor_absoluteX="202dp"
+            tools:layout_editor_absoluteY="343dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/profileStatVentas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profileStatCompras"
+        app:layout_constraintTop_toTopOf="@+id/profileCity">
+
+        <TextView
+            android:id="@+id/profileTextVentas"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/VentasRealizadas"
+            android:text="@string/VentasRealizadas"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@color/colorPrimary"
+            tools:layout_editor_absoluteX="135dp"
+            tools:layout_editor_absoluteY="343dp"
+            tools:text="@string/VentasRealizadas" />
+
+        <TextView
+            android:id="@+id/profileVentas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            tools:layout_editor_absoluteX="59dp"
+            tools:layout_editor_absoluteY="478dp" />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/profileOpinions"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="24dp"
+        android:alwaysDrawnWithCache="true"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileTitleOpinion"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TableRow
+            android:id="@+id/profileOpinionsButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/profileOpinionButton1"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/BotonValoraciones1"
+                android:onClick="mostrarValoracionesUsuarios"
+                android:text="@string/BotonValoraciones1"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="10sp"
+                tools:layout_editor_absoluteX="37dp"
+                tools:layout_editor_absoluteY="392dp"
+                tools:text="@string/BotonValoraciones1" />
+
+            <Button
+                android:id="@+id/profileOpinionButton2"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/BotonValoraciones2"
+                android:onClick="mostrarMisValoraciones"
+                android:text="@string/BotonValoraciones2"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="10sp"
+                tools:text="@string/BotonValoraciones2" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/profileOpinionList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </TableLayout>
+
+</android.support.constraint.ConstraintLayout>

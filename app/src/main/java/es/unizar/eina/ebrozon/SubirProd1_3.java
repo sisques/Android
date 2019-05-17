@@ -25,7 +25,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import es.unizar.eina.ebrozon.lib.ResultIPC;
 
 
 public class SubirProd1_3 extends AppCompatActivity {
@@ -58,8 +62,8 @@ public class SubirProd1_3 extends AppCompatActivity {
     int CAMARA_3 = 7;
     int CAMARA_4 = 8;
 
-    String IMAGE_DIRECTORY = "/";
-
+    String IMAGE_DIRECTORY = "/Ebrozon_app";
+    List<Object> datos = new ArrayList<Object>();
 
 
     @Override
@@ -168,10 +172,14 @@ public class SubirProd1_3 extends AppCompatActivity {
             Intent intent = new Intent(SubirProd1_3.this, SubirProd2_3.class);
             intent.putExtra("nombreProducto", producto);
             intent.putExtra("descripcionProducto", descripcion);
-            intent.putExtra("foto1", imagen1_bm);
-            intent.putExtra("foto2", imagen2_bm);
-            intent.putExtra("foto3", imagen3_bm);
-            intent.putExtra("foto4", imagen4_bm);
+
+
+            datos.add( imagen1_bm );
+            datos.add( imagen2_bm );
+            datos.add( imagen3_bm );
+            datos.add( imagen4_bm );
+            int sync = ResultIPC.get().setLargeData(datos);
+            intent.putExtra("bigdata:synccode", sync);
             startActivity(intent);
         }
     }
@@ -308,19 +316,19 @@ public class SubirProd1_3 extends AppCompatActivity {
                     switch (requestCode) {
                         case 1:
                             imagen1_bm = bitmap;
-                            foto1.setImageBitmap(bitmap);
+                            foto1.setImageBitmap(imagen1_bm);
                             break;
                         case 2:
                             imagen2_bm = bitmap;
-                            foto2.setImageBitmap(bitmap);
+                            foto2.setImageBitmap(imagen2_bm);
                             break;
                         case 3:
                             imagen3_bm = bitmap;
-                            foto3.setImageBitmap(bitmap);
+                            foto3.setImageBitmap(imagen3_bm);
                             break;
                         case 4:
                             imagen4_bm = bitmap;
-                            foto4.setImageBitmap(bitmap);
+                            foto4.setImageBitmap(imagen4_bm);
                             break;
                     }
 
@@ -336,19 +344,19 @@ public class SubirProd1_3 extends AppCompatActivity {
             switch (requestCode) {
                 case 5:
                     imagen1_bm = thumbnail;
-                    foto1.setImageBitmap(thumbnail);
+                    foto1.setImageBitmap(imagen1_bm);
                     break;
                 case 6:
                     imagen2_bm = thumbnail;
-                    foto2.setImageBitmap(thumbnail);
+                    foto2.setImageBitmap(imagen2_bm);
                     break;
                 case 7:
                     imagen3_bm = thumbnail;
-                    foto3.setImageBitmap(thumbnail);
+                    foto3.setImageBitmap(imagen3_bm);
                     break;
                 case 8:
                     imagen4_bm = thumbnail;
-                    foto4.setImageBitmap(thumbnail);
+                    foto4.setImageBitmap(imagen4_bm);
                     break;
             }
             guardarFoto(thumbnail);
@@ -388,12 +396,6 @@ public class SubirProd1_3 extends AppCompatActivity {
         return "";
     }
 
-    public String BitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] b=baos.toByteArray();
-        String temp=Base64.encodeToString(b, Base64.DEFAULT);
-        return temp;
-    }
+
 
 }

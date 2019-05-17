@@ -147,6 +147,7 @@ public class Registro extends AppCompatActivity {
             else {
                 limitFullName.setTextColor(Color.rgb(128,128,128));
             }
+            newLimitName = namechars.toString();
 
             Integer userchars = 30 - uname.length();
             if (userchars < 0) {
