@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -58,6 +59,7 @@ public class PantallaPrincipal extends AppCompatActivity
     private Boolean filtroUsar;
     private String filtroCi; // filtro ciudad
     private Boolean misProductos;
+    private String busqueda; // palabra a buscar
 
     private Ventas productos;
     private TextView menuNombre;
@@ -65,6 +67,7 @@ public class PantallaPrincipal extends AppCompatActivity
     private ImageView menuImagen;
     private Button botonFiltros;
     private ListView listaProductosListView;
+    private SearchView menuBusqueda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,7 @@ public class PantallaPrincipal extends AppCompatActivity
         listarPorCiudad = false; // Al principio se listan todos los productos
         filtroUsar = false;
         misProductos = false;
+        busqueda = null;
 
         // Filtros
         botonFiltros = findViewById(R.id.principal_filtros);
@@ -125,6 +129,33 @@ public class PantallaPrincipal extends AppCompatActivity
                 recuperarUsuario();
                 listarProductos();
                 swipeLayout.setRefreshing(false);
+            }
+        });
+
+        // Barra de búsqueda
+        menuBusqueda = findViewById(R.id.principal_busqueda);
+        menuBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) { // Cuando se le da a buscar
+                if (s.length() > 1) {
+                    busqueda = s;
+                    productos.clear();
+                    listarProductos();
+                }
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) { // Mientras se escribe
+                return false;
+            }
+        });
+        menuBusqueda.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() { // Cuando se le da a cerrar
+                busqueda = null;
+                productos.clear();
+                listarProductos();
+                return false;
             }
         });
 
@@ -191,11 +222,18 @@ public class PantallaPrincipal extends AppCompatActivity
         queue.add(postRequest);
     }
 
-    private void listarProductos() {
-        if (misProductos)
+    private void listarProductos() { // TODO: Añadir listado para más de 25 productos
+        if (busqueda != null && busqueda.length() > 1) {
+            listarProductosBusqueda();
+        }
+        else if (misProductos)
             listarProductosUsuario(un);
         else
             listarProductosCiudad();
+    }
+
+    private void listarProductosBusqueda() { // TODO: Añadir filtros
+        gestionarPeticionListar(Common.url + "/listarProductos?met=Coincidencias&ets=" + busqueda);
     }
 
     private void listarProductosCiudad() {
@@ -313,17 +351,20 @@ public class PantallaPrincipal extends AppCompatActivity
         if (id == R.id.nav_principal) {
             botonFiltros.setVisibility(View.VISIBLE);
             botonFiltros.setClickable(true);
+            menuBusqueda.setVisibility(View.VISIBLE);
             misProductos = false;
             resetPantalla();
-        }
-        else if (id == R.id.nav_perfil) {
-            startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
         }
         else if (id == R.id.nav_en_venta) {
             botonFiltros.setVisibility(View.INVISIBLE);
             botonFiltros.setClickable(false);
+            menuBusqueda.setVisibility(View.INVISIBLE);
+            busqueda = null;
             misProductos = true;
             resetPantalla();
+        }
+        else if (id == R.id.nav_perfil) {
+            startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
         }
         else if (id == R.id.nav_siguiendo) {
 
