@@ -348,8 +348,9 @@ public class PantallaPrincipal extends AppCompatActivity
                 listarPorCiudad = data.getBooleanExtra("listarPorCiudad", listarPorCiudad);
                 filtroCi = data.getData().toString();
 
-                listaProductosListView.setAdapter(null);
                 productos.clear();
+                SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
+                sa.notifyDataSetChanged();
                 listarProductos();
             }
             else if (resultCode == Common.RESULTADO_CANCELADO) {
@@ -362,8 +363,9 @@ public class PantallaPrincipal extends AppCompatActivity
         filtroUsar = false;
         listarPorCiudad = false;
 
-        listaProductosListView.setAdapter(null);
         productos.clear();
+        SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
+        sa.notifyDataSetChanged();
         recuperarUsuario();
         listarProductos();
     }
