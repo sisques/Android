@@ -2,12 +2,9 @@ package es.unizar.eina.ebrozon;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-
-import android.util.Base64;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -318,20 +315,23 @@ public class PantallaPrincipal extends AppCompatActivity
             botonFiltros.setClickable(true);
             misProductos = false;
             resetPantalla();
-        } else if (id == R.id.nav_ajustes) {
+        }
+        else if (id == R.id.nav_perfil) {
             startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
-        } else if (id == R.id.nav_ayuda) {
-
-        } else if (id == R.id.nav_en_venta) {
+        }
+        else if (id == R.id.nav_en_venta) {
             botonFiltros.setVisibility(View.INVISIBLE);
             botonFiltros.setClickable(false);
             misProductos = true;
             resetPantalla();
-        } else if (id == R.id.nav_siguiendo) {
+        }
+        else if (id == R.id.nav_siguiendo) {
 
-        } else if (id == R.id.nav_mensajes) {
+        }
+        else if (id == R.id.nav_mensajes) {
 
-        }else if (id == R.id.nav_cerrar_sesion) {
+        }
+        else if (id == R.id.nav_cerrar_sesion) {
             logout();
         }
 

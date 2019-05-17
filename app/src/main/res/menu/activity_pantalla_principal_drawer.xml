@@ -22,16 +22,12 @@
             android:title="@string/En_venta" />
     </group>
 
-    <item android:title="@string/Documentacion">
+    <item android:title="@string/Ajustes">
         <menu>
             <item
-                android:id="@+id/nav_ayuda"
-                android:icon="@drawable/ic_menu_ayuda"
-                android:title="@string/Ayuda" />
-            <item
-                android:id="@+id/nav_ajustes"
-                android:icon="@drawable/ic_menu_ajustes"
-                android:title="@string/Ajustes" />
+                android:id="@+id/nav_perfil"
+                android:icon="@drawable/ic_menu_perfil"
+                android:title="@string/Perfil" />
             <item
                 android:id="@+id/nav_cerrar_sesion"
                 android:icon="@drawable/logout"
