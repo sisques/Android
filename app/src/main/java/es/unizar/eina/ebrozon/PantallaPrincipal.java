@@ -59,6 +59,7 @@ public class PantallaPrincipal extends AppCompatActivity
     private Boolean filtroUsar;
     private String filtroCi; // filtro ciudad
     private Boolean misProductos;
+    private Boolean buscar;
     private String busqueda; // palabra a buscar
 
     private Ventas productos;
@@ -82,6 +83,7 @@ public class PantallaPrincipal extends AppCompatActivity
         listarPorCiudad = false; // Al principio se listan todos los productos
         filtroUsar = false;
         misProductos = false;
+        buscar = false;
         busqueda = null;
 
         // Filtros
@@ -139,6 +141,7 @@ public class PantallaPrincipal extends AppCompatActivity
             public boolean onQueryTextSubmit(String s) { // Cuando se le da a buscar
                 if (s.length() > 1) {
                     busqueda = s;
+                    buscar = true;
                     productos.clear();
                     listarProductos();
                 }
@@ -153,6 +156,7 @@ public class PantallaPrincipal extends AppCompatActivity
             @Override
             public boolean onClose() { // Cuando se le da a cerrar
                 busqueda = null;
+                buscar = false;
                 productos.clear();
                 listarProductos();
                 return false;
@@ -223,7 +227,7 @@ public class PantallaPrincipal extends AppCompatActivity
     }
 
     private void listarProductos() { // TODO: Añadir listado para más de 25 productos
-        if (busqueda != null && busqueda.length() > 1) {
+        if (buscar && busqueda != null && busqueda.length() > 1) {
             listarProductosBusqueda();
         }
         else if (misProductos)
@@ -352,6 +356,7 @@ public class PantallaPrincipal extends AppCompatActivity
             botonFiltros.setVisibility(View.VISIBLE);
             botonFiltros.setClickable(true);
             menuBusqueda.setVisibility(View.VISIBLE);
+            buscar = true;
             misProductos = false;
             resetPantalla();
         }
@@ -359,7 +364,7 @@ public class PantallaPrincipal extends AppCompatActivity
             botonFiltros.setVisibility(View.INVISIBLE);
             botonFiltros.setClickable(false);
             menuBusqueda.setVisibility(View.INVISIBLE);
-            busqueda = null;
+            buscar = false;
             misProductos = true;
             resetPantalla();
         }
