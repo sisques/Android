@@ -344,7 +344,7 @@ public class PantallaPrincipal extends AppCompatActivity
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.clear();
         editor.commit();
-        startActivity(new Intent(PantallaPrincipal.this, PreLogin.class));
+        finish();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
