@@ -360,6 +360,9 @@ public class PantallaPrincipal extends AppCompatActivity
             misProductos = false;
             resetPantalla();
         }
+        else if (id == R.id.nav_siguiendo) {
+
+        }
         else if (id == R.id.nav_en_venta) {
             botonFiltros.setVisibility(View.INVISIBLE);
             botonFiltros.setClickable(false);
@@ -368,14 +371,11 @@ public class PantallaPrincipal extends AppCompatActivity
             misProductos = true;
             resetPantalla();
         }
-        else if (id == R.id.nav_perfil) {
-            startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
-        }
-        else if (id == R.id.nav_siguiendo) {
-
-        }
         else if (id == R.id.nav_mensajes) {
 
+        }
+        else if (id == R.id.nav_perfil) {
+            startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
         }
         else if (id == R.id.nav_cerrar_sesion) {
             logout();
