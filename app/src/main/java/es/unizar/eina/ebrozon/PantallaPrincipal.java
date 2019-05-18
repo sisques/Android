@@ -163,6 +163,7 @@ public class PantallaPrincipal extends AppCompatActivity
             }
         });
 
+        productos.clear();
         recuperarUsuario();
         listarProductos();
     }
@@ -372,7 +373,7 @@ public class PantallaPrincipal extends AppCompatActivity
             resetPantalla();
         }
         else if (id == R.id.nav_mensajes) {
-
+            startActivity(new Intent(PantallaPrincipal.this, Mensajes.class));
         }
         else if (id == R.id.nav_perfil) {
             startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
