@@ -101,4 +101,32 @@ public final class Common {
         );
         queue.add(postRequest);
     }
+
+    public static void establecerFotoUsuarioServidor(Context context, String un, final ImageView imagen) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String urlPetition = Common.url + "/loadArchivoUsuario?un=" + un;
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        response = response.replace(" ","+");
+                        Bitmap result = StringToBitMap(response);
+                        if (result != null) {
+                            imagen.setImageBitmap(result);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error con imagen de perfil");
+                    }
+                }
+        );
+        queue.add(postRequest);
+    }
 }
