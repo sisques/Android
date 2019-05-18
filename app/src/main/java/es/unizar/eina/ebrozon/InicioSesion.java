@@ -107,6 +107,7 @@ public class InicioSesion extends AppCompatActivity {
 
 
             startActivity(new Intent(InicioSesion.this, PantallaPrincipal.class));
+            finish();
         }
         else if (estado.equals("E")){
             Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_LONG).show();

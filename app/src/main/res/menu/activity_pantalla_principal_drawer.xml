@@ -9,10 +9,6 @@
             android:icon="@drawable/ic_menu_principal"
             android:title="@string/Principal" />
         <item
-            android:id="@+id/nav_mensajes"
-            android:icon="@drawable/ic_menu_mensajes"
-            android:title="@string/Mensajes" />
-        <item
             android:id="@+id/nav_siguiendo"
             android:icon="@drawable/ic_menu_siguiendo"
             android:title="@string/Siguiendo" />
@@ -21,6 +17,15 @@
             android:icon="@drawable/ic_menu_en_venta"
             android:title="@string/En_venta" />
     </group>
+
+    <item android:title="@string/Comunicacion">
+        <menu>
+            <item
+                android:id="@+id/nav_mensajes"
+                android:icon="@drawable/ic_menu_mensajes"
+                android:title="@string/Mensajes" />
+        </menu>
+    </item>
 
     <item android:title="@string/Ajustes">
         <menu>

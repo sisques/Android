@@ -324,6 +324,7 @@ public class Registro extends AppCompatActivity {
 
 
             startActivity(new Intent(Registro.this, PantallaPrincipal.class));
+            finish();
         }
         else if (estado.equals("E")){
             Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_LONG).show();
