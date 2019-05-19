@@ -59,7 +59,12 @@ public class Mensajes extends AppCompatActivity {
                 swipeLayout.setRefreshing(false);
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mensajes.clear();
         listarMensajes();
     }
 

@@ -97,29 +97,72 @@ public class Ventas {
         return resumenes.get(index);
     }
 
-    public String getId(int index) throws JSONException {
+    public String getIdVenta(int index) throws JSONException {
         return ventas.get(index).get(atributos[0]).toString();
+    }
+
+    public String getUsuarioVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[1]).toString();
+    }
+
+    public String getFechainicioVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[2]).toString();
+    }
+
+    public String getFechaventaVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[3]).toString();
     }
 
     public String getNombreVenta(int index) throws JSONException {
         return ventas.get(index).get(atributos[4]).toString();
     }
 
-    public String getPrecioVenta(int index) throws JSONException {
-        return ventas.get(index).get(atributos[6]).toString();
-    }
-
     public String getDescripcionVenta(int index) throws JSONException {
         return ventas.get(index).get(atributos[5]).toString();
     }
 
-    public String getImagenVenta(int index) {
-        try {
-            return ventas.get(index).getJSONArray(atributos[atributos.length - 1]).get(0).toString();
-        }
-        catch (Exception e) {
-            return null;
-        }
+    public String getPrecioVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[6]).toString();
+    }
+
+    public String getPreciofinalVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[7]).toString();
+    }
+
+    public String getCompradorVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[8]).toString();
+    }
+
+    public String getFechapagoVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[9]).toString();
+    }
+
+    public String getTienearchivoVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[10]).toString();
+    }
+
+    public String getActivaVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[11]).toString();
+    }
+
+    public String getEsSubastaVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[12]).toString();
+    }
+
+    public String getCiudadVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[13]).toString();
+    }
+
+    public String getProvinciaVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[14]).toString();
+    }
+
+    public String getUserVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[15]).toString();
+    }
+
+    public String getImagenVenta(int index) throws JSONException {
+        return ventas.get(index).getJSONArray(atributos[16]).get(0).toString();
     }
 
     public String getImagenResumen(int index) {
