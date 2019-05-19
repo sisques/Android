@@ -9,10 +9,6 @@
             android:icon="@drawable/ic_menu_principal"
             android:title="@string/Principal" />
         <item
-            android:id="@+id/nav_mensajes"
-            android:icon="@drawable/ic_menu_mensajes"
-            android:title="@string/Mensajes" />
-        <item
             android:id="@+id/nav_siguiendo"
             android:icon="@drawable/ic_menu_siguiendo"
             android:title="@string/Siguiendo" />
@@ -22,16 +18,21 @@
             android:title="@string/En_venta" />
     </group>
 
-    <item android:title="@string/Documentacion">
+    <item android:title="@string/Comunicacion">
         <menu>
             <item
-                android:id="@+id/nav_ayuda"
-                android:icon="@drawable/ic_menu_ayuda"
-                android:title="@string/Ayuda" />
+                android:id="@+id/nav_mensajes"
+                android:icon="@drawable/ic_menu_mensajes"
+                android:title="@string/Mensajes" />
+        </menu>
+    </item>
+
+    <item android:title="@string/Ajustes">
+        <menu>
             <item
-                android:id="@+id/nav_ajustes"
-                android:icon="@drawable/ic_menu_ajustes"
-                android:title="@string/Ajustes" />
+                android:id="@+id/nav_perfil"
+                android:icon="@drawable/ic_menu_perfil"
+                android:title="@string/Perfil" />
             <item
                 android:id="@+id/nav_cerrar_sesion"
                 android:icon="@drawable/logout"

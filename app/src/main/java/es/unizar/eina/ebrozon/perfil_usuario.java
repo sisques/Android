@@ -68,7 +68,7 @@ public class perfil_usuario extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(perfil_usuario.this, PantallaPrincipal.class));
+        finish();
     }
 
     @Override
@@ -273,6 +273,7 @@ public class perfil_usuario extends AppCompatActivity {
         intent.putExtra("user_city", user_city.getText());
         intent.putExtra("user_idPic", user_idPic);
         startActivity(intent);
+        finish();
     }
 
     public void mostrarValoracionesUsuarios(View view) {

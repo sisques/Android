@@ -1,69 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="es.unizar.eina.ebrozon">
-<!-- To auto-complete the email text field in the login form with the user's emails -->
-<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-<uses-permission android:name="android.permission.READ_PROFILE" />
-<uses-permission android:name="android.permission.READ_CONTACTS" />
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="es.unizar.eina.ebrozon">
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-    android:allowBackup="true"
-    android:debuggable="true"
-    android:icon="@mipmap/ic_launcher"
-    android:label="@string/app_name"
-    android:roundIcon="@mipmap/ic_launcher_round"
-    android:supportsRtl="true"
-    android:theme="@style/AppTheme"
-    android:usesCleartextTraffic="true">
-    <activity android:name=".Filtros" />
-    <activity android:name=".Producto" />
-    <activity
-        android:name=".perfil_usuario"
-        android:label="@string/title_activity_perfil"
-        android:screenOrientation="portrait" />
-    <activity
-        android:name=".editar_perfil"
-        android:label="@string/title_activity_editarperfil"
-        android:screenOrientation="portrait" />
-    <activity
-        android:name=".SubirProd1_3"
-        android:label="@string/title_activity_subir_producto_1_3"
-        android:screenOrientation="portrait" />
-    <activity
-        android:name=".SubirProd2_3"
-        android:label="@string/title_activity_subir_producto_2_3"
-        android:screenOrientation="portrait" />
-    <activity
-        android:name=".SubirProd3_3"
-        android:label="@string/title_activity_subir_producto_3_3"
-        android:screenOrientation="portrait" />
-    <activity
-        android:name=".PantallaPrincipal"
-        android:label="@string/title_activity_pantalla_principal"
-        android:screenOrientation="portrait" />
-    <activity
-        android:name=".Registro"
-        android:label="@string/title_activity_registro"
-        android:screenOrientation="portrait" />
-    <activity
-        android:name=".InicioSesion"
-        android:label="@string/title_activity_inicio_sesion"
-        android:screenOrientation="portrait" />
-    <activity
-        android:name=".PreLogin"
+        android:allowBackup="true"
+        android:debuggable="true"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:screenOrientation="portrait">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".Chat"></activity>
+        <activity android:name=".Mensajes" />
+        <activity android:name=".Filtros" />
+        <activity android:name=".Producto" />
+        <activity
+            android:name=".perfil_usuario"
+            android:label="@string/title_activity_perfil"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".editar_perfil"
+            android:label="@string/title_activity_editarperfil"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SubirProd1_3"
+            android:label="@string/title_activity_subir_producto_1_3"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SubirProd2_3"
+            android:label="@string/title_activity_subir_producto_2_3"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SubirProd3_3"
+            android:label="@string/title_activity_subir_producto_3_3"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PantallaPrincipal"
+            android:label="@string/title_activity_pantalla_principal"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Registro"
+            android:label="@string/title_activity_registro"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".InicioSesion"
+            android:label="@string/title_activity_inicio_sesion"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PreLogin"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-</application>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
 
 </manifest>

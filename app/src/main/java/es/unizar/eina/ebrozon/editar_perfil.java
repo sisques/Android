@@ -120,7 +120,8 @@ public class editar_perfil extends AppCompatActivity {
             pictureDialog.show();
         }
         else {
-            super.onBackPressed();
+            startActivity(new Intent(editar_perfil.this, perfil_usuario.class));
+            finish();
         }
     }
 
@@ -351,7 +352,6 @@ public class editar_perfil extends AppCompatActivity {
                         // response
                         Log.d("Response", response);
                         Toast.makeText(editar_perfil.this, "Cambios aplicados", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(editar_perfil.this, perfil_usuario.class));
                     }
                 },
                 new Response.ErrorListener() {
@@ -446,9 +446,8 @@ public class editar_perfil extends AppCompatActivity {
             )) {
                 actualizarUsuario(newPic, user_fullname.getText().toString().trim(), user_province.getText().toString().trim(), user_city.getText().toString().trim());
             }
-            else {
-                super.onBackPressed();
-            }
+            startActivity(new Intent(editar_perfil.this, perfil_usuario.class));
+            finish();
         }
         confirm.setEnabled(true);
     }
