@@ -2,7 +2,7 @@ package es.unizar.eina.ebrozon;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 
@@ -37,7 +37,10 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.concurrent.TimeUnit;
+
 import es.unizar.eina.ebrozon.lib.Common;
+import es.unizar.eina.ebrozon.lib.ImagenFinal;
 import es.unizar.eina.ebrozon.lib.Ventas;
 
 
@@ -78,7 +81,7 @@ public class PantallaPrincipal extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         productos = new Ventas();
-        productos.setImagenDefault(BitmapFactory.decodeResource(getResources(),R.drawable.logo));
+        productos.setContext(getApplicationContext());
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         listarPorCiudad = false; // Al principio se listan todos los productos
         filtroUsar = false;
@@ -280,6 +283,24 @@ public class PantallaPrincipal extends AppCompatActivity
                             try {
                                 productos.anyadirVentas(new JSONArray(response));
                                 gestionarListarTrasPeticion();
+
+                                // Le da un tiempo para que el servidor envíe la petición
+                                Thread t1 = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            TimeUnit.SECONDS.sleep(2);
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
+                                                    sa.notifyDataSetChanged();
+                                                }
+                                            });
+                                        } catch (Exception ignored) { }
+                                    }
+                                });
+                                t1.start();
                             }catch (Exception ignored) { }
                         }
                     }
@@ -304,11 +325,12 @@ public class PantallaPrincipal extends AppCompatActivity
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), productos.getResumenes(), R.layout.content_producto_resumen, from, to);
         simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
             @Override
-            public boolean setViewValue(View view, Object data, String textRepresentation)
-            { // Para el tratamiento de imágenes
-                if((view instanceof ImageView) & (data instanceof String))
-                {
-                    Common.establecerFotoServidor(getApplicationContext(), (String) data, (ImageView) view);
+            public boolean setViewValue(View view, Object data, String textRepresentation) { // Para el tratamiento de imágenes
+                if ((view instanceof ImageView) && (data instanceof ImagenFinal)) {
+                    Bitmap result = Common.StringToBitMap(((ImagenFinal) data).getImagen());
+                    if (result != null) {
+                        ((ImageView) view).setImageBitmap(result);
+                    }
                     return true;
                 }
                 return false;
@@ -335,8 +357,6 @@ public class PantallaPrincipal extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-           // super.onBackPressed();
         }
     }
 

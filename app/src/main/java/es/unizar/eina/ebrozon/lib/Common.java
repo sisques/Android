@@ -14,8 +14,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.util.Objects;
-
 public final class Common {
     public static final String url ="https://protected-caverns-60859.herokuapp.com";
 
@@ -49,7 +47,7 @@ public final class Common {
         }
     }
 
-    public static void obtenerFotoServidor(Context context, String id, final Bitmap imagen) {
+    public static void obtenerFotoServidor(Context context, String id, final ImagenFinal imagen) {
         RequestQueue queue = Volley.newRequestQueue(context);
         String urlPetition = Common.url + "/loadArchivoTemp?id=" + id;
 
@@ -60,7 +58,7 @@ public final class Common {
                         // response
                         Log.d("Response", response);
                         response = response.replace(" ","+");
-                        imagen.setConfig(Objects.requireNonNull(StringToBitMap(response)).getConfig());
+                        imagen.setImagen(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -74,7 +72,7 @@ public final class Common {
         queue.add(postRequest);
     }
 
-    public static void establecerFotoServidor(Context context, String id, final ImageView imagen) {
+    public static void establecerFotoServidor(final Context context, final String id, final ImageView imagen) {
         RequestQueue queue = Volley.newRequestQueue(context);
         String urlPetition = Common.url + "/loadArchivoTemp?id=" + id;
 

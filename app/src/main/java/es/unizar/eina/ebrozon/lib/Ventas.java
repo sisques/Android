@@ -1,6 +1,6 @@
 package es.unizar.eina.ebrozon.lib;
 
-import android.graphics.Bitmap;
+import android.content.Context;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,11 +14,11 @@ import java.util.List;
 public class Ventas {
     // Son static para mantener la misma lista sin duplicar
     private static List<JSONObject> ventas = new ArrayList<JSONObject>();
-    private static List<HashMap<String, String>> resumenes
-            = new ArrayList<HashMap<String, String>>(); // Información duplicada pero muestra más rápido
+    private static List<HashMap<String, Object>> resumenes
+            = new ArrayList<HashMap<String, Object>>(); // Información duplicada pero muestra más rápido
     private static Integer idMax = 0; // id máxima entre todas las ventas
 
-    private static Bitmap imagenDefault = null;
+    private Context contextPantalla = null;
 
     private final static String[] atributos =
             {"identificador", "usuario", "fechainicio", "fechaventa", "producto", "descripcion",
@@ -32,9 +32,10 @@ public class Ventas {
     }
 
     public void anyadirVentas(JSONArray productos) {
-        HashMap<String, String> resumen;
+        HashMap<String, Object> resumen;
         JSONObject producto;
         String aux;
+        ImagenFinal imagen;
         Integer id;
 
         for (int i=0; i<productos.length(); i++) {
@@ -46,31 +47,41 @@ public class Ventas {
                 if (id > idMax)
                     idMax = id;
 
-                resumen = new HashMap<String, String>();
+                resumen = new HashMap<String, Object>();
                 resumen.put(atributos[4], producto.get(atributos[4]).toString());
                 resumen.put(atributos[6], producto.get(atributos[6]).toString());
                 resumen.put(atributos[5], producto.get(atributos[5]).toString());
+
                 aux = producto.get(atributos[13]).toString();
                 if (!aux.equals(""))
-                    resumen.put(atributos[13], producto.get(atributos[13]).toString());
+                    resumen.put(atributos[13], aux);
                 else
                     resumen.put(atributos[13], producto.get(atributos[14]).toString());
-                resumen.put("imagen", producto.getJSONArray(atributos[atributos.length-1]).get(0).toString());
+
+                aux = producto.getJSONArray(atributos[16]).get(0).toString();
+                imagen = new ImagenFinal();
+                resumen.put("imagen", imagen);
+                if (!aux.equals("")) {
+                    Common.obtenerFotoServidor(this.contextPantalla, aux, (ImagenFinal) resumen.get("imagen"));
+                }
+                else {
+                    Common.obtenerFotoServidor(this.contextPantalla, "", (ImagenFinal) resumen.get("imagen"));
+                }
                 resumenes.add(resumen);
             }
             catch (Exception ignored) { }
         }
     }
 
-    public void setImagenDefault(Bitmap imagen) {
-        imagenDefault = imagen;
+    public void setContext(Context c) {
+        this.contextPantalla = c;
     }
 
     public Integer getIdMax() {
         return idMax;
     }
 
-    public List<HashMap<String, String>> getResumenes() {
+    public List<HashMap<String, Object>> getResumenes() {
         return resumenes;
     }
 
@@ -93,7 +104,7 @@ public class Ventas {
         return ventas.get(index);
     }
 
-    public HashMap<String, String> getResumen(int index) {
+    public HashMap<String, Object> getResumen(int index) {
         return resumenes.get(index);
     }
 
@@ -165,7 +176,7 @@ public class Ventas {
         return ventas.get(index).getJSONArray(atributos[16]).get(0).toString();
     }
 
-    public String getImagenResumen(int index) {
-        return (String) resumenes.get(index).get("imagen");
+    public ImagenFinal getImagenResumen(int index) {
+        return (ImagenFinal) resumenes.get(index).get("imagen");
     }
 }
