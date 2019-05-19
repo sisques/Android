@@ -145,10 +145,12 @@ public class Mensajes extends AppCompatActivity {
                     aux = JSONmensaje.get("receptor").toString();
                 }
                 mensaje.put(atributos[0], aux);
-
-                mensaje.put(atributos[1], JSONmensaje.get(atributos[1]).toString());
-                mensaje.put(atributos[2], JSONmensaje.get(atributos[2]).toString());
                 mensaje.put(atributos[3], aux);
+
+                aux = JSONmensaje.get(atributos[1]).toString();
+                mensaje.put(atributos[1], aux.substring(11, 16) + " " + aux.substring(8, 10) + "-"
+                        + aux.substring(5, 7) + "-" + aux.substring(2, 4));
+                mensaje.put(atributos[2], JSONmensaje.get(atributos[2]).toString());
                 mensajes.add(mensaje);
             }
             catch (Exception ignored) { }
