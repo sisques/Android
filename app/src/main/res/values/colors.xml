@@ -7,7 +7,7 @@
     <color name="colorPrimaryLight">#2a95bc</color>
     <color name="colorFondo">#d4ebf2</color>
     <color name="colorTextos">@color/secondary_text_default_material_light</color>
-    <color name="colorRojo">#c62828</color>
+    <color name="colorRojo">#C62828</color>
 
 
 </resources>

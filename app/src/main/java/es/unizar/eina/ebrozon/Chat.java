@@ -114,6 +114,9 @@ public class Chat extends AppCompatActivity {
                     public void onResponse(String response) {
                         // response
                         Log.d("Response", response);
+                        if (idMax == 0) {
+                            listarChat(true);
+                        }
                     }
                 },
                 new Response.ErrorListener()
