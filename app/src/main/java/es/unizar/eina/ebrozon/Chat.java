@@ -113,18 +113,18 @@ public class Chat extends AppCompatActivity {
                 if(data instanceof Boolean)
                 {
                     if ((Boolean) data) {
-                        ((TextView) view).setGravity(Gravity.START);
-                        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-                        p.setMargins(10, 10, 200, 10);
-                        view.requestLayout();
-                        view.setBackground(getResources().getDrawable(R.drawable.rounded_shape_recibido));
-                    }
-                    else {
                         ((TextView) view).setGravity(Gravity.END);
                         ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
                         p.setMargins(200, 10, 10, 10);
                         view.requestLayout();
                         view.setBackground(getResources().getDrawable(R.drawable.rounded_shape_enviado));
+                    }
+                    else {
+                        ((TextView) view).setGravity(Gravity.START);
+                        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+                        p.setMargins(10, 10, 200, 10);
+                        view.requestLayout();
+                        view.setBackground(getResources().getDrawable(R.drawable.rounded_shape_recibido));
                     }
                     return true;
                 }
