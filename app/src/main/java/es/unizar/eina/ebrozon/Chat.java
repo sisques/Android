@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -26,6 +29,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import es.unizar.eina.ebrozon.lib.Common;
 
@@ -35,6 +40,7 @@ public class Chat extends AppCompatActivity {
 
     private List<HashMap<String, Object>> chat;
     private final String[] atributos = {"contenido", "emisor"};
+    private Integer idMax; // id del último mensaje
 
     private String un; // usuario
     private String usuarioComunica; // usuario con el que se comunica
@@ -49,9 +55,37 @@ public class Chat extends AppCompatActivity {
 
         listaChatListView = (ListView) findViewById(R.id.listaChat);
         chat = new ArrayList<HashMap<String, Object>>();
+        idMax = 0;
 
         SharedPreferences sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         un = sharedpreferences.getString(Common.un, null);
+
+        // Barra de arriba (Usuario con el que se comunica)
+        ImageView fotoUsuarioComunica = (ImageView) findViewById(R.id.chatImagen);
+        Common.establecerFotoUsuarioServidor(getApplicationContext(), usuarioComunica, fotoUsuarioComunica);
+
+        TextView nombreUsuarioComunica = (TextView) findViewById(R.id.chatUsuario);
+        nombreUsuarioComunica.setText(usuarioComunica);
+
+        // Enviar mensajes
+        final EditText mensaje = (EditText) findViewById(R.id.chatEscribir);
+        final ImageButton enviar = (ImageButton) findViewById(R.id.chatEnviar);
+        enviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enviarMensaje(mensaje.getText().toString());
+                mensaje.getText().clear();
+            }
+        });
+
+        // Timer, para recargar el chat cada segundo
+        Timer mTimer = new Timer();
+        TimerTask mTt = new TimerTask() {
+            public void run() {
+                listarChat(false);
+            }
+        };
+        mTimer.schedule(mTt, 1, 1000);
 
         // Refresh
         swipeLayout = findViewById(R.id.chatRefresh);
@@ -59,20 +93,60 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onRefresh() { // Cada vez que se realiza el gesto para refrescar
                 chat.clear();
-                listarChat();
+                listarChat(true);
                 swipeLayout.setRefreshing(false);
             }
         });
 
-        listarChat();
+        listarChat(true);
     }
 
-    private void listarChat() {
-        String urlPetition = Common.url + "/cargarChat?em=" + un + "&re=" + usuarioComunica;
-        gestionarPeticionListar(urlPetition);
+    private void enviarMensaje(String mensaje) {
+        String urlPetition = Common.url + "/mandarMensaje?em=" + un + "&re=" + usuarioComunica
+                + "&con=" + mensaje;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        if (idMax == 0) {
+                            listarChat(true);
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error al recibir la lista de chat");
+                    }
+                }
+        );
+        queue.add(postRequest);
     }
 
-    private void gestionarPeticionListar(String urlPetition) {
+    // Si all, lista todos los mensajes, si no, añade a la lista los mensajes desde idMax
+    private void listarChat(Boolean all) {
+        if (all) {
+            String urlPetition = Common.url + "/cargarChat?em=" + un + "&re=" + usuarioComunica;
+            gestionarPeticionListar(urlPetition, all);
+        }
+        else {
+            if (idMax > 0) {
+                String urlPetition = Common.url + "/recibirMensaje?em=" + un + "&re=" + usuarioComunica
+                        + "&lm=" + idMax;
+                gestionarPeticionListar(urlPetition, all);
+            }
+        }
+    }
+
+    private void gestionarPeticionListar(String urlPetition, final Boolean all) {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
@@ -85,7 +159,13 @@ public class Chat extends AppCompatActivity {
                         if (!response.equals("[]")) {
                             try {
                                 anyadirChat(new JSONArray(response));
-                                gestionarListarTrasPeticion();
+                                if (all) {
+                                    gestionarListarTrasPeticion();
+                                }
+                                else {
+                                    SimpleAdapter sa = (SimpleAdapter) listaChatListView.getAdapter();
+                                    sa.notifyDataSetChanged();
+                                }
                             }catch (Exception ignored) { }
                         }
                     }
@@ -113,18 +193,18 @@ public class Chat extends AppCompatActivity {
                 if(data instanceof Boolean)
                 {
                     if ((Boolean) data) {
-                        ((TextView) view).setGravity(Gravity.START);
-                        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-                        p.setMargins(10, 10, 200, 10);
-                        view.requestLayout();
-                        view.setBackground(getResources().getDrawable(R.drawable.rounded_shape_recibido));
-                    }
-                    else {
                         ((TextView) view).setGravity(Gravity.END);
                         ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
                         p.setMargins(200, 10, 10, 10);
                         view.requestLayout();
                         view.setBackground(getResources().getDrawable(R.drawable.rounded_shape_enviado));
+                    }
+                    else {
+                        ((TextView) view).setGravity(Gravity.START);
+                        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+                        p.setMargins(10, 10, 200, 10);
+                        view.requestLayout();
+                        view.setBackground(getResources().getDrawable(R.drawable.rounded_shape_recibido));
                     }
                     return true;
                 }
@@ -137,7 +217,7 @@ public class Chat extends AppCompatActivity {
 
     private void anyadirChat(JSONArray JSONmensajes) {
         HashMap<String, Object> mensaje;
-        JSONObject JSONmensaje;
+        JSONObject JSONmensaje = null;
 
         for (int i=0; i<JSONmensajes.length(); i++) {
             try {
@@ -154,6 +234,13 @@ public class Chat extends AppCompatActivity {
                 }
 
                 chat.add(mensaje);
+            }
+            catch (Exception ignored) { }
+        }
+
+        if (JSONmensaje != null) {
+            try {
+                idMax = JSONmensaje.getInt("identificador");
             }
             catch (Exception ignored) { }
         }
