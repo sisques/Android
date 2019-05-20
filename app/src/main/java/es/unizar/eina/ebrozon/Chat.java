@@ -82,7 +82,7 @@ public class Chat extends AppCompatActivity {
         Timer mTimer = new Timer();
         TimerTask mTt = new TimerTask() {
             public void run() {
-                listarChat(false);
+                listarChat(false, false);
             }
         };
         mTimer.schedule(mTt, 1, 1000);
@@ -93,60 +93,63 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onRefresh() { // Cada vez que se realiza el gesto para refrescar
                 chat.clear();
-                listarChat(true);
+                listarChat(true, false);
                 swipeLayout.setRefreshing(false);
             }
         });
 
-        listarChat(true);
+        listarChat(true, true);
     }
 
     private void enviarMensaje(String mensaje) {
-        String urlPetition = Common.url + "/mandarMensaje?em=" + un + "&re=" + usuarioComunica
-                + "&con=" + mensaje;
+        if (!mensaje.equals("")) {
+            String urlPetition = Common.url + "/mandarMensaje?em=" + un + "&re=" + usuarioComunica
+                    + "&con=" + mensaje;
 
-        RequestQueue queue = Volley.newRequestQueue(this);
+            RequestQueue queue = Volley.newRequestQueue(this);
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
-                new Response.Listener<String>()
-                {
-                    @Override
-                    public void onResponse(String response) {
-                        // response
-                        Log.d("Response", response);
-                        if (idMax == 0) {
-                            listarChat(true);
+            StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            // response
+                            Log.d("Response", response);
+                            if (idMax == 0) {
+                                listarChat(true, true);
+                            } else {
+                                listarChat(false, true);
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // error
+                            Log.d("Error.Response", "Error al recibir la lista de chat");
                         }
                     }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error
-                        Log.d("Error.Response", "Error al recibir la lista de chat");
-                    }
-                }
-        );
-        queue.add(postRequest);
+            );
+            queue.add(postRequest);
+        }
     }
 
     // Si all, lista todos los mensajes, si no, añade a la lista los mensajes desde idMax
-    private void listarChat(Boolean all) {
+    // Si lastMsg, se posiciona al final del chat, si no, donde estaba
+    private void listarChat(Boolean all, Boolean lastMsg) {
         if (all) {
             String urlPetition = Common.url + "/cargarChat?em=" + un + "&re=" + usuarioComunica;
-            gestionarPeticionListar(urlPetition, all);
+            gestionarPeticionListar(urlPetition, all, lastMsg);
         }
         else {
             if (idMax > 0) {
                 String urlPetition = Common.url + "/recibirMensaje?em=" + un + "&re=" + usuarioComunica
                         + "&lm=" + idMax;
-                gestionarPeticionListar(urlPetition, all);
+                gestionarPeticionListar(urlPetition, all, lastMsg);
             }
         }
     }
 
-    private void gestionarPeticionListar(String urlPetition, final Boolean all) {
+    private void gestionarPeticionListar(String urlPetition, final Boolean all, final Boolean lastMsg) {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
@@ -160,11 +163,14 @@ public class Chat extends AppCompatActivity {
                             try {
                                 anyadirChat(new JSONArray(response));
                                 if (all) {
-                                    gestionarListarTrasPeticion();
+                                    gestionarListarTrasPeticion(lastMsg);
                                 }
                                 else {
                                     SimpleAdapter sa = (SimpleAdapter) listaChatListView.getAdapter();
                                     sa.notifyDataSetChanged();
+                                    if (lastMsg) {
+                                        listaChatListView.setSelection(sa.getCount() - 1);
+                                    }
                                 }
                             }catch (Exception ignored) { }
                         }
@@ -182,7 +188,7 @@ public class Chat extends AppCompatActivity {
         queue.add(postRequest);
     }
 
-    private void gestionarListarTrasPeticion() {
+    private void gestionarListarTrasPeticion(final Boolean lastMsg) {
         int[] to = {R.id.ChatMensaje, R.id.ChatMensaje};
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), this.chat, R.layout.content_chat_mensaje, this.atributos, to);
@@ -213,6 +219,9 @@ public class Chat extends AppCompatActivity {
         });
 
         listaChatListView.setAdapter(simpleAdapter);
+        if (lastMsg) {
+            listaChatListView.setSelection(simpleAdapter.getCount() - 1);
+        }
     }
 
     private void anyadirChat(JSONArray JSONmensajes) {
