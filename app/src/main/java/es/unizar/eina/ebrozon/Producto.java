@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -91,11 +90,11 @@ public class Producto extends AppCompatActivity {
 
 
         // TODO: Preparar para varias imagenes
-        //Bitmap imagen = productos.getImagenResumen(posVenta);
         ImageView ProductoImagen = (ImageView) findViewById(R.id.ProductoImagen);
-        //ProductoImagen.setImageBitmap(imagen);
-        Common.establecerFotoServidor(getApplicationContext(), productos.getImagenResumen(posVenta),
-                ProductoImagen);
+        Bitmap result = Common.StringToBitMap((productos.getImagenResumen(posVenta)).getImagen());
+        if (result != null) {
+            ProductoImagen.setImageBitmap(result);
+        }
 
         TextView ProductoNombre = (TextView) findViewById(R.id.ProductoNombre);
         try {
