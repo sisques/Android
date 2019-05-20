@@ -288,16 +288,19 @@ public class PantallaPrincipal extends AppCompatActivity
                                 Thread t1 = new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        try {
-                                            TimeUnit.SECONDS.sleep(2);
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-                                                    sa.notifyDataSetChanged();
-                                                }
-                                            });
-                                        } catch (Exception ignored) { }
+                                        for (int i=0; i<20; i++) {
+                                            try {
+                                                TimeUnit.MILLISECONDS.sleep(200);
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
+                                                        sa.notifyDataSetChanged();
+                                                    }
+                                                });
+                                            } catch (Exception ignored) {
+                                            }
+                                        }
                                     }
                                 });
                                 t1.start();
