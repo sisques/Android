@@ -169,6 +169,22 @@
     <string name="EditarFoto">FOTO DE PERFIL</string>
     <string name="CambiarContraseña">Cambiar tu contraseña</string>
 
+
+    <string name="cat1">Motor y accesorios</string>
+    <string name="cat2">Tv, audio, foto y video</string>
+    <string name="cat3">Informática y electrónica</string>
+    <string name="cat4">Cine, libros y música</string>
+    <string name="cat5">Deporte y ocio</string>
+    <string name="cat6">Hogar y jardín</string>
+    <string name="cat7">Electrodomésticos</string>
+    <string name="cat8">Moda y accesorios</string>
+    <string name="cat9">Niños y bebes</string>
+    <string name="cat10">Industria y agricultura</string>
+    <string name="cat11">Empleo y servicios</string>
+    <string name="cat12">Otros</string>
+
+
+
     <string-array name="ListaCiudades">
         <item>Almería</item>
         <item>Avilés</item>

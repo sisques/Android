@@ -310,23 +310,31 @@ public class SubirProd1_3 extends AppCompatActivity {
         }
         if (requestCode == GALERIA_1 || requestCode == GALERIA_2 || requestCode == GALERIA_3 || requestCode == GALERIA_4) {
             if (data != null) {
+
+
                 Uri contentURI = data.getData();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
                     switch (requestCode) {
                         case 1:
+
                             imagen1_bm = bitmap;
                             foto1.setImageBitmap(imagen1_bm);
                             break;
                         case 2:
+
                             imagen2_bm = bitmap;
                             foto2.setImageBitmap(imagen2_bm);
                             break;
                         case 3:
+
                             imagen3_bm = bitmap;
                             foto3.setImageBitmap(imagen3_bm);
                             break;
                         case 4:
+
                             imagen4_bm = bitmap;
                             foto4.setImageBitmap(imagen4_bm);
                             break;
@@ -341,6 +349,8 @@ public class SubirProd1_3 extends AppCompatActivity {
 
         } else if (requestCode == CAMARA_1 || requestCode == CAMARA_2 || requestCode == CAMARA_3 || requestCode == CAMARA_4) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
             switch (requestCode) {
                 case 5:
                     imagen1_bm = thumbnail;
@@ -359,7 +369,7 @@ public class SubirProd1_3 extends AppCompatActivity {
                     foto4.setImageBitmap(imagen4_bm);
                     break;
             }
-            guardarFoto(thumbnail);
+            guardarFoto(thumbnail, bytes);
          }
         String prod = nombreProducto.getText().toString().trim();
         String desc = descripcionProducto.getText().toString().trim();
@@ -367,9 +377,8 @@ public class SubirProd1_3 extends AppCompatActivity {
     }
 
 
-    public String guardarFoto(Bitmap myBitmap) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+    public String guardarFoto(Bitmap myBitmap, ByteArrayOutputStream bytes) {
+
         File wallpaperDirectory = new File(
                 Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
         // have the object build the directory structure, if needed.
