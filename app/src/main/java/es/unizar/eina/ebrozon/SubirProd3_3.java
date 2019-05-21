@@ -5,13 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -35,7 +35,34 @@ public class SubirProd3_3 extends AppCompatActivity {
 
     Button siguiente;
     Button anterior;
+    ImageButton motor;
+    ImageButton tv;
+    ImageButton compu;
+    ImageButton pelis;
+    ImageButton deporte;
+    ImageButton hogar;
+    ImageButton electro;
+    ImageButton ropa;
+    ImageButton bebe;
+    ImageButton agri;
+    ImageButton empleo;
+    ImageButton otros;
     SharedPreferences sharedpreferences;
+
+    String[] categorias =   {   "Motor y accesorios",
+                                "Tv, audio, foto y video",
+                                "Informática y electrónica",
+                                "Cine, libros y música",
+                                "Deporte y ocio",
+                                "Hogar y jardín",
+                                "Electrodomésticos",
+                                "Moda y accesorios",
+                                "Niños y bebes",
+                                "Industria y agricultura",
+                                "Empleo y servicios",
+                                "Otros"
+                            };
+    int categoria = 0;
 
 
     @Override
@@ -48,7 +75,20 @@ public class SubirProd3_3 extends AppCompatActivity {
         siguiente = findViewById(R.id.PantallaSiguiente);
         anterior = findViewById(R.id.PantallaAnterior);
 
-        siguiente.setEnabled(true);
+        motor = findViewById(R.id.Motor);
+        tv = findViewById(R.id.Tv);
+        compu = findViewById(R.id.Informatica);
+        pelis = findViewById(R.id.Cine);
+        deporte = findViewById(R.id.Deporte);
+        hogar = findViewById(R.id.Hogar);
+        electro = findViewById(R.id.Electrodomesticos);
+        ropa = findViewById(R.id.Moda);
+        bebe = findViewById(R.id.ninyos);
+        agri = findViewById(R.id.Industria);
+        empleo = findViewById(R.id.Empleo);
+        otros = findViewById(R.id.Otros);
+
+        siguiente.setEnabled(false);
         anterior.setEnabled(true);
 
         siguiente.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +105,169 @@ public class SubirProd3_3 extends AppCompatActivity {
             }
         });
 
+        motor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(1);
+            }
+        });
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(2);
+            }
+        });
+        compu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(3);
+            }
+        });
+        pelis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(4);
+            }
+        });
+        deporte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(5);
+            }
+        });
+        hogar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(6);
+            }
+        });
+        electro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(7);
+            }
+        });
+        ropa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(8);
+            }
+        });
+        bebe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(9);
+            }
+        });
+        agri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(10);
+            }
+        });
+        empleo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(11);
+            }
+        });
+        otros.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                elegirCategoria(12);
+            }
+        });
+
+
+
     }
+
+    private void elegirCategoria(int cat){
+        if(categoria == cat){
+            categoria = 0;
+            resetearBotones();
+        } else{
+            categoria = cat;
+            bloquearRestoYDestacar(cat);
+            siguiente.setEnabled(true);
+        }
+
+
+    }
+
+    private void resetearBotones(){
+        motor.setImageResource(R.drawable.motor);
+        tv.setImageResource(R.drawable.tv);
+        compu.setImageResource(R.drawable.compu);
+        pelis.setImageResource(R.drawable.pelis);
+        deporte.setImageResource(R.drawable.deporte);
+        hogar.setImageResource(R.drawable.hogar);
+        electro.setImageResource(R.drawable.electro);
+        ropa.setImageResource(R.drawable.ropa);
+        bebe.setImageResource(R.drawable.bebe);
+        agri.setImageResource(R.drawable.agri);
+        empleo.setImageResource(R.drawable.empleo);
+        otros.setImageResource(R.drawable.otros);
+    }
+
+    private void bloquearRestoYDestacar(int cat){
+        motor.setImageResource(R.drawable.motor_dis);
+        tv.setImageResource(R.drawable.tv_dis);
+        compu.setImageResource(R.drawable.compu_dis);
+        pelis.setImageResource(R.drawable.pelis_dis);
+        deporte.setImageResource(R.drawable.deporte_dis);
+        hogar.setImageResource(R.drawable.hogar_dis);
+        electro.setImageResource(R.drawable.electro_dis);
+        ropa.setImageResource(R.drawable.ropa_dis);
+        bebe.setImageResource(R.drawable.bebe_dis);
+        agri.setImageResource(R.drawable.agri_dis);
+        empleo.setImageResource(R.drawable.empleo_dis);
+        otros.setImageResource(R.drawable.otros_dis);
+        switch (cat) {
+            case 1:
+                motor.setImageResource(R.drawable.motor_sel);
+                break;
+            case 2:
+                tv.setImageResource(R.drawable.tv_sel);
+                break;
+            case 3:
+                compu.setImageResource(R.drawable.compu_sel);
+                break;
+            case 4:
+                 pelis.setImageResource(R.drawable.pelis_sel);
+                break;
+            case 5:
+                deporte.setImageResource(R.drawable.deporte_sel);
+                break;
+            case 6:
+                hogar.setImageResource(R.drawable.hogar_sel);
+                break;
+            case 7:
+                electro.setImageResource(R.drawable.electro_sel);
+                break;
+            case 8:
+                ropa.setImageResource(R.drawable.ropa_sel);
+                break;
+            case 9:
+                bebe.setImageResource(R.drawable.bebe_sel);
+                break;
+            case 10:
+                agri.setImageResource(R.drawable.agri_sel);
+                break;
+            case 11:
+                empleo.setImageResource(R.drawable.empleo_sel);
+                break;
+            case 12:
+                otros.setImageResource(R.drawable.otros_sel);
+                break;
+
+        }
+    }
+
+
+
+
+
 
     private void siguientePaso() {
 
@@ -91,7 +293,7 @@ public class SubirProd3_3 extends AppCompatActivity {
                 "Subiendo...", true);
 
         subirProducto(producto, descripcion, imagen1_bm, imagen2_bm, imagen3_bm, imagen4_bm,
-                precio, esSubasta, fechaLimite, precioInicial);
+                precio, esSubasta, fechaLimite, precioInicial, categoria);
 
 
     }
@@ -123,7 +325,7 @@ public class SubirProd3_3 extends AppCompatActivity {
     private void subirProducto(final String producto, final String descripcion, final Bitmap imagen1_bm,
                                final Bitmap imagen2_bm, final Bitmap imagen3_bm, final Bitmap imagen4_bm,
                                final String precio, final Boolean esSubasta, final long fechaLimite,
-                               final String precioInicial) {
+                               final String precioInicial, final int categ) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -180,6 +382,7 @@ public class SubirProd3_3 extends AppCompatActivity {
                     params.put("pin", precioInicial);
                     params.put("end", String.valueOf(fechaLimite));
                 }
+                params.put("cat", categorias[categ]);
 
 
                 return params;
