@@ -48,7 +48,6 @@ public class SubirProd3_3 extends AppCompatActivity {
     ImageButton empleo;
     ImageButton otros;
     SharedPreferences sharedpreferences;
-
     String[] categorias =   {   "Motor y accesorios",
                                 "Tv, audio, foto y video",
                                 "Informática y electrónica",
@@ -290,11 +289,13 @@ public class SubirProd3_3 extends AppCompatActivity {
         Long fechaLimite = intentAnterior.getLongExtra("fechaLimite",0);
         String precioInicial = intentAnterior.getStringExtra("precioInicial");
 
+
+
         ProgressDialog dialog = ProgressDialog.show(SubirProd3_3.this, "",
                 "Subiendo...", true);
 
         subirProducto(producto, descripcion, imagen1_bm, imagen2_bm, imagen3_bm, imagen4_bm,
-                precio, esSubasta, fechaLimite, precioInicial, categoria);
+                precio, esSubasta, fechaLimite, precioInicial, categoria, dialog);
 
 
     }
@@ -303,30 +304,34 @@ public class SubirProd3_3 extends AppCompatActivity {
         finish();
     }
 
-    private void volverPrincipal() {
+    private void volverPrincipal(ProgressDialog dialog) {
+        dialog.dismiss();
         Intent intent = new Intent(SubirProd3_3.this, PantallaPrincipal.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         startActivity(intent);
     }
 
-    private void gestionPeticion(String estado, String msg) {
-        if (estado.equals("O")) {
-
-            volverPrincipal();
-        } else if (estado.equals("E")) {
-            siguiente.setEnabled(true);
-            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-        } else {
-            siguiente.setEnabled(true);
-            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+    private void gestionPeticion(String estado, String msg, ProgressDialog dialog) {
+        switch(estado){
+            case "O":
+                volverPrincipal(dialog);
+                break;
+            case "E":
+                siguiente.setEnabled(true);
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                break;
+            default:
+                siguiente.setEnabled(true);
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                break;
         }
     }
 
     private void subirProducto(final String producto, final String descripcion, final Bitmap imagen1_bm,
                                final Bitmap imagen2_bm, final Bitmap imagen3_bm, final Bitmap imagen4_bm,
                                final String precio, final Boolean esSubasta, final long fechaLimite,
-                               final String precioInicial, final int categ) {
+                               final String precioInicial, final int categ, final ProgressDialog dialog) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -347,22 +352,27 @@ public class SubirProd3_3 extends AppCompatActivity {
                         response = response.replace("{", "").replace("}", "").replace("\"", "");
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado + ":", "");
-                        gestionPeticion(estado, msg);
+                        gestionPeticion(estado, msg, dialog);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        Log.d("Error.Response", error.getMessage());
-                        Toast.makeText(SubirProd3_3.this, "Error al subir: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        String msg = "Error desconocido";
+                        if (error.getMessage() != null) {
+                            msg = error.getMessage();
+                        }
+                        Log.d("Error.Response", msg);
+                        Toast.makeText(SubirProd3_3.this, "Error al subir: " + msg, Toast.LENGTH_LONG).show();
+                        volverPrincipal(dialog);
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
 
-                String uName = sharedpreferences.getString(Common.un, null);
+                String uName = sharedpreferences.getString(Common.un, "usuario");
                 String foto1 = BitMapToString(imagen1_bm);
                 String foto2 = BitMapToString(imagen2_bm);
                 String foto3 = BitMapToString(imagen3_bm);
@@ -384,6 +394,7 @@ public class SubirProd3_3 extends AppCompatActivity {
                     params.put("end", String.valueOf(fechaLimite));
                 }
                 params.put("cat", categorias[categ-1]);
+
 
 
                 return params;
@@ -408,8 +419,7 @@ public class SubirProd3_3 extends AppCompatActivity {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] b = baos.toByteArray();
-            String temp = Base64.encodeToString(b, Base64.DEFAULT);
-            return temp;
+            return Base64.encodeToString(b, Base64.DEFAULT);
         }
     }
 }
