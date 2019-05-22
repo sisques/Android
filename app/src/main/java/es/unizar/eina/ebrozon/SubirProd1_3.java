@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.util.Calendar;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -26,7 +28,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import es.unizar.eina.ebrozon.lib.ResultIPC;
@@ -315,8 +316,11 @@ public class SubirProd1_3 extends AppCompatActivity {
                 Uri contentURI = data.getData();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+
+                    int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
                     switch (requestCode) {
                         case 1:
 
@@ -349,12 +353,16 @@ public class SubirProd1_3 extends AppCompatActivity {
 
         } else if (requestCode == CAMARA_1 || requestCode == CAMARA_2 || requestCode == CAMARA_3 || requestCode == CAMARA_4) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            guardarFoto(thumbnail);
+            int nh = (int) ( thumbnail.getHeight() * (512.0 / thumbnail.getWidth()) );
+            thumbnail = Bitmap.createScaledBitmap(thumbnail, 512, nh, true);
+
             switch (requestCode) {
                 case 5:
                     imagen1_bm = thumbnail;
                     foto1.setImageBitmap(imagen1_bm);
+                    foto1.setScaleX(3);
+                    foto1.setScaleY(3);
                     break;
                 case 6:
                     imagen2_bm = thumbnail;
@@ -369,7 +377,7 @@ public class SubirProd1_3 extends AppCompatActivity {
                     foto4.setImageBitmap(imagen4_bm);
                     break;
             }
-            guardarFoto(thumbnail, bytes);
+
          }
         String prod = nombreProducto.getText().toString().trim();
         String desc = descripcionProducto.getText().toString().trim();
@@ -377,33 +385,39 @@ public class SubirProd1_3 extends AppCompatActivity {
     }
 
 
-    public String guardarFoto(Bitmap myBitmap, ByteArrayOutputStream bytes) {
+    public String guardarFoto(Bitmap myBitmap) {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            File wallpaperDirectory = new File(
+                    Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
+            // have the object build the directory structure, if needed.
+            if (!wallpaperDirectory.exists()) {
+                wallpaperDirectory.mkdirs();
+            }
 
-        File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
-        // have the object build the directory structure, if needed.
-        if (!wallpaperDirectory.exists()) {
-            wallpaperDirectory.mkdirs();
+            try {
+                File f;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    f = new File(wallpaperDirectory, "producto-"+ Calendar.getInstance().getTime()+".jpg");
+                }
+                else {
+                    f = new File(wallpaperDirectory, "producto.jpg");
+                }
+                f.createNewFile();
+                FileOutputStream fo = new FileOutputStream(f);
+                fo.write(bytes.toByteArray());
+                MediaScannerConnection.scanFile(this,
+                        new String[]{f.getPath()},
+                        new String[]{"image/jpeg"}, null);
+                fo.close();
+                Log.d("TAG", "Imagen guardada::--->" + f.getAbsolutePath());
+
+                return f.getAbsolutePath();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return "";
         }
-
-        try {
-            File f = new File(wallpaperDirectory, Calendar.getInstance()
-                    .getTimeInMillis() + ".jpg");
-            f.createNewFile();
-            FileOutputStream fo = new FileOutputStream(f);
-            fo.write(bytes.toByteArray());
-            MediaScannerConnection.scanFile(this,
-                    new String[]{f.getPath()},
-                    new String[]{"image/jpeg"}, null);
-            fo.close();
-            Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
-
-            return f.getAbsolutePath();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        return "";
-    }
 
 
 

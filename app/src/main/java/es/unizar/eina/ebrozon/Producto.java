@@ -115,5 +115,10 @@ public class Producto extends AppCompatActivity {
         try {
             ProductoDescripcion.setText(productos.getDescripcionVenta(posVenta));
         } catch (Exception ignored) { }
+
+        TextView ProductoCategoria = (TextView) findViewById(R.id.ProductoCategoria);
+        try {
+            ProductoCategoria.setText(productos.getCategoriaVenta(posVenta));
+        } catch (Exception ignored) { }
     }
 }

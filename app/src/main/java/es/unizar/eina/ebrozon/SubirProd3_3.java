@@ -186,6 +186,7 @@ public class SubirProd3_3 extends AppCompatActivity {
         if(categoria == cat){
             categoria = 0;
             resetearBotones();
+            siguiente.setEnabled(false);
         } else{
             categoria = cat;
             bloquearRestoYDestacar(cat);
@@ -382,7 +383,7 @@ public class SubirProd3_3 extends AppCompatActivity {
                     params.put("pin", precioInicial);
                     params.put("end", String.valueOf(fechaLimite));
                 }
-                params.put("cat", categorias[categ]);
+                params.put("cat", categorias[categ-1]);
 
 
                 return params;
