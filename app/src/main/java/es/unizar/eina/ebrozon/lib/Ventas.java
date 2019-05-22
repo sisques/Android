@@ -23,7 +23,7 @@ public class Ventas {
     private final static String[] atributos =
             {"identificador", "usuario", "fechainicio", "fechaventa", "producto", "descripcion",
              "precio", "preciofinal", "comprador", "fechapago", "tienearchivo", "activa",
-             "es_subasta", "ciudad", "provincia", "user", "archivos"};
+             "es_subasta", "ciudad", "provincia", "user", "archivos","categoria"};
 
     public void clear() {
         ventas.clear();
@@ -178,5 +178,9 @@ public class Ventas {
 
     public ImagenFinal getImagenResumen(int index) {
         return (ImagenFinal) resumenes.get(index).get("imagen");
+    }
+
+    public String getCategoriaVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[17]).toString();
     }
 }
