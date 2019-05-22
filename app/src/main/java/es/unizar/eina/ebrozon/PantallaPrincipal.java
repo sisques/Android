@@ -95,7 +95,7 @@ public class PantallaPrincipal extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(PantallaPrincipal.this, Filtros.class);
-                i.putExtra("listarPorCiudad", listarPorCiudad);
+                i.putExtra("ProvinciaFiltros", filtroCi);
                 startActivityForResult(i, ACT_FILTROS);
             }
         });
@@ -415,8 +415,8 @@ public class PantallaPrincipal extends AppCompatActivity
         if (requestCode == ACT_FILTROS) {
             if (resultCode == Common.RESULTADO_OK) {
                 filtroUsar = true;
-                listarPorCiudad = data.getBooleanExtra("listarPorCiudad", listarPorCiudad);
                 filtroCi = data.getData().toString();
+                listarPorCiudad = !filtroCi.equals("");
 
                 productos.clear();
                 SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
