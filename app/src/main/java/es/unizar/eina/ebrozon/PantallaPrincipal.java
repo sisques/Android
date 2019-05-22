@@ -62,7 +62,7 @@ public class PantallaPrincipal extends AppCompatActivity
 
     private Boolean misProductos; // Para ver productos en venta
 
-    private Boolean buscar; // Utilizar contenido de búsqueda
+    private Boolean buscar; // Opción de búsqueda
     private String busqueda; // Palabra a buscar
 
     private TextView menuNombre;
@@ -396,14 +396,13 @@ public class PantallaPrincipal extends AppCompatActivity
                 listarProductos();
             }
             else if (resultCode == Common.RESULTADO_CANCELADO) {
+                provincia = "";
                 resetPantalla();
             }
         }
     }
 
     private void resetPantalla() {
-        provincia = "";
-
         productos.clear();
         SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
         sa.notifyDataSetChanged();
