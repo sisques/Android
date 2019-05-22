@@ -27,9 +27,6 @@ public class Filtros extends AppCompatActivity {
         setContentView(R.layout.activity_filtros);
 
         provincia = getIntent().getStringExtra("ProvinciaFiltros");
-        if (provincia == null) {
-            provincia = "";
-        }
 
         // Botón aplicar
         Button botonAplicar = findViewById(R.id.FiltroBotonAplicar);

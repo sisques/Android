@@ -54,18 +54,17 @@ public class PantallaPrincipal extends AppCompatActivity
 
     private String un; // usuario
     private String cor; // correo
-    private String pr; // provincia
-    private String ci; // ciudad
     private String im; // imagen perfil
 
-    private Boolean listarPorCiudad;
-    private Boolean filtroUsar;
-    private String filtroCi; // filtro ciudad
-    private Boolean misProductos;
-    private Boolean buscar;
-    private String busqueda; // palabra a buscar
+    private Ventas productos; // Productos y resúmenes
 
-    private Ventas productos;
+    private String provincia; // Provincia utilizada en la búsqueda; "" = todas las provincias
+
+    private Boolean misProductos; // Para ver productos en venta
+
+    private Boolean buscar; // Utilizar contenido de búsqueda
+    private String busqueda; // Palabra a buscar
+
     private TextView menuNombre;
     private TextView menuCorreo;
     private ImageView menuImagen;
@@ -83,8 +82,7 @@ public class PantallaPrincipal extends AppCompatActivity
         productos = new Ventas();
         productos.setContext(getApplicationContext());
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
-        listarPorCiudad = false; // Al principio se listan todos los productos
-        filtroUsar = false;
+        provincia = ""; // Al principio se listan todos los productos
         misProductos = false;
         buscar = false;
         busqueda = null;
@@ -95,7 +93,7 @@ public class PantallaPrincipal extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(PantallaPrincipal.this, Filtros.class);
-                i.putExtra("ProvinciaFiltros", filtroCi);
+                i.putExtra("ProvinciaFiltros", provincia);
                 startActivityForResult(i, ACT_FILTROS);
             }
         });
@@ -188,31 +186,18 @@ public class PantallaPrincipal extends AppCompatActivity
                         try {
                             JSONObject usuario = new JSONObject(response);
                             cor = usuario.getString("correo");
-                            pr = usuario.getString("provincia");
-                            ci = usuario.getString("ciudad");
-                            if (ci.isEmpty()) {
-                                ci = "...";
-                            }
                             im = usuario.getString("urlArchivo");
 
                             Common.establecerFotoServidor(getApplicationContext(), im, menuImagen);
 
                             SharedPreferences.Editor editor = sharedpreferences.edit();
                             editor.putString(Common.cor, cor);
-                            editor.putString(Common.ci, ci);
-                            editor.putString(Common.pr, pr);
                             editor.putString(Common.im, im);
                             editor.commit();
                         }
                         catch(Exception e) {
                             cor = sharedpreferences.getString(Common.cor, null);
-                            pr = sharedpreferences.getString(Common.pr, null);
-                            ci = sharedpreferences.getString(Common.ci, null);
                             im = sharedpreferences.getString(Common.im, null);
-                        }
-
-                        if (pr == null || pr.equals("")) {
-                            pr = "Zaragoza";
                         }
                         menuNombre.setText(un);
                         menuCorreo.setText(cor);
@@ -245,21 +230,10 @@ public class PantallaPrincipal extends AppCompatActivity
     }
 
     private void listarProductosCiudad() {
-        String ciudad;
-        if (filtroUsar && !filtroCi.equals("...")) {
-            ciudad = filtroCi;
-        }
-        else {
-            if (ci != null && !ci.equals("..."))
-                ciudad = ci;
-            else
-                ciudad = pr;
-        }
-
         Integer id = productos.getIdMax();
 
-        if (listarPorCiudad)
-            gestionarPeticionListar(Common.url + "/listarProductosCiudad?id=" + id + "&ci=" + ciudad);
+        if (!provincia.equals(""))
+            gestionarPeticionListar(Common.url + "/listarProductosCiudad?id=" + id + "&ci=" + provincia);
         else
             gestionarPeticionListar(Common.url + "/listarPaginaPrincipal?id=" + id);
     }
@@ -414,9 +388,7 @@ public class PantallaPrincipal extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ACT_FILTROS) {
             if (resultCode == Common.RESULTADO_OK) {
-                filtroUsar = true;
-                filtroCi = data.getData().toString();
-                listarPorCiudad = !filtroCi.equals("");
+                provincia = data.getData().toString();
 
                 productos.clear();
                 SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
@@ -430,8 +402,7 @@ public class PantallaPrincipal extends AppCompatActivity
     }
 
     private void resetPantalla() {
-        filtroUsar = false;
-        listarPorCiudad = false;
+        provincia = "";
 
         productos.clear();
         SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
