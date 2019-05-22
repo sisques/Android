@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -46,6 +47,11 @@ public class SubirProd2_3 extends AppCompatActivity {
     Button siguiente;
     Button anterior;
 
+    LinearLayout layout1;
+    LinearLayout layout2;
+    LinearLayout layout3;
+
+
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog.OnTimeSetListener timeSetListener;
 
@@ -61,7 +67,7 @@ public class SubirProd2_3 extends AppCompatActivity {
         fecha = findViewById(R.id.FechaLimite);
         horaLimiteSubasta = findViewById(R.id.HoraLimite_text_view);
         hora = findViewById(R.id.HoraLimite);
-        simbolo€ = findViewById(R.id.Simbolo_euro);
+        simbolo€ = findViewById(R.id.simbolo_euro_2);
 
         precioProducto = findViewById(R.id.PrecioProducto);
         precioInicial = findViewById(R.id.PrecioInicial);

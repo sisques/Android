@@ -154,18 +154,18 @@ public class SubirProd1_3 extends AppCompatActivity {
             String prod = nombreProducto.getText().toString().trim();
             String desc = descripcionProducto.getText().toString().trim();
 
-            prodNameCheckLength = (prod.length() >= 3 && prod.length() <= 100);;
-            prodDescCheckLength = (desc.length() >= 10);
+            prodNameCheckLength = (prod.length() >= 3 && prod.length() <= 100) && prod.matches("\\p{L}+ \\p{L}+");
+            prodDescCheckLength = (desc.length() >= 10) && desc.matches("\\p{L}+ \\p{L}+");
 
         }
     };
 
     private void siguientePaso(){
         if(!prodNameCheckLength){
-            Toast.makeText(getApplicationContext(),"El nombre del producto debe tener entre 3 y 100 caracteres", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"El nombre del producto debe tener entre 3 y 100 caracteres y no puede contener caracteres especiales", Toast.LENGTH_LONG).show();
         }
         else if(!prodDescCheckLength){
-            Toast.makeText(getApplicationContext(),"La descripción del producto debe tener como mínimo 10 caracteres", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"La descripción del producto debe tener como mínimo 10 caracteres y no puede contener caracteres especiales", Toast.LENGTH_LONG).show();
         }
         else {
             String producto = nombreProducto.getText().toString().trim();
@@ -361,8 +361,6 @@ public class SubirProd1_3 extends AppCompatActivity {
                 case 5:
                     imagen1_bm = thumbnail;
                     foto1.setImageBitmap(imagen1_bm);
-                    foto1.setScaleX(3);
-                    foto1.setScaleY(3);
                     break;
                 case 6:
                     imagen2_bm = thumbnail;

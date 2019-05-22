@@ -32,6 +32,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:text="@string/title_activity_subir_producto_2_3"
+                android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textColor="@color/colorPrimary"
                 android:textSize="24sp"
@@ -82,13 +83,13 @@
                     android:hint="@string/precio_del_producto"
                     android:inputType="number|numberDecimal"
                     app:layout_constraintBottom_toTopOf="@+id/esSubasta"
-                    app:layout_constraintEnd_toStartOf="@+id/simbolo_euro_2"
+                    app:layout_constraintEnd_toStartOf="@+id/simbolo_euro_1"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/PrecioProd_text_view" />
 
                 <TextView
-                    android:id="@+id/simbolo_euro_2"
+                    android:id="@+id/simbolo_euro_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
@@ -133,11 +134,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/PrecioProducto" />
 
             <LinearLayout
+                android:id="@+id/layout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/PrecioInicial_text_view"
@@ -179,7 +182,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/PrecioInicial_text_view" />
 
                     <TextView
-                        android:id="@+id/simbolo_euro_"
+                        android:id="@+id/simbolo_euro_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -196,16 +199,35 @@
             </LinearLayout>
 
             <Space
+                android:id="@+id/espacio1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:visibility="visible" />
 
             <LinearLayout
+                android:id="@+id/layout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/FechaLimite_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="0"
+                    android:text="@string/fecha_limite_subasta"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toTopOf="@+id/FechaLimite"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/PrecioInicial" />
 
                 <TextView
                     android:id="@+id/FechaLimite"
@@ -224,34 +246,38 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/FechaLimite_text_view" />
 
+            </LinearLayout>
+
+            <Space
+                android:id="@+id/espacio2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/layout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:visibility="visible">
+
                 <TextView
-                    android:id="@+id/FechaLimite_text_view"
+                    android:id="@+id/HoraLimite_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="0"
-                    android:text="@string/fecha_limite_subasta"
+                    android:text="@string/hora_limite_subasta"
                     android:visibility="invisible"
-                    app:layout_constraintBottom_toTopOf="@+id/FechaLimite"
+                    app:layout_constraintBottom_toTopOf="@+id/HoraLimite"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/PrecioInicial" />
-
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+                    app:layout_constraintTop_toBottomOf="@+id/FechaLimite" />
 
                 <TextView
                     android:id="@+id/HoraLimite"
@@ -268,21 +294,6 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/HoraLimite_text_view" />
-
-                <TextView
-                    android:id="@+id/HoraLimite_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="0"
-                    android:text="@string/hora_limite_subasta"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toTopOf="@+id/HoraLimite"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/FechaLimite" />
 
             </LinearLayout>
 
