@@ -1,6 +1,7 @@
 package es.unizar.eina.ebrozon.lib;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,18 +17,18 @@ public class Ventas {
     private static List<JSONObject> ventas = new ArrayList<JSONObject>();
     private static List<HashMap<String, Object>> resumenes
             = new ArrayList<HashMap<String, Object>>(); // Información duplicada pero muestra más rápido
+    private static List<List<Bitmap>> archivos = new ArrayList<List<Bitmap>>(); // Imágenes
     private static Integer idMax = 0; // id máxima entre todas las ventas
-
-    private Context contextPantalla = null;
 
     private final static String[] atributos =
             {"identificador", "usuario", "fechainicio", "fechaventa", "producto", "descripcion",
              "precio", "preciofinal", "comprador", "fechapago", "tienearchivo", "activa",
-             "es_subasta", "ciudad", "provincia", "user", "archivos","categoria"};
+             "es_subasta", "ciudad", "provincia", "user", "archivos", "categoria"};
 
     public void clear() {
         ventas.clear();
         resumenes.clear();
+        archivos.clear();
         idMax = 0;
     }
 
@@ -35,13 +36,14 @@ public class Ventas {
         HashMap<String, Object> resumen;
         JSONObject producto;
         String aux;
-        ImagenFinal imagen;
         Integer id;
 
         for (int i=0; i<productos.length(); i++) {
             try {
                 producto = productos.getJSONObject(i);
                 ventas.add(producto);
+
+                archivos.add(new ArrayList<Bitmap>());
 
                 id = producto.getInt(atributos[0]);
                 if (id > idMax)
@@ -58,27 +60,24 @@ public class Ventas {
                 else
                     resumen.put(atributos[13], producto.get(atributos[14]).toString());
 
-                aux = producto.getJSONArray(atributos[16]).get(0).toString();
-                imagen = new ImagenFinal();
-                resumen.put("imagen", imagen);
-                if (!aux.equals("")) {
-                    Common.obtenerFotoServidor(this.contextPantalla, aux, (ImagenFinal) resumen.get("imagen"));
-                }
-                else {
-                    Common.obtenerFotoServidor(this.contextPantalla, "", (ImagenFinal) resumen.get("imagen"));
-                }
+                resumen.put("imagen", null);
                 resumenes.add(resumen);
             }
             catch (Exception ignored) { }
         }
     }
 
-    public void setContext(Context c) {
-        this.contextPantalla = c;
+    public void anyadirImagen(int numProducto, Bitmap im) {
+        archivos.get(numProducto).add(im);
+        resumenes.get(numProducto).put("imagen", im);
     }
 
     public Integer getIdMax() {
         return idMax;
+    }
+
+    public Integer getTamanyo() {
+        return ventas.size();
     }
 
     public List<HashMap<String, Object>> getResumenes() {
@@ -172,12 +171,12 @@ public class Ventas {
         return ventas.get(index).get(atributos[15]).toString();
     }
 
-    public String getImagenVenta(int index) throws JSONException {
-        return ventas.get(index).getJSONArray(atributos[16]).get(0).toString();
+    public JSONArray getIdImagenesVenta(int index) throws JSONException {
+        return ventas.get(index).getJSONArray(atributos[16]);
     }
 
-    public ImagenFinal getImagenResumen(int index) {
-        return (ImagenFinal) resumenes.get(index).get("imagen");
+    public Bitmap getImagenResumen(int index) {
+        return (Bitmap) resumenes.get(index).get("imagen");
     }
 
     public String getCategoriaVenta(int index) throws JSONException {

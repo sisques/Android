@@ -47,31 +47,6 @@ public final class Common {
         }
     }
 
-    public static void obtenerFotoServidor(Context context, String id, final ImagenFinal imagen) {
-        RequestQueue queue = Volley.newRequestQueue(context);
-        String urlPetition = Common.url + "/loadArchivoTemp?id=" + id;
-
-        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // response
-                        Log.d("Response", response);
-                        response = response.replace(" ","+");
-                        imagen.setImagen(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error
-                        Log.d("Error.Response", "Error con imagen de perfil");
-                    }
-                }
-        );
-        queue.add(postRequest);
-    }
-
     public static void establecerFotoServidor(final Context context, final String id, final ImageView imagen) {
         RequestQueue queue = Volley.newRequestQueue(context);
         String urlPetition = Common.url + "/loadArchivoTemp?id=" + id;

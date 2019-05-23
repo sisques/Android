@@ -37,11 +37,10 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.concurrent.TimeUnit;
-
 import es.unizar.eina.ebrozon.lib.Common;
-import es.unizar.eina.ebrozon.lib.ImagenFinal;
 import es.unizar.eina.ebrozon.lib.Ventas;
+
+import static es.unizar.eina.ebrozon.lib.Common.StringToBitMap;
 
 
 public class PantallaPrincipal extends AppCompatActivity
@@ -80,7 +79,6 @@ public class PantallaPrincipal extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         productos = new Ventas();
-        productos.setContext(getApplicationContext());
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         provincia = ""; // Al principio se listan todos los productos
         misProductos = false;
@@ -257,28 +255,8 @@ public class PantallaPrincipal extends AppCompatActivity
                             try {
                                 productos.anyadirVentas(new JSONArray(response));
                                 gestionarListarTrasPeticion();
-
-                                // Le da un tiempo para que el servidor envíe la petición
-                                Thread t1 = new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        for (int i=0; i<20; i++) {
-                                            try {
-                                                TimeUnit.MILLISECONDS.sleep(200);
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-                                                        sa.notifyDataSetChanged();
-                                                    }
-                                                });
-                                            } catch (Exception ignored) {
-                                            }
-                                        }
-                                    }
-                                });
-                                t1.start();
-                            }catch (Exception ignored) { }
+                                descargarImagenesPrincipales();
+                            } catch (Exception ignored) { }
                         }
                     }
                 },
@@ -303,11 +281,8 @@ public class PantallaPrincipal extends AppCompatActivity
         simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Object data, String textRepresentation) { // Para el tratamiento de imágenes
-                if ((view instanceof ImageView) && (data instanceof ImagenFinal)) {
-                    Bitmap result = Common.StringToBitMap(((ImagenFinal) data).getImagen());
-                    if (result != null) {
-                        ((ImageView) view).setImageBitmap(result);
-                    }
+                if ((view instanceof ImageView) && (data instanceof Bitmap)) {
+                    ((ImageView) view).setImageBitmap((Bitmap) data);
                     return true;
                 }
                 return false;
@@ -326,6 +301,47 @@ public class PantallaPrincipal extends AppCompatActivity
                 startActivity(intent);
             }
         });
+    }
+
+    private void descargarImagenesPrincipales() {
+        String imagen;
+        for (int i=0; i<productos.getTamanyo(); i++) {
+            try {
+                imagen = productos.getIdImagenesVenta(i).getString(0);
+                descargarImagenPrincipal(imagen, i);
+            }
+            catch (Exception ignored) {}
+        }
+    }
+
+    private void descargarImagenPrincipal(final String idImagen, final int numProducto) {
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String urlPetition = Common.url + "/loadArchivoTemp?id=" + idImagen;
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        response = response.replace(" ","+");
+
+                        if (productos.getTamanyo() > numProducto) {
+                            productos.anyadirImagen(numProducto, StringToBitMap(response));
+                            SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
+                            sa.notifyDataSetChanged();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error con imagen de perfil");
+                    }
+                }
+        );
+        queue.add(postRequest);
     }
 
     @Override
