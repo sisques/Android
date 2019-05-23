@@ -26,7 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import es.unizar.eina.ebrozon.lib.Common;
+
 public class SubirProd2_3 extends AppCompatActivity {
+    private final int ACT_SIGUIENTE = 999;
 
     TextView precioInicialProd;
     TextView fechaLimiteSubasta;
@@ -256,13 +259,29 @@ public class SubirProd2_3 extends AppCompatActivity {
 
             intent.putExtra("fechaLimite", f);
 
-            startActivity(intent);
+            startActivityForResult(intent, ACT_SIGUIENTE);
         }
 
     }
 
-    private void pasoAnterior(){
+    private void pasoAnterior() {
+        setResult(Common.RESULTADO_NOK, new Intent());
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        pasoAnterior();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ACT_SIGUIENTE) {
+            if (resultCode == Common.RESULTADO_OK) {
+                setResult(Common.RESULTADO_OK, new Intent());
+                finish();
+            }
+        }
     }
 
     private void cambiar (Boolean isChecked){

@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.content.SharedPreferences;
 
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -48,6 +49,7 @@ public class PantallaPrincipal extends AppCompatActivity
 
     private final int ACT_FILTROS = 0;
     private final int ACT_COMPRAR_PRODUCTO = 1;
+    private final int ACT_SUBIR_PRODUCTO = 2;
 
     SharedPreferences sharedpreferences;
     private SwipeRefreshLayout swipeLayout;
@@ -67,6 +69,8 @@ public class PantallaPrincipal extends AppCompatActivity
     private Integer tipoVenta; // Tipo de venta; -1 = todos los tipos
     private Double precioMinimo; // Precio mínimo; -1.0 = sin precio mínimo
     private Double precioMaximo; // Precio máximo; -1.0 = sin precio máximo
+
+    private Integer ultimoIdListado;
 
     // Buscar productos
     private Boolean buscar; // Opción de búsqueda
@@ -100,6 +104,8 @@ public class PantallaPrincipal extends AppCompatActivity
         precioMinimo = -1.0;
         precioMaximo = -1.0;
 
+        ultimoIdListado = 0;
+
         buscar = false;
         busqueda = null;
 
@@ -124,7 +130,8 @@ public class PantallaPrincipal extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PantallaPrincipal.this, SubirProd1_3.class));
+                startActivityForResult(new Intent(PantallaPrincipal.this,
+                        SubirProd1_3.class), ACT_SUBIR_PRODUCTO);
             }
         });
 
@@ -214,6 +221,22 @@ public class PantallaPrincipal extends AppCompatActivity
                 startActivityForResult(intent, ACT_COMPRAR_PRODUCTO);
             }
         });
+
+        listaProductosListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) { }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if (firstVisibleItem + visibleItemCount == totalItemCount && totalItemCount != 0
+                        && !ultimoIdListado.equals(productos.getIdUltimo())) {
+                    ultimoIdListado = productos.getIdUltimo();
+                    listarProductos();
+                }
+            }
+        });
     }
 
     private void recuperarUsuario() {
@@ -262,12 +285,22 @@ public class PantallaPrincipal extends AppCompatActivity
         queue.add(postRequest);
     }
 
-    private void listarProductos() { // TODO: Añadir listado para más de 25 productos y más filtros
+    private void listarProductos() {
+        String url = Common.url;
+
         if (misProductos) {
-            listarProductosUsuario(un);
+            url += "/listarProductosUsuario?un=" + un;
+
+            if (productos.getIdUltimo() > 0) {
+                url += "&id=" + productos.getIdUltimo();
+            }
+            else {
+                url += "&id=99999";
+            }
         }
+
         else {
-            String url = Common.url + "/listarProductos?met=";
+            url += "/listarProductos?met=";
 
             switch (orden) {
                 case 1 :
@@ -320,14 +353,9 @@ public class PantallaPrincipal extends AppCompatActivity
             if (productos.getIdUltimo() > 0) {
                 url += "&id=" + productos.getIdUltimo();
             }
-
-            gestionarPeticionListar(url);
         }
-    }
 
-    private void listarProductosUsuario(String usuario) {
-        gestionarPeticionListar(Common.url + "/listarProductosUsuario?id=" +
-                productos.getIdUltimo() + "&un=" + usuario);
+        gestionarPeticionListar(url);
     }
 
     private void gestionarPeticionListar(String urlPetition) {
@@ -496,10 +524,17 @@ public class PantallaPrincipal extends AppCompatActivity
                 simpleAdapter.notifyDataSetChanged();
             }
         }
+
+        else if (requestCode == ACT_SUBIR_PRODUCTO) {
+            if (resultCode == Common.RESULTADO_OK) {
+                resetPantalla();
+            }
+        }
     }
 
     private void resetPantalla() {
         productos.clear();
+        ultimoIdListado = 0;
         simpleAdapter.notifyDataSetChanged();
         listarProductos();
     }

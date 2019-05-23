@@ -49,20 +49,19 @@ public class SubirProd3_3 extends AppCompatActivity {
     ImageButton otros;
     SharedPreferences sharedpreferences;
     String[] categorias =   {   "Motor y accesorios",
-                                "Tv, audio, foto y video",
+                                "Tv, audio, foto y vídeo",
                                 "Informática y electrónica",
                                 "Cine, libros y música",
                                 "Deporte y ocio",
                                 "Hogar y jardín",
                                 "Electrodomésticos",
                                 "Moda y accesorios",
-                                "Niños y bebes",
+                                "Niños y bebés",
                                 "Industria y agricultura",
                                 "Empleo y servicios",
                                 "Otros"
                             };
     int categoria = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -301,15 +300,19 @@ public class SubirProd3_3 extends AppCompatActivity {
     }
 
     private void pasoAnterior() {
+        setResult(Common.RESULTADO_NOK, new Intent());
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        pasoAnterior();
     }
 
     private void volverPrincipal(ProgressDialog dialog) {
         dialog.dismiss();
-        Intent intent = new Intent(SubirProd3_3.this, PantallaPrincipal.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        startActivity(intent);
+        setResult(Common.RESULTADO_OK, new Intent());
+        finish();
     }
 
     private void gestionPeticion(String estado, String msg, ProgressDialog dialog) {

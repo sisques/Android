@@ -139,6 +139,7 @@ public class Producto extends AppCompatActivity {
         Button oferta = findViewById(R.id.ProductoBotonOferta);
         if (vendedorUn.equals(un)) {
             oferta.setVisibility(View.INVISIBLE);
+            oferta.setClickable(false);
         } else{
             oferta.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -151,6 +152,7 @@ public class Producto extends AppCompatActivity {
         Button comprar = findViewById(R.id.ProductoBotonCompra);
         if (vendedorUn.equals(un)) {
             comprar.setVisibility(View.INVISIBLE);
+            comprar.setClickable(false);
         } else{
             comprar.setOnClickListener(new View.OnClickListener() {
                 @Override
