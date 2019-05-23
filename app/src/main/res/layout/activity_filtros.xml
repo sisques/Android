@@ -30,40 +30,173 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="35dp">
 
         <TextView
             android:id="@+id/FiltroProvinciaTexto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:contentDescription="@string/TextoProvincia"
             android:text="@string/TextoProvincia"
-            android:textColor="#2a6ebc"
-            app:layout_constraintBottom_toTopOf="@+id/city_register"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="@string/TextoProvincia" />
+            android:textColor="#2a6ebc"/>
 
         <Spinner
             android:id="@+id/FiltroListaProvincias"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="35dp"
+            android:layout_marginStart="9dp"
             android:layout_weight="1"
             android:entries="@array/ListaProvinciasFiltros"
-            android:spinnerMode="dropdown"
-            app:layout_constraintBottom_toTopOf="@+id/registrar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="35dp">
+
+        <TextView
+            android:id="@+id/FiltroOrdenacionTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/TextoOrdenacion"
+            android:text="@string/TextoOrdenacion"
+            android:textColor="#2a6ebc"/>
+
+        <Spinner
+            android:id="@+id/FiltroListaOrdenacion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_weight="1"
+            android:entries="@array/ListaOrdenacionFiltros"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="35dp">
+
+        <TextView
+            android:id="@+id/FiltroCategoriasTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/TextoCategoria"
+            android:text="@string/TextoCategoria"
+            android:textColor="#2a6ebc"/>
+
+        <Spinner
+            android:id="@+id/FiltroListaCategoria"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:entries="@array/ListaCategoriasFiltros"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="35dp">
+
+        <TextView
+            android:id="@+id/FiltroTipoTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/TextoTipo"
+            android:text="@string/TextoTipo"
+            android:textColor="#2a6ebc"/>
+
+        <Spinner
+            android:id="@+id/FiltroListaTipo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_weight="1"
+            android:entries="@array/ListaTipoFiltros"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/FiltroPrecioMinimoTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/TextoPrecioMinimo"
+            android:text="@string/TextoPrecioMinimo"
+            android:textColor="#2a6ebc" />
+
+        <EditText
+            android:id="@+id/FiltroPrecioMinimo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:drawableEnd="@drawable/ic_euro"
+            android:ems="10"
+            android:hint="@string/TextoPrecioMinimo"
+            android:inputType="numberDecimal"
+            tools:targetApi="o" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="35dp">
+
+        <TextView
+            android:id="@+id/FiltroPrecioMaximoTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/TextoPrecioMaximo"
+            android:text="@string/TextoPrecioMaximo"
+            android:textColor="#2a6ebc"/>
+
+        <EditText
+            android:id="@+id/FiltroPrecioMaximo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:drawableEnd="@drawable/ic_euro"
+            android:ems="10"
+            android:hint="@string/TextoPrecioMaximo"
+            android:inputType="numberDecimal"
+            tools:targetApi="o" />
     </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4" />
+        android:layout_weight="4"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
 
     <LinearLayout
         android:layout_width="match_parent"

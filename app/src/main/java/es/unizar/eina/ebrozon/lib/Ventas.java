@@ -18,7 +18,6 @@ public class Ventas {
     private static List<HashMap<String, Object>> resumenes
             = new ArrayList<HashMap<String, Object>>(); // Información duplicada pero muestra más rápido
     private static List<List<Bitmap>> archivos = new ArrayList<List<Bitmap>>(); // Imágenes
-    private static Integer idMax = 0; // id máxima entre todas las ventas
 
     private final static String[] atributos =
             {"identificador", "usuario", "fechainicio", "fechaventa", "producto", "descripcion",
@@ -29,7 +28,6 @@ public class Ventas {
         ventas.clear();
         resumenes.clear();
         archivos.clear();
-        idMax = 0;
     }
 
     public void anyadirVentas(JSONArray productos) {
@@ -46,8 +44,6 @@ public class Ventas {
                 archivos.add(new ArrayList<Bitmap>());
 
                 id = producto.getInt(atributos[0]);
-                if (id > idMax)
-                    idMax = id;
 
                 resumen = new HashMap<String, Object>();
                 resumen.put(atributos[4], producto.get(atributos[4]).toString());
@@ -67,13 +63,29 @@ public class Ventas {
         }
     }
 
+    public void eliminarVenta(Integer numProducto) {
+        if (numProducto != null && numProducto < ventas.size()) {
+            ventas.remove(numProducto.intValue());
+            resumenes.remove(numProducto.intValue());
+            archivos.remove(numProducto.intValue());
+        }
+    }
+
     public void anyadirImagen(int numProducto, Bitmap im) {
         archivos.get(numProducto).add(im);
         resumenes.get(numProducto).put("imagen", im);
     }
 
-    public Integer getIdMax() {
-        return idMax;
+    public Integer getIdUltimo() {
+        try {
+            if (ventas.size() > 0) {
+                return ventas.get(ventas.size() - 1).getInt("identificador");
+            }
+            else return 0;
+        }
+        catch (Exception e) {
+            return 0;
+        }
     }
 
     public Integer getTamanyo() {

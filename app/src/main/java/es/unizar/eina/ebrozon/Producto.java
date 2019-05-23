@@ -17,20 +17,23 @@ import es.unizar.eina.ebrozon.lib.Ventas;
 import es.unizar.eina.ebrozon.lib.compra;
 
 public class Producto extends AppCompatActivity {
+    private Ventas productos;
+    private Integer posVenta;
+
     private String un; // usuario
     private String vendedorUn; // vendedor
-    private String precio ="";
-    private String numProd="";
+    private String precio = "";
+    private String numProd = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_producto);
 
-        Ventas productos = new Ventas();
+        productos = new Ventas();
 
         // Recibe como atributo la posición de la venta
-        final Integer posVenta = (Integer) getIntent().getSerializableExtra("Venta");
+        posVenta = (Integer) getIntent().getSerializableExtra("Venta");
 
         final SharedPreferences sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         un = sharedpreferences.getString(Common.un, null);
@@ -133,7 +136,7 @@ public class Producto extends AppCompatActivity {
         } catch (Exception ignored) { }
 
 
-        Button oferta = findViewById(R.id.Oferta);
+        Button oferta = findViewById(R.id.ProductoBotonOferta);
         if (vendedorUn.equals(un)) {
             oferta.setVisibility(View.INVISIBLE);
         } else{
@@ -145,7 +148,7 @@ public class Producto extends AppCompatActivity {
             });
         }
 
-        Button comprar = findViewById(R.id.Compra);
+        Button comprar = findViewById(R.id.ProductoBotonCompra);
         if (vendedorUn.equals(un)) {
             comprar.setVisibility(View.INVISIBLE);
         } else{
@@ -153,10 +156,19 @@ public class Producto extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     compra.ofertar( numProd, Producto.this,precio,  sharedpreferences);
+                    productos.eliminarVenta(posVenta);
+                    setResult(Common.RESULTADO_OK, new Intent());
+                    finish();
                 }
             });
         }
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(Common.RESULTADO_NOK, new Intent());
+        finish();
     }
 }
