@@ -49,20 +49,19 @@ public class SubirProd3_3 extends AppCompatActivity {
     ImageButton otros;
     SharedPreferences sharedpreferences;
     String[] categorias =   {   "Motor y accesorios",
-                                "Tv, audio, foto y video",
+                                "Tv, audio, foto y vídeo",
                                 "Informática y electrónica",
                                 "Cine, libros y música",
                                 "Deporte y ocio",
                                 "Hogar y jardín",
                                 "Electrodomésticos",
                                 "Moda y accesorios",
-                                "Niños y bebes",
+                                "Niños y bebés",
                                 "Industria y agricultura",
                                 "Empleo y servicios",
                                 "Otros"
                             };
     int categoria = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

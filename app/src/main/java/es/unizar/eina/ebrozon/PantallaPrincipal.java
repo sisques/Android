@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.content.SharedPreferences;
 
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -68,6 +69,8 @@ public class PantallaPrincipal extends AppCompatActivity
     private Double precioMinimo; // Precio mínimo; -1.0 = sin precio mínimo
     private Double precioMaximo; // Precio máximo; -1.0 = sin precio máximo
 
+    private Integer ultimoIdListado;
+
     // Buscar productos
     private Boolean buscar; // Opción de búsqueda
     private String busqueda; // Palabra a buscar
@@ -99,6 +102,8 @@ public class PantallaPrincipal extends AppCompatActivity
         tipoVenta = -1;
         precioMinimo = -1.0;
         precioMaximo = -1.0;
+
+        ultimoIdListado = 0;
 
         buscar = false;
         busqueda = null;
@@ -214,6 +219,22 @@ public class PantallaPrincipal extends AppCompatActivity
                 startActivityForResult(intent, ACT_COMPRAR_PRODUCTO);
             }
         });
+
+        listaProductosListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) { }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if (firstVisibleItem + visibleItemCount == totalItemCount && totalItemCount != 0
+                        && !ultimoIdListado.equals(productos.getIdUltimo())) {
+                    ultimoIdListado = productos.getIdUltimo();
+                    listarProductos();
+                }
+            }
+        });
     }
 
     private void recuperarUsuario() {
@@ -263,11 +284,18 @@ public class PantallaPrincipal extends AppCompatActivity
     }
 
     private void listarProductos() { // TODO: Añadir listado para más de 25 productos y más filtros
+        String url = Common.url;
+
         if (misProductos) {
-            listarProductosUsuario(un);
+            url += "/listarProductosUsuario?un=" + un;
+
+            if (productos.getIdUltimo() > 0) {
+                url += "&id=" + productos.getIdUltimo();
+            }
         }
+
         else {
-            String url = Common.url + "/listarProductos?met=";
+            url += "/listarProductos?met=";
 
             switch (orden) {
                 case 1 :
@@ -320,14 +348,9 @@ public class PantallaPrincipal extends AppCompatActivity
             if (productos.getIdUltimo() > 0) {
                 url += "&id=" + productos.getIdUltimo();
             }
-
-            gestionarPeticionListar(url);
         }
-    }
 
-    private void listarProductosUsuario(String usuario) {
-        gestionarPeticionListar(Common.url + "/listarProductosUsuario?id=" +
-                productos.getIdUltimo() + "&un=" + usuario);
+        gestionarPeticionListar(url);
     }
 
     private void gestionarPeticionListar(String urlPetition) {
@@ -500,6 +523,7 @@ public class PantallaPrincipal extends AppCompatActivity
 
     private void resetPantalla() {
         productos.clear();
+        ultimoIdListado = 0;
         simpleAdapter.notifyDataSetChanged();
         listarProductos();
     }
