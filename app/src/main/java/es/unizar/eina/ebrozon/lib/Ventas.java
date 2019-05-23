@@ -63,6 +63,14 @@ public class Ventas {
         }
     }
 
+    public void eliminarVenta(Integer numProducto) {
+        if (numProducto != null && numProducto < ventas.size()) {
+            ventas.remove(numProducto.intValue());
+            resumenes.remove(numProducto.intValue());
+            archivos.remove(numProducto.intValue());
+        }
+    }
+
     public void anyadirImagen(int numProducto, Bitmap im) {
         archivos.get(numProducto).add(im);
         resumenes.get(numProducto).put("imagen", im);

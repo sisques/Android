@@ -47,6 +47,7 @@ public class PantallaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private final int ACT_FILTROS = 0;
+    private final int ACT_COMPRAR_PRODUCTO = 1;
 
     SharedPreferences sharedpreferences;
     private SwipeRefreshLayout swipeLayout;
@@ -76,6 +77,7 @@ public class PantallaPrincipal extends AppCompatActivity
     private ImageView menuImagen;
     private Button botonFiltros;
     private ListView listaProductosListView;
+    private SimpleAdapter simpleAdapter; // Adapter del ListView
     private SearchView menuBusqueda;
 
     @Override
@@ -88,6 +90,8 @@ public class PantallaPrincipal extends AppCompatActivity
         productos = new Ventas();
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         misProductos = false;
+
+        inicializarListView();
 
         provincia = ""; // Al principio se listan todos los productos
         orden = 0;
@@ -145,9 +149,7 @@ public class PantallaPrincipal extends AppCompatActivity
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() { // Cada vez que se realiza el gesto para refrescar
-                productos.clear();
-                recuperarUsuario();
-                listarProductos();
+                resetPantalla();
                 swipeLayout.setRefreshing(false);
             }
         });
@@ -160,8 +162,7 @@ public class PantallaPrincipal extends AppCompatActivity
                 if (s.length() > 1) {
                     busqueda = s;
                     buscar = true;
-                    productos.clear();
-                    listarProductos();
+                    resetPantalla();
                 }
                 return false;
             }
@@ -175,15 +176,44 @@ public class PantallaPrincipal extends AppCompatActivity
             public boolean onClose() { // Cuando se le da a cerrar
                 busqueda = null;
                 buscar = false;
-                productos.clear();
-                listarProductos();
+                resetPantalla();
                 return false;
             }
         });
 
-        productos.clear();
         recuperarUsuario();
-        listarProductos();
+        resetPantalla();
+    }
+
+    private void inicializarListView() {
+        String[] from = productos.getResumenAtributos();
+        int[] to = {R.id.ProductoResumenTitulo, R.id.ProductoResumenPrecio,
+                R.id.ProductoResumenDescripcion, R.id.ProductoResumenCiudad, R.id.ProductoResumenImagen};
+
+        simpleAdapter = new SimpleAdapter(getBaseContext(), productos.getResumenes(), R.layout.content_producto_resumen, from, to);
+        simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Object data, String textRepresentation) { // Para el tratamiento de imágenes
+                if ((view instanceof ImageView) && (data instanceof Bitmap)) {
+                    ((ImageView) view).setImageBitmap((Bitmap) data);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        listaProductosListView = (ListView) findViewById(R.id.listaProductos);
+        listaProductosListView.setAdapter(simpleAdapter);
+
+        listaProductosListView.setClickable(true);
+        listaProductosListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                Intent intent = new Intent(PantallaPrincipal.this, Producto.class);
+                intent.putExtra("Venta", position);
+                startActivityForResult(intent, ACT_COMPRAR_PRODUCTO);
+            }
+        });
     }
 
     private void recuperarUsuario() {
@@ -313,7 +343,7 @@ public class PantallaPrincipal extends AppCompatActivity
                         if (!response.equals("[]")) {
                             try {
                                 productos.anyadirVentas(new JSONArray(response));
-                                gestionarListarTrasPeticion();
+                                simpleAdapter.notifyDataSetChanged();
                                 descargarImagenesPrincipales();
                             } catch (Exception ignored) { }
                         }
@@ -329,37 +359,6 @@ public class PantallaPrincipal extends AppCompatActivity
                 }
         );
         queue.add(postRequest);
-    }
-
-    private void gestionarListarTrasPeticion() {
-        String[] from = productos.getResumenAtributos();
-        int[] to = {R.id.ProductoResumenTitulo, R.id.ProductoResumenPrecio,
-                R.id.ProductoResumenDescripcion, R.id.ProductoResumenCiudad, R.id.ProductoResumenImagen};
-
-        SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), productos.getResumenes(), R.layout.content_producto_resumen, from, to);
-        simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-            @Override
-            public boolean setViewValue(View view, Object data, String textRepresentation) { // Para el tratamiento de imágenes
-                if ((view instanceof ImageView) && (data instanceof Bitmap)) {
-                    ((ImageView) view).setImageBitmap((Bitmap) data);
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        listaProductosListView = (ListView) findViewById(R.id.listaProductos);
-        listaProductosListView.setAdapter(simpleAdapter);
-
-        listaProductosListView.setClickable(true);
-        listaProductosListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                Intent intent = new Intent(PantallaPrincipal.this, Producto.class);
-                intent.putExtra("Venta", position);
-                startActivity(intent);
-            }
-        });
     }
 
     private void descargarImagenesPrincipales() {
@@ -387,12 +386,7 @@ public class PantallaPrincipal extends AppCompatActivity
 
                         if (productos.getTamanyo() > numProducto) {
                             productos.anyadirImagen(numProducto, StringToBitMap(response));
-                            if (listaProductosListView != null) {
-                                SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-                                if (sa != null) {
-                                    sa.notifyDataSetChanged();
-                                }
-                            }
+                            simpleAdapter.notifyDataSetChanged();
                         }
                     }
                 },
@@ -426,6 +420,8 @@ public class PantallaPrincipal extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
+        recuperarUsuario();
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -481,14 +477,7 @@ public class PantallaPrincipal extends AppCompatActivity
                 precioMinimo = data.getDoubleExtra("PrecioMinimoFiltros", -1.0);
                 precioMaximo = data.getDoubleExtra("PrecioMaximoFiltros", -1.0);
 
-                productos.clear();
-                if (listaProductosListView != null) {
-                    SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-                    if (sa != null) {
-                        sa.notifyDataSetChanged();
-                    }
-                }
-                listarProductos();
+                resetPantalla();
             }
             else if (resultCode == Common.RESULTADO_CANCELADO) {
                 provincia = "";
@@ -501,17 +490,17 @@ public class PantallaPrincipal extends AppCompatActivity
                 resetPantalla();
             }
         }
+
+        else if (requestCode == ACT_COMPRAR_PRODUCTO) {
+            if (resultCode == Common.RESULTADO_OK) {
+                simpleAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     private void resetPantalla() {
         productos.clear();
-        if (listaProductosListView != null) {
-            SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-            if (sa != null) {
-                sa.notifyDataSetChanged();
-            }
-        }
-        recuperarUsuario();
+        simpleAdapter.notifyDataSetChanged();
         listarProductos();
     }
 }
