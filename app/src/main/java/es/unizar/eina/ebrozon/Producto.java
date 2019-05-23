@@ -6,11 +6,23 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
@@ -23,7 +35,10 @@ public class Producto extends AppCompatActivity {
     private String un; // usuario
     private String vendedorUn; // vendedor
     private String precio = "";
-    private String numProd = "";
+    private String numProd = ""; // id producto
+
+    Switch ProductoSeguir;
+    private boolean siguiendo; // Siguiendo producto
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,10 +144,22 @@ public class Producto extends AppCompatActivity {
             ProductoCategoria.setText(productos.getCategoriaVenta(posVenta));
         } catch (Exception ignored) { }
 
-
-
         try {
             numProd = productos.getIdVenta(posVenta);
+
+            // Switch seguir producto
+            ProductoSeguir = (Switch) findViewById(R.id.ProductoSeguir);
+            ProductoSeguir.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (siguiendo != isChecked) {
+                        siguiendo = isChecked;
+                        seguirProducto();
+                    }
+                }
+            });
+
+            comprobarSiguiendoProducto();
         } catch (Exception ignored) { }
 
 
@@ -164,13 +191,87 @@ public class Producto extends AppCompatActivity {
                 }
             });
         }
-
-
     }
 
     @Override
     public void onBackPressed() {
         setResult(Common.RESULTADO_NOK, new Intent());
         finish();
+    }
+
+    private void comprobarSiguiendoProducto() {
+        siguiendo = false;
+        String url = Common.url + "/listarSeguimientosUsuario?un=" + un;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        if (!response.equals("[]")) {
+                            try {
+                                JSONArray seguimiento = new JSONArray(response);
+                                for (int i=0; i<seguimiento.length(); i++) {
+                                    if (seguimiento.getJSONObject(i).getString("nventa").equals(numProd)) {
+                                        siguiendo = true;
+                                        break;
+                                    }
+                                }
+                            } catch (Exception ignored) { }
+                        }
+
+                        ProductoSeguir.setChecked(siguiendo);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error al recibir la lista de productos");
+                        ProductoSeguir.setChecked(siguiendo);
+                    }
+                }
+        );
+        queue.add(postRequest);
+    }
+
+    private void seguirProducto() {
+        String url = Common.url;
+        if (siguiendo) {
+            url += "/seguirProducto";
+        }
+        else {
+            url += "/dejarSeguirProducto";
+        }
+        url += "?un=" + un + "&nv=" + numProd;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error al recibir la lista de productos");
+                        siguiendo = !siguiendo;
+                        ProductoSeguir.setChecked(siguiendo);
+                    }
+                }
+        );
+        queue.add(postRequest);
     }
 }

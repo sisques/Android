@@ -125,6 +125,18 @@
             android:text="@string/Ejemplo"
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <Switch
+            android:id="@+id/ProductoSeguir"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:switchPadding="10dp"
+            android:text="@string/Seguir"
+            android:textAlignment="textEnd"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <TextView

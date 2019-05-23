@@ -213,6 +213,7 @@
     <string name="FiltroTexto">Filtros para la búsqueda de productos.</string>
     <string name="FiltroTodos">Mostrar productos de todas las ciudades</string>
 
+    <string name="Seguir">Seguir</string>
     <string name="Precio">Precio</string>
     <string name="Producto">Producto</string>
     <string name="Principal">Principal</string>
