@@ -300,15 +300,19 @@ public class SubirProd3_3 extends AppCompatActivity {
     }
 
     private void pasoAnterior() {
+        setResult(Common.RESULTADO_NOK, new Intent());
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        pasoAnterior();
     }
 
     private void volverPrincipal(ProgressDialog dialog) {
         dialog.dismiss();
-        Intent intent = new Intent(SubirProd3_3.this, PantallaPrincipal.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        startActivity(intent);
+        setResult(Common.RESULTADO_OK, new Intent());
+        finish();
     }
 
     private void gestionPeticion(String estado, String msg, ProgressDialog dialog) {

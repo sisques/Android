@@ -49,6 +49,7 @@ public class PantallaPrincipal extends AppCompatActivity
 
     private final int ACT_FILTROS = 0;
     private final int ACT_COMPRAR_PRODUCTO = 1;
+    private final int ACT_SUBIR_PRODUCTO = 2;
 
     SharedPreferences sharedpreferences;
     private SwipeRefreshLayout swipeLayout;
@@ -129,7 +130,8 @@ public class PantallaPrincipal extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PantallaPrincipal.this, SubirProd1_3.class));
+                startActivityForResult(new Intent(PantallaPrincipal.this,
+                        SubirProd1_3.class), ACT_SUBIR_PRODUCTO);
             }
         });
 
@@ -283,7 +285,7 @@ public class PantallaPrincipal extends AppCompatActivity
         queue.add(postRequest);
     }
 
-    private void listarProductos() { // TODO: Añadir listado para más de 25 productos y más filtros
+    private void listarProductos() {
         String url = Common.url;
 
         if (misProductos) {
@@ -291,6 +293,9 @@ public class PantallaPrincipal extends AppCompatActivity
 
             if (productos.getIdUltimo() > 0) {
                 url += "&id=" + productos.getIdUltimo();
+            }
+            else {
+                url += "&id=99999";
             }
         }
 
@@ -517,6 +522,12 @@ public class PantallaPrincipal extends AppCompatActivity
         else if (requestCode == ACT_COMPRAR_PRODUCTO) {
             if (resultCode == Common.RESULTADO_OK) {
                 simpleAdapter.notifyDataSetChanged();
+            }
+        }
+
+        else if (requestCode == ACT_SUBIR_PRODUCTO) {
+            if (resultCode == Common.RESULTADO_OK) {
+                resetPantalla();
             }
         }
     }
