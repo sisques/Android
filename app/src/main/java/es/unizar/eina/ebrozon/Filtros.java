@@ -1,7 +1,6 @@
 package es.unizar.eina.ebrozon;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,8 +20,8 @@ public class Filtros extends AppCompatActivity {
     private Integer orden; // Tipo de ordenación
     private String categoria; // Categoría utilizada; "" = todas las categorías
     private Integer tipoVenta; // Tipo de venta; -1 = todos los tipos
-    private Integer precioMinimo; // Precio mínimo; -1 = sin precio mínimo
-    private Integer precioMaximo; // Precio máximo; -1 = sin precio máximo
+    private Double precioMinimo; // Precio mínimo; -1 = sin precio mínimo
+    private Double precioMaximo; // Precio máximo; -1 = sin precio máximo
 
     private Spinner spinnerProvincia;
     private Spinner spinnerOrden;
@@ -40,8 +39,8 @@ public class Filtros extends AppCompatActivity {
         orden = getIntent().getIntExtra("OrdenFiltros", 0);
         categoria = getIntent().getStringExtra("CategoriaFiltros");
         tipoVenta = getIntent().getIntExtra("TipoVentaFiltros", -1);
-        precioMinimo = getIntent().getIntExtra("PrecioMinimoFiltros", -1);
-        precioMaximo = getIntent().getIntExtra("PrecioMaximoFiltros", -1);
+        precioMinimo = getIntent().getDoubleExtra("PrecioMinimoFiltros", -1.0);
+        precioMaximo = getIntent().getDoubleExtra("PrecioMaximoFiltros", -1.0);
 
         // Botón aplicar
         Button botonAplicar = findViewById(R.id.FiltroBotonAplicar);
@@ -49,13 +48,28 @@ public class Filtros extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent data = new Intent();
-                //data.setData(Uri.parse(provincia));
+
+                if (textPrecioMinimo != null && !textPrecioMinimo.getText().toString().isEmpty()) {
+                    precioMinimo = Double.parseDouble(textPrecioMinimo.getText().toString());
+                }
+                else {
+                    precioMinimo = -1.0;
+                }
+
+                if (textPrecioMaximo != null && !textPrecioMaximo.getText().toString().isEmpty()) {
+                    precioMaximo = Double.parseDouble(textPrecioMaximo.getText().toString());
+                }
+                else {
+                    precioMaximo = -1.0;
+                }
+
                 data.putExtra("ProvinciaFiltros", provincia);
                 data.putExtra("OrdenFiltros", orden);
                 data.putExtra("CategoriaFiltros", categoria);
                 data.putExtra("TipoVentaFiltros", tipoVenta);
                 data.putExtra("PrecioMinimoFiltros", precioMinimo);
                 data.putExtra("PrecioMaximoFiltros", precioMaximo);
+
                 setResult(Common.RESULTADO_OK, data);
                 finish();
             }
@@ -148,6 +162,18 @@ public class Filtros extends AppCompatActivity {
 
         if (tipoVenta >= -1) {
             spinnerTipo.setSelection(tipoVenta + 1);
+        }
+
+        // Precio mínimo
+        textPrecioMinimo = findViewById(R.id.FiltroPrecioMinimo);
+        if (precioMinimo >= 0.0) {
+            textPrecioMinimo.setText(precioMinimo.toString());
+        }
+
+        // Precio máximo
+        textPrecioMaximo = findViewById(R.id.FiltroPrecioMaximo);
+        if (precioMaximo >= 0.0) {
+            textPrecioMaximo.setText(precioMaximo.toString());
         }
     }
 

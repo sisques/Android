@@ -37,9 +37,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-import java.util.List;
-
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
 
@@ -67,8 +64,8 @@ public class PantallaPrincipal extends AppCompatActivity
     private Integer orden; // Tipo de ordenación
     private String categoria; // Categoría utilizada; "" = todas las categorías
     private Integer tipoVenta; // Tipo de venta; -1 = todos los tipos
-    private Integer precioMinimo; // Precio mínimo; -1 = sin precio mínimo
-    private Integer precioMaximo; // Precio máximo; -1 = sin precio máximo
+    private Double precioMinimo; // Precio mínimo; -1.0 = sin precio mínimo
+    private Double precioMaximo; // Precio máximo; -1.0 = sin precio máximo
 
     // Buscar productos
     private Boolean buscar; // Opción de búsqueda
@@ -96,8 +93,8 @@ public class PantallaPrincipal extends AppCompatActivity
         orden = 0;
         categoria = ""; // Al principio se listan todas las categorias
         tipoVenta = -1;
-        precioMinimo = -1;
-        precioMaximo = -1;
+        precioMinimo = -1.0;
+        precioMaximo = -1.0;
 
         buscar = false;
         busqueda = null;
@@ -276,6 +273,14 @@ public class PantallaPrincipal extends AppCompatActivity
 
             if (!categoria.equals("")) {
                 url += "&cat=" + categoria;
+            }
+
+            if (precioMinimo >= 0.0) {
+                url += "&min=" + precioMinimo;
+            }
+
+            if (precioMaximo >= 0.0) {
+                url += "&max=" + precioMaximo;
             }
 
             if (buscar && busqueda != null && busqueda.length() > 1) {
@@ -473,8 +478,8 @@ public class PantallaPrincipal extends AppCompatActivity
                     categoria = "";
                 }
                 tipoVenta = data.getIntExtra("TipoVentaFiltros", -1);
-                precioMinimo = data.getIntExtra("PrecioMinimoFiltros", -1);
-                precioMaximo = data.getIntExtra("PrecioMaximoFiltros", -1);
+                precioMinimo = data.getDoubleExtra("PrecioMinimoFiltros", -1.0);
+                precioMaximo = data.getDoubleExtra("PrecioMaximoFiltros", -1.0);
 
                 productos.clear();
                 if (listaProductosListView != null) {
@@ -490,8 +495,8 @@ public class PantallaPrincipal extends AppCompatActivity
                 orden = 0;
                 categoria = "";
                 tipoVenta = -1;
-                precioMinimo = -1;
-                precioMaximo = -1;
+                precioMinimo = -1.0;
+                precioMaximo = -1.0;
 
                 resetPantalla();
             }
