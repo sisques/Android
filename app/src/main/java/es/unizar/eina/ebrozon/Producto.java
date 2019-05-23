@@ -7,16 +7,20 @@ import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
+import es.unizar.eina.ebrozon.lib.compra;
 
 public class Producto extends AppCompatActivity {
     private String un; // usuario
     private String vendedorUn; // vendedor
+    private String precio ="";
+    private String numProd="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +30,9 @@ public class Producto extends AppCompatActivity {
         Ventas productos = new Ventas();
 
         // Recibe como atributo la posición de la venta
-        Integer posVenta = (Integer) getIntent().getSerializableExtra("Venta");
+        final Integer posVenta = (Integer) getIntent().getSerializableExtra("Venta");
 
-        SharedPreferences sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+        final SharedPreferences sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         un = sharedpreferences.getString(Common.un, null);
 
         // Barra de vendedor
@@ -103,7 +107,8 @@ public class Producto extends AppCompatActivity {
 
         TextView ProductoPrecio = (TextView) findViewById(R.id.ProductoPrecio);
         try {
-            ProductoPrecio.setText(productos.getPrecioVenta(posVenta));
+            precio = productos.getPrecioVenta(posVenta);
+            ProductoPrecio.setText(precio);
         } catch (Exception ignored) { }
 
         TextView ProductoCiudad = (TextView) findViewById(R.id.ProductoCiudad);
@@ -120,5 +125,38 @@ public class Producto extends AppCompatActivity {
         try {
             ProductoCategoria.setText(productos.getCategoriaVenta(posVenta));
         } catch (Exception ignored) { }
+
+
+
+        try {
+            numProd = productos.getIdVenta(posVenta);
+        } catch (Exception ignored) { }
+
+
+        Button oferta = findViewById(R.id.Oferta);
+        if (vendedorUn.equals(un)) {
+            oferta.setVisibility(View.INVISIBLE);
+        } else{
+            oferta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //compra.ofertar( posVenta, Producto.this, precio,  sharedpreferences);
+                }
+            });
+        }
+
+        Button comprar = findViewById(R.id.Compra);
+        if (vendedorUn.equals(un)) {
+            comprar.setVisibility(View.INVISIBLE);
+        } else{
+            comprar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    compra.ofertar( numProd, Producto.this,precio,  sharedpreferences);
+                }
+            });
+        }
+
+
     }
 }

@@ -13,51 +13,124 @@
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="137dp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/mensajeBienvenida_register2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/title_activity_subir_producto_2_3"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/PrecioProd_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/precio_del_producto"
+            android:visibility="visible" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:gravity="bottom"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/mensajeBienvenida_register2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="24dp"
-                android:text="@string/title_activity_subir_producto_2_3"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textColor="@color/colorPrimary"
- />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="20"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/PrecioProd_text_view"
+            <EditText
+                android:id="@+id/PrecioProducto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/precio_del_producto"
-                android:visibility="visible"/>
+                android:layout_weight="10"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/precio_del_producto"
+                android:inputType="number|numberDecimal" />
+
+            <TextView
+                android:id="@+id/simbolo_euro_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="0dp"
+                android:layout_weight="1"
+                android:text="@string/simbolo_euro"
+                android:textSize="36sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <Switch
+            android:id="@+id/esSubasta"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0.5"
+            android:checked="false"
+            android:showText="false"
+            android:text="@string/publicar_como_subasta"
+            android:textAlignment="viewStart"
+            android:textSize="18sp"
+            android:thumbTint="@color/colorPrimary"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/layout1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/PrecioInicial_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="0.25"
+                android:text="@string/precio_inicial_del_producto"
+                android:visibility="invisible" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.75"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/PrecioProducto"
+                    android:id="@+id/PrecioInicial"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -65,187 +138,90 @@
                     android:layout_weight="10"
                     android:autofillHints=""
                     android:ems="10"
-                    android:hint="@string/precio_del_producto"
+                    android:hint="@string/precio_inicial_del_producto"
                     android:inputType="number|numberDecimal"
- />
+                    android:visibility="invisible" />
 
                 <TextView
-                    android:id="@+id/simbolo_euro_1"
+                    android:id="@+id/simbolo_euro_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
                     android:layout_weight="1"
                     android:text="@string/simbolo_euro"
                     android:textSize="36sp"
- />
+                    android:visibility="invisible" />
+
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="100"
-            android:gravity="bottom"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
             android:orientation="vertical"
             android:visibility="visible">
 
-            <Switch
-                android:id="@+id/esSubasta"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/FechaLimite_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_weight="0.5"
-                android:checked="false"
-                android:showText="false"
-                android:text="@string/publicar_como_subasta"
-                android:textAlignment="viewStart"
+                android:layout_weight="0.2"
+                android:text="@string/fecha_limite_subasta"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/FechaLimite"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="0.8"
+                android:text="@string/textview"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="18sp"
-                android:thumbTint="@color/colorPrimary"
-                android:visibility="visible"
- />
-
-            <LinearLayout
-                android:id="@+id/layout1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <TextView
-                    android:id="@+id/PrecioInicial_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="0"
-                    android:text="@string/precio_inicial_del_producto"
-                    android:visibility="invisible"
- />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/PrecioInicial"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="10"
-                        android:autofillHints=""
-                        android:ems="10"
-                        android:hint="@string/precio_inicial_del_producto"
-                        android:inputType="number|numberDecimal"
-                        android:visibility="invisible"
-/>
-
-                    <TextView
-                        android:id="@+id/simbolo_euro_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/simbolo_euro"
-                        android:textSize="36sp"
-                        android:visibility="invisible"
-/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <Space
-                android:id="@+id/espacio1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:visibility="visible" />
-
-            <LinearLayout
-                android:id="@+id/layout2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <TextView
-                    android:id="@+id/FechaLimite_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="0"
-                    android:text="@string/fecha_limite_subasta"
-                    android:visibility="invisible"
-/>
-
-                <TextView
-                    android:id="@+id/FechaLimite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="0"
-                    android:text="@string/textview"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="18sp"
-                    android:visibility="invisible"
- />
-
-            </LinearLayout>
-
-            <Space
-                android:id="@+id/espacio2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:visibility="visible" />
-
-            <LinearLayout
-                android:id="@+id/layout3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <TextView
-                    android:id="@+id/HoraLimite_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="0"
-                    android:text="@string/hora_limite_subasta"
-                    android:visibility="invisible"
-                    />
-
-                <TextView
-                    android:id="@+id/HoraLimite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="0"
-                    android:text="@string/textview"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="18sp"
-                    android:visibility="invisible"
- />
-
-            </LinearLayout>
+                android:visibility="invisible" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/HoraLimite_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="0.2"
+                android:text="@string/hora_limite_subasta"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/HoraLimite"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="0.8"
+                android:text="@string/textview"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
