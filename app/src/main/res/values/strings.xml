@@ -152,29 +152,29 @@
     </string-array>
 
     <string-array name="ListaOrdenacionFiltros">
-    <item>Más recientes primero</item>
-    <item>Más antiguos primero</item>
-    <item>Más baratos primero</item>
-    <item>Más caros primero</item>
-    <item>Más popular primero</item>
-    <item>Mejor coincidencia primero</item>
-    <item>Mejor valoración primero</item>
+        <item>Más recientes primero</item>
+        <item>Más antiguos primero</item>
+        <item>Más baratos primero</item>
+        <item>Más caros primero</item>
+        <item>Más popular primero</item>
+        <item>Mejor coincidencia primero</item>
+        <item>Mejor valoración primero</item>
     </string-array>
 
     <string-array name="ListaCategoriasFiltros">
-    <item>Todas las categorías</item>
-    <item>Motor y accesorios</item>
-    <item>Tv, audio, foto y vídeo</item>
-    <item>Informática y electrónica</item>
-    <item>Cine, libros y música</item>
-    <item>Deporte y ocio</item>
-    <item>Hogar y jardín</item>
-    <item>Electrodomésticos</item>
-    <item>Moda y accesorios</item>
-    <item>Niños y bebés</item>
-    <item>Industria y agricultura</item>
-    <item>Empleo y servicios</item>
-    <item>Otros</item>
+        <item>Todas las categorías</item>
+        <item>Motor y accesorios</item>
+        <item>Tv, audio, foto y vídeo</item>
+        <item>Informática y electrónica</item>
+        <item>Cine, libros y música</item>
+        <item>Deporte y ocio</item>
+        <item>Hogar y jardín</item>
+        <item>Electrodomésticos</item>
+        <item>Moda y accesorios</item>
+        <item>Niños y bebés</item>
+        <item>Industria y agricultura</item>
+        <item>Empleo y servicios</item>
+        <item>Otros</item>
     </string-array>
 
     <string-array name="ListaTipoFiltros">

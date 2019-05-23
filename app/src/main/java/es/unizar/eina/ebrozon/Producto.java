@@ -113,13 +113,49 @@ public class Producto extends AppCompatActivity {
             productoBorrar.setClickable(false);
         }
 
+        // Imágenes
+        final ImageView[] ProductoImagenes = {
+                (ImageView) findViewById(R.id.ProductoImagen),
+                (ImageView) findViewById(R.id.ProductoImagen2),
+                (ImageView) findViewById(R.id.ProductoImagen3),
+                (ImageView) findViewById(R.id.ProductoImagen4)
+        };
 
-        // TODO: Preparar para varias imagenes
-        ImageView ProductoImagen = (ImageView) findViewById(R.id.ProductoImagen);
         Bitmap result = productos.getImagenResumen(posVenta);
         if (result != null) {
-            ProductoImagen.setImageBitmap(result);
+            ProductoImagenes[0].setImageBitmap(result);
         }
+
+        ProductoImagenes[1].setVisibility(View.INVISIBLE);
+        ProductoImagenes[2].setVisibility(View.INVISIBLE);
+        ProductoImagenes[3].setVisibility(View.INVISIBLE);
+
+        // Imágenes en grande
+        try {
+            final JSONArray imagenes = productos.getIdImagenesVenta(posVenta);
+            for (int i=0; i<imagenes.length(); i++) {
+                try {
+                    if (i > 0) {
+                        Common.establecerFotoServidor(getApplicationContext(), imagenes.getString(i),
+                                ProductoImagenes[i]);
+                        ProductoImagenes[i].setVisibility(View.VISIBLE);
+                    }
+
+                    final int finalI = i;
+                    ProductoImagenes[i].setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                Intent intent = new Intent(Producto.this, ImagenPantalla.class);
+                                intent.putExtra("Imagen", imagenes.getString(finalI));
+                                startActivity(intent);
+                            } catch (Exception ignored) { }
+                        }
+                    });
+                } catch (Exception ignored) { }
+            }
+        } catch (Exception ignored) { }
+
 
         TextView ProductoNombre = (TextView) findViewById(R.id.ProductoNombre);
         try {
