@@ -37,6 +37,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+import java.util.List;
+
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
 
@@ -58,8 +61,16 @@ public class PantallaPrincipal extends AppCompatActivity
     private Ventas productos; // Productos y resúmenes
 
     private Boolean misProductos; // Para ver productos en venta
-    private String provincia; // Provincia utilizada en la búsqueda; "" = todas las provincias
-    private String metOrden; // Tipo de ordenación
+
+    // Listar productos
+    private String provincia; // Provincia utilizada; "" = todas las provincias
+    private Integer orden; // Tipo de ordenación
+    private String categoria; // Categoría utilizada; "" = todas las categorías
+    private Integer tipoVenta; // Tipo de venta; -1 = todos los tipos
+    private Integer precioMinimo; // Precio mínimo; -1 = sin precio mínimo
+    private Integer precioMaximo; // Precio máximo; -1 = sin precio máximo
+
+    // Buscar productos
     private Boolean buscar; // Opción de búsqueda
     private String busqueda; // Palabra a buscar
 
@@ -80,8 +91,14 @@ public class PantallaPrincipal extends AppCompatActivity
         productos = new Ventas();
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         misProductos = false;
+
         provincia = ""; // Al principio se listan todos los productos
-        metOrden = "Fecha des";
+        orden = 0;
+        categoria = ""; // Al principio se listan todas las categorias
+        tipoVenta = -1;
+        precioMinimo = -1;
+        precioMaximo = -1;
+
         buscar = false;
         busqueda = null;
 
@@ -92,6 +109,11 @@ public class PantallaPrincipal extends AppCompatActivity
             public void onClick(View view) {
                 Intent i = new Intent(PantallaPrincipal.this, Filtros.class);
                 i.putExtra("ProvinciaFiltros", provincia);
+                i.putExtra("OrdenFiltros", orden);
+                i.putExtra("CategoriaFiltros", categoria);
+                i.putExtra("TipoVentaFiltros", tipoVenta);
+                i.putExtra("PrecioMinimoFiltros", precioMinimo);
+                i.putExtra("PrecioMaximoFiltros", precioMaximo);
                 startActivityForResult(i, ACT_FILTROS);
             }
         });
@@ -218,13 +240,50 @@ public class PantallaPrincipal extends AppCompatActivity
             listarProductosUsuario(un);
         }
         else {
-            String url = Common.url + "/listarProductos?met=" + metOrden;// + "&id=" + productos.getIdMax(); // TODO: Problemas con id
+            String url = Common.url + "/listarProductos?met=";
+
+            switch (orden) {
+                case 1 :
+                    url += "Fecha asc";
+                    break;
+                case 2 :
+                    url += "Precio asc";
+                    break;
+                case 3 :
+                    url += "Precio des";
+                    break;
+                case 4 :
+                    url += "Popularidad";
+                    break;
+                case 5 :
+                    url += "Coincidencias";
+                    break;
+                case 6 :
+                    url += "Valoraciones";
+                    break;
+                default :
+                    url += "Fecha des";
+                    break;
+            }
+
+            if (tipoVenta >= 0) {
+                url += "&tp=" + tipoVenta;
+            }
+
+            if (!provincia.equals("")) {
+                url += "&pr=" + provincia;
+            }
+
+            if (!categoria.equals("")) {
+                url += "&cat=" + categoria;
+            }
 
             if (buscar && busqueda != null && busqueda.length() > 1) {
                 url += "&ets=" + busqueda;
             }
-            if (!provincia.equals("")) {
-                url += "&pr=" + provincia;
+
+            if (productos.getIdUltimo() > 0) {
+                url += "&id=" + productos.getIdUltimo();
             }
 
             gestionarPeticionListar(url);
@@ -232,8 +291,8 @@ public class PantallaPrincipal extends AppCompatActivity
     }
 
     private void listarProductosUsuario(String usuario) {
-        Integer id = productos.getIdMax();
-        gestionarPeticionListar(Common.url + "/listarProductosUsuario?id=" + id +"&un=" + usuario);
+        gestionarPeticionListar(Common.url + "/listarProductosUsuario?id=" +
+                productos.getIdUltimo() + "&un=" + usuario);
     }
 
     private void gestionarPeticionListar(String urlPetition) {
@@ -403,7 +462,19 @@ public class PantallaPrincipal extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ACT_FILTROS) {
             if (resultCode == Common.RESULTADO_OK) {
-                provincia = data.getData().toString();
+
+                provincia = data.getStringExtra("ProvinciaFiltros");
+                if (provincia == null) {
+                    provincia = "";
+                }
+                orden = data.getIntExtra("OrdenFiltros", 0);
+                categoria = data.getStringExtra("CategoriaFiltros");
+                if (categoria == null) {
+                    categoria = "";
+                }
+                tipoVenta = data.getIntExtra("TipoVentaFiltros", -1);
+                precioMinimo = data.getIntExtra("PrecioMinimoFiltros", -1);
+                precioMaximo = data.getIntExtra("PrecioMaximoFiltros", -1);
 
                 productos.clear();
                 if (listaProductosListView != null) {
@@ -416,6 +487,12 @@ public class PantallaPrincipal extends AppCompatActivity
             }
             else if (resultCode == Common.RESULTADO_CANCELADO) {
                 provincia = "";
+                orden = 0;
+                categoria = "";
+                tipoVenta = -1;
+                precioMinimo = -1;
+                precioMaximo = -1;
+
                 resetPantalla();
             }
         }
