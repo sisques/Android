@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.util.Calendar;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -26,13 +28,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
+import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.ResultIPC;
 
 
 public class SubirProd1_3 extends AppCompatActivity {
+    private final int ACT_SIGUIENTE = 999;
 
     ImageButton foto1;
     ImageButton foto2;
@@ -153,18 +156,18 @@ public class SubirProd1_3 extends AppCompatActivity {
             String prod = nombreProducto.getText().toString().trim();
             String desc = descripcionProducto.getText().toString().trim();
 
-            prodNameCheckLength = (prod.length() >= 3 && prod.length() <= 100);;
-            prodDescCheckLength = (desc.length() >= 10);
+            prodNameCheckLength = (prod.length() >= 3 && prod.length() <= 100);
+            prodDescCheckLength = (desc.length() >= 10) ;
 
         }
     };
 
     private void siguientePaso(){
         if(!prodNameCheckLength){
-            Toast.makeText(getApplicationContext(),"El nombre del producto debe tener entre 3 y 100 caracteres", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"El nombre del producto debe tener entre 3 y 100 caracteres.", Toast.LENGTH_LONG).show();
         }
         else if(!prodDescCheckLength){
-            Toast.makeText(getApplicationContext(),"La descripción del producto debe tener como mínimo 10 caracteres", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"La descripción del producto debe tener como mínimo 10 caracteres.", Toast.LENGTH_LONG).show();
         }
         else {
             String producto = nombreProducto.getText().toString().trim();
@@ -180,12 +183,19 @@ public class SubirProd1_3 extends AppCompatActivity {
             datos.add( imagen4_bm );
             int sync = ResultIPC.get().setLargeData(datos);
             intent.putExtra("bigdata:synccode", sync);
-            startActivity(intent);
+
+            startActivityForResult(intent, ACT_SIGUIENTE);
         }
     }
 
-    private void pasoAnterior(){
+    private void pasoAnterior() {
+        setResult(Common.RESULTADO_NOK, new Intent());
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        pasoAnterior();
     }
 
     private void subirImagen1(){
@@ -303,107 +313,125 @@ public class SubirProd1_3 extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == this.RESULT_CANCELED) {
-            return;
+        if (requestCode == ACT_SIGUIENTE) {
+            if (resultCode == Common.RESULTADO_OK) {
+                setResult(Common.RESULTADO_OK, new Intent());
+                finish();
+            }
         }
-        if (requestCode == GALERIA_1 || requestCode == GALERIA_2 || requestCode == GALERIA_3 || requestCode == GALERIA_4) {
-            if (data != null) {
+
+        else {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == this.RESULT_CANCELED) {
+                return;
+            }
+            if (requestCode == GALERIA_1 || requestCode == GALERIA_2 || requestCode == GALERIA_3 || requestCode == GALERIA_4) {
+                if (data != null) {
 
 
-                Uri contentURI = data.getData();
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                    switch (requestCode) {
-                        case 1:
+                    Uri contentURI = data.getData();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
 
-                            imagen1_bm = bitmap;
-                            foto1.setImageBitmap(imagen1_bm);
-                            break;
-                        case 2:
 
-                            imagen2_bm = bitmap;
-                            foto2.setImageBitmap(imagen2_bm);
-                            break;
-                        case 3:
+                        int nh = (int) (bitmap.getHeight() * (512.0 / bitmap.getWidth()));
 
-                            imagen3_bm = bitmap;
-                            foto3.setImageBitmap(imagen3_bm);
-                            break;
-                        case 4:
+                        bitmap = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+                        switch (requestCode) {
+                            case 1:
 
-                            imagen4_bm = bitmap;
-                            foto4.setImageBitmap(imagen4_bm);
-                            break;
+                                imagen1_bm = bitmap;
+                                foto1.setImageBitmap(imagen1_bm);
+                                break;
+                            case 2:
+
+                                imagen2_bm = bitmap;
+                                foto2.setImageBitmap(imagen2_bm);
+                                break;
+                            case 3:
+
+                                imagen3_bm = bitmap;
+                                foto3.setImageBitmap(imagen3_bm);
+                                break;
+                            case 4:
+
+                                imagen4_bm = bitmap;
+                                foto4.setImageBitmap(imagen4_bm);
+                                break;
+                        }
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(SubirProd1_3.this, "Failed!", Toast.LENGTH_SHORT).show();
                     }
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(SubirProd1_3.this, "Failed!", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-        } else if (requestCode == CAMARA_1 || requestCode == CAMARA_2 || requestCode == CAMARA_3 || requestCode == CAMARA_4) {
-            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+            } else if (requestCode == CAMARA_1 || requestCode == CAMARA_2 || requestCode == CAMARA_3 || requestCode == CAMARA_4) {
+                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                guardarFoto(thumbnail);
+                int nh = (int) (thumbnail.getHeight() * (512.0 / thumbnail.getWidth()));
+                thumbnail = Bitmap.createScaledBitmap(thumbnail, 512, nh, true);
+
+                switch (requestCode) {
+                    case 5:
+                        imagen1_bm = thumbnail;
+                        foto1.setImageBitmap(imagen1_bm);
+                        break;
+                    case 6:
+                        imagen2_bm = thumbnail;
+                        foto2.setImageBitmap(imagen2_bm);
+                        break;
+                    case 7:
+                        imagen3_bm = thumbnail;
+                        foto3.setImageBitmap(imagen3_bm);
+                        break;
+                    case 8:
+                        imagen4_bm = thumbnail;
+                        foto4.setImageBitmap(imagen4_bm);
+                        break;
+                }
+
+            }
+            String prod = nombreProducto.getText().toString().trim();
+            String desc = descripcionProducto.getText().toString().trim();
+            siguiente.setEnabled(!prod.isEmpty() && !desc.isEmpty() && imagen1_bm != null);
+        }
+    }
+
+
+    public String guardarFoto(Bitmap myBitmap) {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-            switch (requestCode) {
-                case 5:
-                    imagen1_bm = thumbnail;
-                    foto1.setImageBitmap(imagen1_bm);
-                    break;
-                case 6:
-                    imagen2_bm = thumbnail;
-                    foto2.setImageBitmap(imagen2_bm);
-                    break;
-                case 7:
-                    imagen3_bm = thumbnail;
-                    foto3.setImageBitmap(imagen3_bm);
-                    break;
-                case 8:
-                    imagen4_bm = thumbnail;
-                    foto4.setImageBitmap(imagen4_bm);
-                    break;
+            myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            File wallpaperDirectory = new File(
+                    Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
+            // have the object build the directory structure, if needed.
+            if (!wallpaperDirectory.exists()) {
+                wallpaperDirectory.mkdirs();
             }
-            guardarFoto(thumbnail, bytes);
-         }
-        String prod = nombreProducto.getText().toString().trim();
-        String desc = descripcionProducto.getText().toString().trim();
-        siguiente.setEnabled(!prod.isEmpty() && !desc.isEmpty() && imagen1_bm != null );
-    }
 
+            try {
+                File f;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    f = new File(wallpaperDirectory, "producto-"+ Calendar.getInstance().getTime()+".jpg");
+                }
+                else {
+                    f = new File(wallpaperDirectory, "producto.jpg");
+                }
+                f.createNewFile();
+                FileOutputStream fo = new FileOutputStream(f);
+                fo.write(bytes.toByteArray());
+                MediaScannerConnection.scanFile(this,
+                        new String[]{f.getPath()},
+                        new String[]{"image/jpeg"}, null);
+                fo.close();
 
-    public String guardarFoto(Bitmap myBitmap, ByteArrayOutputStream bytes) {
-
-        File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
-        // have the object build the directory structure, if needed.
-        if (!wallpaperDirectory.exists()) {
-            wallpaperDirectory.mkdirs();
+                return f.getAbsolutePath();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return "";
         }
-
-        try {
-            File f = new File(wallpaperDirectory, Calendar.getInstance()
-                    .getTimeInMillis() + ".jpg");
-            f.createNewFile();
-            FileOutputStream fo = new FileOutputStream(f);
-            fo.write(bytes.toByteArray());
-            MediaScannerConnection.scanFile(this,
-                    new String[]{f.getPath()},
-                    new String[]{"image/jpeg"}, null);
-            fo.close();
-            Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
-
-            return f.getAbsolutePath();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        return "";
-    }
 
 
 

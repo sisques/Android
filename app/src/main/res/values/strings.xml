@@ -95,6 +95,100 @@
         <item>Zaragoza</item>
     </string-array>
 
+    <string-array name="ListaProvinciasFiltros">
+        <item>Todas las provincias</item>
+        <item>A Coruña</item>
+        <item>Álava</item>
+        <item>Albacete</item>
+        <item>Alicante</item>
+        <item>Almería</item>
+        <item>Asturias</item>
+        <item>Ávila</item>
+        <item>Badajoz</item>
+        <item>Baleares</item>
+        <item>Barcelona</item>
+        <item>Burgos</item>
+        <item>Cáceres</item>
+        <item>Cádiz</item>
+        <item>Cantabria</item>
+        <item>Castellón</item>
+        <item>Ceuta</item>
+        <item>Ciudad Real</item>
+        <item>Córdoba</item>
+        <item>Cuenca</item>
+        <item>Girona</item>
+        <item>Granada</item>
+        <item>Guadalajara</item>
+        <item>Gipuzkoa</item>
+        <item>Huelva</item>
+        <item>Huesca</item>
+        <item>Jaén</item>
+        <item>La Rioja</item>
+        <item>Las Palmas</item>
+        <item>León</item>
+        <item>Lérida</item>
+        <item>Lugo</item>
+        <item>Madrid</item>
+        <item>Málaga</item>
+        <item>Melilla</item>
+        <item>Murcia</item>
+        <item>Navarra</item>
+        <item>Ourense</item>
+        <item>Palencia</item>
+        <item>Pontevedra</item>
+        <item>Salamanca</item>
+        <item>Segovia</item>
+        <item>Sevilla</item>
+        <item>Soria</item>
+        <item>Tarragona</item>
+        <item>Santa Cruz de Tenerife</item>
+        <item>Teruel</item>
+        <item>Toledo</item>
+        <item>Valencia</item>
+        <item>Valladolid</item>
+        <item>Vizcaya</item>
+        <item>Zamora</item>
+        <item>Zaragoza</item>
+    </string-array>
+
+    <string-array name="ListaOrdenacionFiltros">
+    <item>Más recientes primero</item>
+    <item>Más antiguos primero</item>
+    <item>Más baratos primero</item>
+    <item>Más caros primero</item>
+    <item>Más popular primero</item>
+    <item>Mejor coincidencia primero</item>
+    <item>Mejor valoración primero</item>
+    </string-array>
+
+    <string-array name="ListaCategoriasFiltros">
+    <item>Todas las categorías</item>
+    <item>Motor y accesorios</item>
+    <item>Tv, audio, foto y vídeo</item>
+    <item>Informática y electrónica</item>
+    <item>Cine, libros y música</item>
+    <item>Deporte y ocio</item>
+    <item>Hogar y jardín</item>
+    <item>Electrodomésticos</item>
+    <item>Moda y accesorios</item>
+    <item>Niños y bebés</item>
+    <item>Industria y agricultura</item>
+    <item>Empleo y servicios</item>
+    <item>Otros</item>
+    </string-array>
+
+    <string-array name="ListaTipoFiltros">
+        <item>Todos</item>
+        <item>Sólo ventas</item>
+        <item>Sólo subastas</item>
+    </string-array>
+
+    <string name="TextoOrdenacion">ORDEN</string>
+    <string name="TextoCategoria">CATEGORÍA</string>
+    <string name="TextoTipo">TIPO</string>
+    <string name="TextoPrecioMinimo">PRECIO MÍNIMO</string>
+    <string name="TextoPrecioMaximo">PRECIO MÁXIMO</string>
+
     <!-- Pantalla principal -->
     <string name="title_activity_pantalla_principal">PantallaPrincipal</string>
     <string name="SubirProducto">Subir producto</string>
@@ -105,7 +199,7 @@
     <string name="menu_button">Menu button</string>
     <string name="title_activity_subir_producto_1_3">Información básica del producto.</string>
     <string name="title_activity_subir_producto_2_3">Precio del producto.</string>
-    <string name="title_activity_subir_producto_3_3">Categoría y etiquetas del producto.</string>
+    <string name="title_activity_subir_producto_3_3">Categoría del producto.</string>
 
     <string name="nombre_del_producto">NOMBRE DEL PRODUCTO</string>
     <string name="subir_producto">Subir producto</string>
@@ -171,19 +265,21 @@
 
 
     <string name="cat1">Motor y accesorios</string>
-    <string name="cat2">Tv, audio, foto y video</string>
+    <string name="cat2">Tv, audio, foto y vídeo</string>
     <string name="cat3">Informática y electrónica</string>
     <string name="cat4">Cine, libros y música</string>
     <string name="cat5">Deporte y ocio</string>
     <string name="cat6">Hogar y jardín</string>
     <string name="cat7">Electrodomésticos</string>
     <string name="cat8">Moda y accesorios</string>
-    <string name="cat9">Niños y bebes</string>
+    <string name="cat9">Niños y bebés</string>
     <string name="cat10">Industria y agricultura</string>
     <string name="cat11">Empleo y servicios</string>
     <string name="cat12">Otros</string>
 
 
+    <string name="oferta">Proponer un precio</string>
+    <string name="compra">Comprar a precio completo</string>
 
     <string-array name="ListaCiudades">
         <item>Almería</item>

@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.content.SharedPreferences;
 
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -37,40 +38,50 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.concurrent.TimeUnit;
-
 import es.unizar.eina.ebrozon.lib.Common;
-import es.unizar.eina.ebrozon.lib.ImagenFinal;
 import es.unizar.eina.ebrozon.lib.Ventas;
+
+import static es.unizar.eina.ebrozon.lib.Common.StringToBitMap;
 
 
 public class PantallaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private final int ACT_FILTROS = 0;
+    private final int ACT_COMPRAR_PRODUCTO = 1;
+    private final int ACT_SUBIR_PRODUCTO = 2;
 
     SharedPreferences sharedpreferences;
     private SwipeRefreshLayout swipeLayout;
 
     private String un; // usuario
     private String cor; // correo
-    private String pr; // provincia
-    private String ci; // ciudad
     private String im; // imagen perfil
 
-    private Boolean listarPorCiudad;
-    private Boolean filtroUsar;
-    private String filtroCi; // filtro ciudad
-    private Boolean misProductos;
-    private Boolean buscar;
-    private String busqueda; // palabra a buscar
+    private Ventas productos; // Productos y resúmenes
 
-    private Ventas productos;
+    private Boolean misProductos; // Para ver productos en venta
+
+    // Listar productos
+    private String provincia; // Provincia utilizada; "" = todas las provincias
+    private Integer orden; // Tipo de ordenación
+    private String categoria; // Categoría utilizada; "" = todas las categorías
+    private Integer tipoVenta; // Tipo de venta; -1 = todos los tipos
+    private Double precioMinimo; // Precio mínimo; -1.0 = sin precio mínimo
+    private Double precioMaximo; // Precio máximo; -1.0 = sin precio máximo
+
+    private Integer ultimoIdListado;
+
+    // Buscar productos
+    private Boolean buscar; // Opción de búsqueda
+    private String busqueda; // Palabra a buscar
+
     private TextView menuNombre;
     private TextView menuCorreo;
     private ImageView menuImagen;
     private Button botonFiltros;
     private ListView listaProductosListView;
+    private SimpleAdapter simpleAdapter; // Adapter del ListView
     private SearchView menuBusqueda;
 
     @Override
@@ -81,11 +92,20 @@ public class PantallaPrincipal extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         productos = new Ventas();
-        productos.setContext(getApplicationContext());
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
-        listarPorCiudad = false; // Al principio se listan todos los productos
-        filtroUsar = false;
         misProductos = false;
+
+        inicializarListView();
+
+        provincia = ""; // Al principio se listan todos los productos
+        orden = 0;
+        categoria = ""; // Al principio se listan todas las categorias
+        tipoVenta = -1;
+        precioMinimo = -1.0;
+        precioMaximo = -1.0;
+
+        ultimoIdListado = 0;
+
         buscar = false;
         busqueda = null;
 
@@ -95,7 +115,12 @@ public class PantallaPrincipal extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(PantallaPrincipal.this, Filtros.class);
-                i.putExtra("listarPorCiudad", listarPorCiudad);
+                i.putExtra("ProvinciaFiltros", provincia);
+                i.putExtra("OrdenFiltros", orden);
+                i.putExtra("CategoriaFiltros", categoria);
+                i.putExtra("TipoVentaFiltros", tipoVenta);
+                i.putExtra("PrecioMinimoFiltros", precioMinimo);
+                i.putExtra("PrecioMaximoFiltros", precioMaximo);
                 startActivityForResult(i, ACT_FILTROS);
             }
         });
@@ -105,7 +130,8 @@ public class PantallaPrincipal extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PantallaPrincipal.this, SubirProd1_3.class));
+                startActivityForResult(new Intent(PantallaPrincipal.this,
+                        SubirProd1_3.class), ACT_SUBIR_PRODUCTO);
             }
         });
 
@@ -130,9 +156,7 @@ public class PantallaPrincipal extends AppCompatActivity
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() { // Cada vez que se realiza el gesto para refrescar
-                productos.clear();
-                recuperarUsuario();
-                listarProductos();
+                resetPantalla();
                 swipeLayout.setRefreshing(false);
             }
         });
@@ -145,8 +169,7 @@ public class PantallaPrincipal extends AppCompatActivity
                 if (s.length() > 1) {
                     busqueda = s;
                     buscar = true;
-                    productos.clear();
-                    listarProductos();
+                    resetPantalla();
                 }
                 return false;
             }
@@ -160,15 +183,60 @@ public class PantallaPrincipal extends AppCompatActivity
             public boolean onClose() { // Cuando se le da a cerrar
                 busqueda = null;
                 buscar = false;
-                productos.clear();
-                listarProductos();
+                resetPantalla();
                 return false;
             }
         });
 
-        productos.clear();
         recuperarUsuario();
-        listarProductos();
+        resetPantalla();
+    }
+
+    private void inicializarListView() {
+        String[] from = productos.getResumenAtributos();
+        int[] to = {R.id.ProductoResumenTitulo, R.id.ProductoResumenPrecio,
+                R.id.ProductoResumenDescripcion, R.id.ProductoResumenCiudad, R.id.ProductoResumenImagen};
+
+        simpleAdapter = new SimpleAdapter(getBaseContext(), productos.getResumenes(), R.layout.content_producto_resumen, from, to);
+        simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Object data, String textRepresentation) { // Para el tratamiento de imágenes
+                if ((view instanceof ImageView) && (data instanceof Bitmap)) {
+                    ((ImageView) view).setImageBitmap((Bitmap) data);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        listaProductosListView = (ListView) findViewById(R.id.listaProductos);
+        listaProductosListView.setAdapter(simpleAdapter);
+
+        listaProductosListView.setClickable(true);
+        listaProductosListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                Intent intent = new Intent(PantallaPrincipal.this, Producto.class);
+                intent.putExtra("Venta", position);
+                startActivityForResult(intent, ACT_COMPRAR_PRODUCTO);
+            }
+        });
+
+        listaProductosListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) { }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if (firstVisibleItem + visibleItemCount == totalItemCount && totalItemCount != 0
+                        && !ultimoIdListado.equals(productos.getIdUltimo())) {
+                    ultimoIdListado = productos.getIdUltimo();
+                    listarProductos();
+                }
+            }
+        });
     }
 
     private void recuperarUsuario() {
@@ -188,31 +256,18 @@ public class PantallaPrincipal extends AppCompatActivity
                         try {
                             JSONObject usuario = new JSONObject(response);
                             cor = usuario.getString("correo");
-                            pr = usuario.getString("provincia");
-                            ci = usuario.getString("ciudad");
-                            if (ci.isEmpty()) {
-                                ci = "...";
-                            }
                             im = usuario.getString("urlArchivo");
 
                             Common.establecerFotoServidor(getApplicationContext(), im, menuImagen);
 
                             SharedPreferences.Editor editor = sharedpreferences.edit();
                             editor.putString(Common.cor, cor);
-                            editor.putString(Common.ci, ci);
-                            editor.putString(Common.pr, pr);
                             editor.putString(Common.im, im);
                             editor.commit();
                         }
                         catch(Exception e) {
                             cor = sharedpreferences.getString(Common.cor, null);
-                            pr = sharedpreferences.getString(Common.pr, null);
-                            ci = sharedpreferences.getString(Common.ci, null);
                             im = sharedpreferences.getString(Common.im, null);
-                        }
-
-                        if (pr == null || pr.equals("")) {
-                            pr = "Zaragoza";
                         }
                         menuNombre.setText(un);
                         menuCorreo.setText(cor);
@@ -230,43 +285,77 @@ public class PantallaPrincipal extends AppCompatActivity
         queue.add(postRequest);
     }
 
-    private void listarProductos() { // TODO: Añadir listado para más de 25 productos
-        if (buscar && busqueda != null && busqueda.length() > 1) {
-            listarProductosBusqueda();
-        }
-        else if (misProductos)
-            listarProductosUsuario(un);
-        else
-            listarProductosCiudad();
-    }
+    private void listarProductos() {
+        String url = Common.url;
 
-    private void listarProductosBusqueda() { // TODO: Añadir filtros
-        gestionarPeticionListar(Common.url + "/listarProductos?met=Coincidencias&ets=" + busqueda);
-    }
+        if (misProductos) {
+            url += "/listarProductosUsuario?un=" + un;
 
-    private void listarProductosCiudad() {
-        String ciudad;
-        if (filtroUsar && !filtroCi.equals("...")) {
-            ciudad = filtroCi;
+            if (productos.getIdUltimo() > 0) {
+                url += "&id=" + productos.getIdUltimo();
+            }
+            else {
+                url += "&id=99999";
+            }
         }
+
         else {
-            if (ci != null && !ci.equals("..."))
-                ciudad = ci;
-            else
-                ciudad = pr;
+            url += "/listarProductos?met=";
+
+            switch (orden) {
+                case 1 :
+                    url += "Fecha asc";
+                    break;
+                case 2 :
+                    url += "Precio asc";
+                    break;
+                case 3 :
+                    url += "Precio des";
+                    break;
+                case 4 :
+                    url += "Popularidad";
+                    break;
+                case 5 :
+                    url += "Coincidencias";
+                    break;
+                case 6 :
+                    url += "Valoraciones";
+                    break;
+                default :
+                    url += "Fecha des";
+                    break;
+            }
+
+            if (tipoVenta >= 0) {
+                url += "&tp=" + tipoVenta;
+            }
+
+            if (!provincia.equals("")) {
+                url += "&pr=" + provincia;
+            }
+
+            if (!categoria.equals("")) {
+                url += "&cat=" + categoria;
+            }
+
+            if (precioMinimo >= 0.0) {
+                url += "&min=" + precioMinimo;
+            }
+
+            if (precioMaximo >= 0.0) {
+                url += "&max=" + precioMaximo;
+            }
+
+            if (buscar && busqueda != null && busqueda.length() > 1) {
+                url += "&ets=" + busqueda;
+            }
+
+            if (productos.getIdUltimo() > 0) {
+                url += "&id=" + productos.getIdUltimo();
+            }
         }
 
-        Integer id = productos.getIdMax();
-
-        if (listarPorCiudad)
-            gestionarPeticionListar(Common.url + "/listarProductosCiudad?id=" + id + "&ci=" + ciudad);
-        else
-            gestionarPeticionListar(Common.url + "/listarPaginaPrincipal?id=" + id);
-    }
-
-    private void listarProductosUsuario(String usuario) {
-        Integer id = productos.getIdMax();
-        gestionarPeticionListar(Common.url + "/listarProductosUsuario?id=" + id +"&un=" + usuario);
+        gestionarPeticionListar(url);
     }
 
     private void gestionarPeticionListar(String urlPetition) {
@@ -282,29 +371,9 @@ public class PantallaPrincipal extends AppCompatActivity
                         if (!response.equals("[]")) {
                             try {
                                 productos.anyadirVentas(new JSONArray(response));
-                                gestionarListarTrasPeticion();
-
-                                // Le da un tiempo para que el servidor envíe la petición
-                                Thread t1 = new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        for (int i=0; i<20; i++) {
-                                            try {
-                                                TimeUnit.MILLISECONDS.sleep(200);
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-                                                        sa.notifyDataSetChanged();
-                                                    }
-                                                });
-                                            } catch (Exception ignored) {
-                                            }
-                                        }
-                                    }
-                                });
-                                t1.start();
-                            }catch (Exception ignored) { }
+                                simpleAdapter.notifyDataSetChanged();
+                                descargarImagenesPrincipales();
+                            } catch (Exception ignored) { }
                         }
                     }
                 },
@@ -320,38 +389,44 @@ public class PantallaPrincipal extends AppCompatActivity
         queue.add(postRequest);
     }
 
-    private void gestionarListarTrasPeticion() {
-        String[] from = productos.getResumenAtributos();
-        int[] to = {R.id.ProductoResumenTitulo, R.id.ProductoResumenPrecio,
-                R.id.ProductoResumenDescripcion, R.id.ProductoResumenCiudad, R.id.ProductoResumenImagen};
+    private void descargarImagenesPrincipales() {
+        String imagen;
+        for (int i=0; i<productos.getTamanyo(); i++) {
+            try {
+                imagen = productos.getIdImagenesVenta(i).getString(0);
+                descargarImagenPrincipal(imagen, i);
+            }
+            catch (Exception ignored) {}
+        }
+    }
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(getBaseContext(), productos.getResumenes(), R.layout.content_producto_resumen, from, to);
-        simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
-            @Override
-            public boolean setViewValue(View view, Object data, String textRepresentation) { // Para el tratamiento de imágenes
-                if ((view instanceof ImageView) && (data instanceof ImagenFinal)) {
-                    Bitmap result = Common.StringToBitMap(((ImagenFinal) data).getImagen());
-                    if (result != null) {
-                        ((ImageView) view).setImageBitmap(result);
+    private void descargarImagenPrincipal(final String idImagen, final int numProducto) {
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String urlPetition = Common.url + "/loadArchivoTemp?id=" + idImagen;
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        response = response.replace(" ","+");
+
+                        if (productos.getTamanyo() > numProducto) {
+                            productos.anyadirImagen(numProducto, StringToBitMap(response));
+                            simpleAdapter.notifyDataSetChanged();
+                        }
                     }
-                    return true;
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error con imagen de perfil");
+                    }
                 }
-                return false;
-            }
-        });
-
-        listaProductosListView = (ListView) findViewById(R.id.listaProductos);
-        listaProductosListView.setAdapter(simpleAdapter);
-
-        listaProductosListView.setClickable(true);
-        listaProductosListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                Intent intent = new Intent(PantallaPrincipal.this, Producto.class);
-                intent.putExtra("Venta", position);
-                startActivity(intent);
-            }
-        });
+        );
+        queue.add(postRequest);
     }
 
     @Override
@@ -373,6 +448,8 @@ public class PantallaPrincipal extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
+        recuperarUsuario();
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -414,29 +491,51 @@ public class PantallaPrincipal extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ACT_FILTROS) {
             if (resultCode == Common.RESULTADO_OK) {
-                filtroUsar = true;
-                listarPorCiudad = data.getBooleanExtra("listarPorCiudad", listarPorCiudad);
-                filtroCi = data.getData().toString();
 
-                productos.clear();
-                SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-                sa.notifyDataSetChanged();
-                listarProductos();
+                provincia = data.getStringExtra("ProvinciaFiltros");
+                if (provincia == null) {
+                    provincia = "";
+                }
+                orden = data.getIntExtra("OrdenFiltros", 0);
+                categoria = data.getStringExtra("CategoriaFiltros");
+                if (categoria == null) {
+                    categoria = "";
+                }
+                tipoVenta = data.getIntExtra("TipoVentaFiltros", -1);
+                precioMinimo = data.getDoubleExtra("PrecioMinimoFiltros", -1.0);
+                precioMaximo = data.getDoubleExtra("PrecioMaximoFiltros", -1.0);
+
+                resetPantalla();
             }
             else if (resultCode == Common.RESULTADO_CANCELADO) {
+                provincia = "";
+                orden = 0;
+                categoria = "";
+                tipoVenta = -1;
+                precioMinimo = -1.0;
+                precioMaximo = -1.0;
+
+                resetPantalla();
+            }
+        }
+
+        else if (requestCode == ACT_COMPRAR_PRODUCTO) {
+            if (resultCode == Common.RESULTADO_OK) {
+                simpleAdapter.notifyDataSetChanged();
+            }
+        }
+
+        else if (requestCode == ACT_SUBIR_PRODUCTO) {
+            if (resultCode == Common.RESULTADO_OK) {
                 resetPantalla();
             }
         }
     }
 
     private void resetPantalla() {
-        filtroUsar = false;
-        listarPorCiudad = false;
-
         productos.clear();
-        SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-        sa.notifyDataSetChanged();
-        recuperarUsuario();
+        ultimoIdListado = 0;
+        simpleAdapter.notifyDataSetChanged();
         listarProductos();
     }
 }

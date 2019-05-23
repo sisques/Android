@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -25,7 +26,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import es.unizar.eina.ebrozon.lib.Common;
+
 public class SubirProd2_3 extends AppCompatActivity {
+    private final int ACT_SIGUIENTE = 999;
 
     TextView precioInicialProd;
     TextView fechaLimiteSubasta;
@@ -46,6 +50,11 @@ public class SubirProd2_3 extends AppCompatActivity {
     Button siguiente;
     Button anterior;
 
+    LinearLayout layout1;
+    LinearLayout layout2;
+    LinearLayout layout3;
+
+
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog.OnTimeSetListener timeSetListener;
 
@@ -61,7 +70,7 @@ public class SubirProd2_3 extends AppCompatActivity {
         fecha = findViewById(R.id.FechaLimite);
         horaLimiteSubasta = findViewById(R.id.HoraLimite_text_view);
         hora = findViewById(R.id.HoraLimite);
-        simbolo€ = findViewById(R.id.Simbolo_euro);
+        simbolo€ = findViewById(R.id.simbolo_euro_2);
 
         precioProducto = findViewById(R.id.PrecioProducto);
         precioInicial = findViewById(R.id.PrecioInicial);
@@ -250,13 +259,29 @@ public class SubirProd2_3 extends AppCompatActivity {
 
             intent.putExtra("fechaLimite", f);
 
-            startActivity(intent);
+            startActivityForResult(intent, ACT_SIGUIENTE);
         }
 
     }
 
-    private void pasoAnterior(){
+    private void pasoAnterior() {
+        setResult(Common.RESULTADO_NOK, new Intent());
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        pasoAnterior();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ACT_SIGUIENTE) {
+            if (resultCode == Common.RESULTADO_OK) {
+                setResult(Common.RESULTADO_OK, new Intent());
+                finish();
+            }
+        }
     }
 
     private void cambiar (Boolean isChecked){

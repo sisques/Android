@@ -7,28 +7,35 @@ import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
+import es.unizar.eina.ebrozon.lib.compra;
 
 public class Producto extends AppCompatActivity {
+    private Ventas productos;
+    private Integer posVenta;
+
     private String un; // usuario
     private String vendedorUn; // vendedor
+    private String precio = "";
+    private String numProd = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_producto);
 
-        Ventas productos = new Ventas();
+        productos = new Ventas();
 
         // Recibe como atributo la posición de la venta
-        Integer posVenta = (Integer) getIntent().getSerializableExtra("Venta");
+        posVenta = (Integer) getIntent().getSerializableExtra("Venta");
 
-        SharedPreferences sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+        final SharedPreferences sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         un = sharedpreferences.getString(Common.un, null);
 
         // Barra de vendedor
@@ -91,7 +98,7 @@ public class Producto extends AppCompatActivity {
 
         // TODO: Preparar para varias imagenes
         ImageView ProductoImagen = (ImageView) findViewById(R.id.ProductoImagen);
-        Bitmap result = Common.StringToBitMap((productos.getImagenResumen(posVenta)).getImagen());
+        Bitmap result = productos.getImagenResumen(posVenta);
         if (result != null) {
             ProductoImagen.setImageBitmap(result);
         }
@@ -103,7 +110,8 @@ public class Producto extends AppCompatActivity {
 
         TextView ProductoPrecio = (TextView) findViewById(R.id.ProductoPrecio);
         try {
-            ProductoPrecio.setText(productos.getPrecioVenta(posVenta));
+            precio = productos.getPrecioVenta(posVenta);
+            ProductoPrecio.setText(precio);
         } catch (Exception ignored) { }
 
         TextView ProductoCiudad = (TextView) findViewById(R.id.ProductoCiudad);
@@ -115,5 +123,54 @@ public class Producto extends AppCompatActivity {
         try {
             ProductoDescripcion.setText(productos.getDescripcionVenta(posVenta));
         } catch (Exception ignored) { }
+
+        TextView ProductoCategoria = (TextView) findViewById(R.id.ProductoCategoria);
+        try {
+            ProductoCategoria.setText(productos.getCategoriaVenta(posVenta));
+        } catch (Exception ignored) { }
+
+
+
+        try {
+            numProd = productos.getIdVenta(posVenta);
+        } catch (Exception ignored) { }
+
+
+        Button oferta = findViewById(R.id.ProductoBotonOferta);
+        if (vendedorUn.equals(un)) {
+            oferta.setVisibility(View.INVISIBLE);
+            oferta.setClickable(false);
+        } else{
+            oferta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //compra.ofertar( posVenta, Producto.this, precio,  sharedpreferences);
+                }
+            });
+        }
+
+        Button comprar = findViewById(R.id.ProductoBotonCompra);
+        if (vendedorUn.equals(un)) {
+            comprar.setVisibility(View.INVISIBLE);
+            comprar.setClickable(false);
+        } else{
+            comprar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    compra.ofertar( numProd, Producto.this,precio,  sharedpreferences);
+                    productos.eliminarVenta(posVenta);
+                    setResult(Common.RESULTADO_OK, new Intent());
+                    finish();
+                }
+            });
+        }
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(Common.RESULTADO_NOK, new Intent());
+        finish();
     }
 }
