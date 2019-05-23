@@ -240,6 +240,8 @@
     <string name="cat12">Otros</string>
 
 
+    <string name="oferta">Proponer un precio</string>
+    <string name="compra">Comprar a precio completo</string>
 
     <string-array name="ListaCiudades">
         <item>Almería</item>
