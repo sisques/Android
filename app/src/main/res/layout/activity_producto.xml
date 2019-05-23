@@ -10,7 +10,8 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <LinearLayout
@@ -86,7 +87,8 @@
     <TextView
         android:id="@+id/ProductoNombre"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
         android:text="@string/Ejemplo"
         android:textAlignment="center"
         android:textSize="30sp"
@@ -94,7 +96,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
         android:orientation="horizontal"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
@@ -130,8 +133,8 @@
     <TextView
         android:id="@+id/ProductoCategoria"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:text="@string/Ejemplo"
@@ -148,5 +151,34 @@
         android:text="@string/Ejemplo"
         android:textAlignment="viewStart"
         android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
+
+        <Button
+            android:id="@+id/Oferta"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:text="@string/oferta" />
+
+        <Button
+            android:id="@+id/Compra"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:text="@string/compra" />
+
+    </LinearLayout>
 
 </LinearLayout>
