@@ -1,6 +1,7 @@
 package es.unizar.eina.ebrozon;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +47,8 @@ public class Chat extends AppCompatActivity {
     private String un; // usuario
     private String usuarioComunica; // usuario con el que se comunica
 
+    private String fechaUltimo;
+
     Timer mTimer;
 
     @Override
@@ -55,6 +58,8 @@ public class Chat extends AppCompatActivity {
 
         // Recibe como atributo el usuario con el que se comunica
         usuarioComunica = (String) getIntent().getSerializableExtra("usuarioComunica");
+
+        fechaUltimo = "";
 
         listaChatListView = (ListView) findViewById(R.id.listaChat);
         chat = new ArrayList<HashMap<String, Object>>();
@@ -141,7 +146,19 @@ public class Chat extends AppCompatActivity {
     public void onBackPressed() {
         mTimer.cancel();
         mTimer.purge();
-        super.onBackPressed();
+
+        Intent data = new Intent();
+
+        if (chat.size() > 0) {
+            data.putExtra("ChatUltimo", (String) chat.get(chat.size() - 1).get(atributos[0]));
+            data.putExtra("FechaUltimo", fechaUltimo);
+            setResult(Common.RESULTADO_OK, data);
+        }
+        else {
+            setResult(Common.RESULTADO_NOK, data);
+        }
+
+        finish();
     }
 
     private void enviarMensaje(String mensaje) {
@@ -278,6 +295,10 @@ public class Chat extends AppCompatActivity {
         if (JSONmensaje != null) {
             try {
                 idMax = JSONmensaje.getInt("identificador");
+
+                String aux = JSONmensaje.getString("fecha");
+                fechaUltimo = aux.substring(11, 16) + " " + aux.substring(8, 10) + "-"
+                        + aux.substring(5, 7) + "-" + aux.substring(2, 4);
             }
             catch (Exception ignored) { }
         }
