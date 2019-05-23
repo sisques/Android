@@ -91,7 +91,7 @@ public class Producto extends AppCompatActivity {
 
         // TODO: Preparar para varias imagenes
         ImageView ProductoImagen = (ImageView) findViewById(R.id.ProductoImagen);
-        Bitmap result = Common.StringToBitMap((productos.getImagenResumen(posVenta)).getImagen());
+        Bitmap result = productos.getImagenResumen(posVenta);
         if (result != null) {
             ProductoImagen.setImageBitmap(result);
         }

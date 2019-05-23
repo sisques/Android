@@ -11,30 +11,22 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 
+import java.util.Arrays;
+import java.util.List;
+
 import es.unizar.eina.ebrozon.lib.Common;
 
 public class Filtros extends AppCompatActivity {
 
-    private Spinner spinnerCi; // spinner ciudad
-    private String filtroCi; // filtro ciudad
-    private Boolean filtroPorCiudad; // Mostrar por ciudad
+    private String provincia; // provincia elegida, "" = todas
+    private Spinner spinnerPr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filtros);
 
-        filtroPorCiudad = getIntent().getBooleanExtra("listarPorCiudad", false);
-
-        // Switch mostrar todos los productos
-        Switch mostrarTodos = findViewById(R.id.FiltroTodos);
-        mostrarTodos.setChecked(!filtroPorCiudad);
-        mostrarTodos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                filtroPorCiudad = !isChecked;
-            }
-        });
+        provincia = getIntent().getStringExtra("ProvinciaFiltros");
 
         // Botón aplicar
         Button botonAplicar = findViewById(R.id.FiltroBotonAplicar);
@@ -42,8 +34,8 @@ public class Filtros extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent data = new Intent();
-                data.setData(Uri.parse(filtroCi));
-                data.putExtra("listarPorCiudad", filtroPorCiudad);
+                data.setData(Uri.parse(provincia));
+                //data.putExtra("listarPorCiudad", filtroPorCiudad);
                 setResult(Common.RESULTADO_OK, data);
                 finish();
             }
@@ -55,29 +47,38 @@ public class Filtros extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent data = new Intent();
-                data.setData(Uri.parse(filtroCi));
                 setResult(Common.RESULTADO_CANCELADO, data);
                 finish();
             }
         });
 
-        // Listado de ciudades
-        spinnerCi = findViewById(R.id.FiltroListaProvincias);
-        spinnerCi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // Listado de provincias
+        final List<String> listaPr = Arrays.asList(getResources().getStringArray(R.array.ListaProvinciasFiltros));
+
+        spinnerPr = findViewById(R.id.FiltroListaProvincias);
+        spinnerPr.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                filtroCi = spinnerCi.getSelectedItem().toString();
+                provincia = spinnerPr.getSelectedItem().toString();
+                if (provincia.equals(listaPr.get(0))) {
+                    provincia = "";
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
         });
+
+        int i = listaPr.indexOf(provincia);
+        if (!provincia.equals("") && i != -1) {
+            spinnerPr.setSelection(i);
+        }
     }
 
     @Override
     public void onBackPressed() {
         Intent data = new Intent();
-        data.setData(Uri.parse(filtroCi));
+        //data.setData(Uri.parse(filtroCi));
         setResult(Common.RESULTADO_NOK, data);
         finish();
     }

@@ -37,11 +37,10 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.concurrent.TimeUnit;
-
 import es.unizar.eina.ebrozon.lib.Common;
-import es.unizar.eina.ebrozon.lib.ImagenFinal;
 import es.unizar.eina.ebrozon.lib.Ventas;
+
+import static es.unizar.eina.ebrozon.lib.Common.StringToBitMap;
 
 
 public class PantallaPrincipal extends AppCompatActivity
@@ -54,18 +53,16 @@ public class PantallaPrincipal extends AppCompatActivity
 
     private String un; // usuario
     private String cor; // correo
-    private String pr; // provincia
-    private String ci; // ciudad
     private String im; // imagen perfil
 
-    private Boolean listarPorCiudad;
-    private Boolean filtroUsar;
-    private String filtroCi; // filtro ciudad
-    private Boolean misProductos;
-    private Boolean buscar;
-    private String busqueda; // palabra a buscar
+    private Ventas productos; // Productos y resúmenes
 
-    private Ventas productos;
+    private Boolean misProductos; // Para ver productos en venta
+    private String provincia; // Provincia utilizada en la búsqueda; "" = todas las provincias
+    private String metOrden; // Tipo de ordenación
+    private Boolean buscar; // Opción de búsqueda
+    private String busqueda; // Palabra a buscar
+
     private TextView menuNombre;
     private TextView menuCorreo;
     private ImageView menuImagen;
@@ -81,11 +78,10 @@ public class PantallaPrincipal extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         productos = new Ventas();
-        productos.setContext(getApplicationContext());
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
-        listarPorCiudad = false; // Al principio se listan todos los productos
-        filtroUsar = false;
         misProductos = false;
+        provincia = ""; // Al principio se listan todos los productos
+        metOrden = "Fecha des";
         buscar = false;
         busqueda = null;
 
@@ -95,7 +91,7 @@ public class PantallaPrincipal extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(PantallaPrincipal.this, Filtros.class);
-                i.putExtra("listarPorCiudad", listarPorCiudad);
+                i.putExtra("ProvinciaFiltros", provincia);
                 startActivityForResult(i, ACT_FILTROS);
             }
         });
@@ -188,31 +184,18 @@ public class PantallaPrincipal extends AppCompatActivity
                         try {
                             JSONObject usuario = new JSONObject(response);
                             cor = usuario.getString("correo");
-                            pr = usuario.getString("provincia");
-                            ci = usuario.getString("ciudad");
-                            if (ci.isEmpty()) {
-                                ci = "...";
-                            }
                             im = usuario.getString("urlArchivo");
 
                             Common.establecerFotoServidor(getApplicationContext(), im, menuImagen);
 
                             SharedPreferences.Editor editor = sharedpreferences.edit();
                             editor.putString(Common.cor, cor);
-                            editor.putString(Common.ci, ci);
-                            editor.putString(Common.pr, pr);
                             editor.putString(Common.im, im);
                             editor.commit();
                         }
                         catch(Exception e) {
                             cor = sharedpreferences.getString(Common.cor, null);
-                            pr = sharedpreferences.getString(Common.pr, null);
-                            ci = sharedpreferences.getString(Common.ci, null);
                             im = sharedpreferences.getString(Common.im, null);
-                        }
-
-                        if (pr == null || pr.equals("")) {
-                            pr = "Zaragoza";
                         }
                         menuNombre.setText(un);
                         menuCorreo.setText(cor);
@@ -230,38 +213,22 @@ public class PantallaPrincipal extends AppCompatActivity
         queue.add(postRequest);
     }
 
-    private void listarProductos() { // TODO: Añadir listado para más de 25 productos
-        if (buscar && busqueda != null && busqueda.length() > 1) {
-            listarProductosBusqueda();
-        }
-        else if (misProductos)
+    private void listarProductos() { // TODO: Añadir listado para más de 25 productos y más filtros
+        if (misProductos) {
             listarProductosUsuario(un);
-        else
-            listarProductosCiudad();
-    }
-
-    private void listarProductosBusqueda() { // TODO: Añadir filtros
-        gestionarPeticionListar(Common.url + "/listarProductos?met=Coincidencias&ets=" + busqueda);
-    }
-
-    private void listarProductosCiudad() {
-        String ciudad;
-        if (filtroUsar && !filtroCi.equals("...")) {
-            ciudad = filtroCi;
         }
         else {
-            if (ci != null && !ci.equals("..."))
-                ciudad = ci;
-            else
-                ciudad = pr;
+            String url = Common.url + "/listarProductos?met=" + metOrden;// + "&id=" + productos.getIdMax(); // TODO: Problemas con id
+
+            if (buscar && busqueda != null && busqueda.length() > 1) {
+                url += "&ets=" + busqueda;
+            }
+            if (!provincia.equals("")) {
+                url += "&pr=" + provincia;
+            }
+
+            gestionarPeticionListar(url);
         }
-
-        Integer id = productos.getIdMax();
-
-        if (listarPorCiudad)
-            gestionarPeticionListar(Common.url + "/listarProductosCiudad?id=" + id + "&ci=" + ciudad);
-        else
-            gestionarPeticionListar(Common.url + "/listarPaginaPrincipal?id=" + id);
     }
 
     private void listarProductosUsuario(String usuario) {
@@ -283,28 +250,8 @@ public class PantallaPrincipal extends AppCompatActivity
                             try {
                                 productos.anyadirVentas(new JSONArray(response));
                                 gestionarListarTrasPeticion();
-
-                                // Le da un tiempo para que el servidor envíe la petición
-                                Thread t1 = new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        for (int i=0; i<20; i++) {
-                                            try {
-                                                TimeUnit.MILLISECONDS.sleep(200);
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-                                                        sa.notifyDataSetChanged();
-                                                    }
-                                                });
-                                            } catch (Exception ignored) {
-                                            }
-                                        }
-                                    }
-                                });
-                                t1.start();
-                            }catch (Exception ignored) { }
+                                descargarImagenesPrincipales();
+                            } catch (Exception ignored) { }
                         }
                     }
                 },
@@ -329,11 +276,8 @@ public class PantallaPrincipal extends AppCompatActivity
         simpleAdapter.setViewBinder(new SimpleAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Object data, String textRepresentation) { // Para el tratamiento de imágenes
-                if ((view instanceof ImageView) && (data instanceof ImagenFinal)) {
-                    Bitmap result = Common.StringToBitMap(((ImagenFinal) data).getImagen());
-                    if (result != null) {
-                        ((ImageView) view).setImageBitmap(result);
-                    }
+                if ((view instanceof ImageView) && (data instanceof Bitmap)) {
+                    ((ImageView) view).setImageBitmap((Bitmap) data);
                     return true;
                 }
                 return false;
@@ -352,6 +296,51 @@ public class PantallaPrincipal extends AppCompatActivity
                 startActivity(intent);
             }
         });
+    }
+
+    private void descargarImagenesPrincipales() {
+        String imagen;
+        for (int i=0; i<productos.getTamanyo(); i++) {
+            try {
+                imagen = productos.getIdImagenesVenta(i).getString(0);
+                descargarImagenPrincipal(imagen, i);
+            }
+            catch (Exception ignored) {}
+        }
+    }
+
+    private void descargarImagenPrincipal(final String idImagen, final int numProducto) {
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String urlPetition = Common.url + "/loadArchivoTemp?id=" + idImagen;
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        response = response.replace(" ","+");
+
+                        if (productos.getTamanyo() > numProducto) {
+                            productos.anyadirImagen(numProducto, StringToBitMap(response));
+                            if (listaProductosListView != null) {
+                                SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
+                                if (sa != null) {
+                                    sa.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error con imagen de perfil");
+                    }
+                }
+        );
+        queue.add(postRequest);
     }
 
     @Override
@@ -414,28 +403,32 @@ public class PantallaPrincipal extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ACT_FILTROS) {
             if (resultCode == Common.RESULTADO_OK) {
-                filtroUsar = true;
-                listarPorCiudad = data.getBooleanExtra("listarPorCiudad", listarPorCiudad);
-                filtroCi = data.getData().toString();
+                provincia = data.getData().toString();
 
                 productos.clear();
-                SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-                sa.notifyDataSetChanged();
+                if (listaProductosListView != null) {
+                    SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
+                    if (sa != null) {
+                        sa.notifyDataSetChanged();
+                    }
+                }
                 listarProductos();
             }
             else if (resultCode == Common.RESULTADO_CANCELADO) {
+                provincia = "";
                 resetPantalla();
             }
         }
     }
 
     private void resetPantalla() {
-        filtroUsar = false;
-        listarPorCiudad = false;
-
         productos.clear();
-        SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-        sa.notifyDataSetChanged();
+        if (listaProductosListView != null) {
+            SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
+            if (sa != null) {
+                sa.notifyDataSetChanged();
+            }
+        }
         recuperarUsuario();
         listarProductos();
     }
