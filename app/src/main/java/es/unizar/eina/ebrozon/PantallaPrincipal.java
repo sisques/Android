@@ -57,10 +57,9 @@ public class PantallaPrincipal extends AppCompatActivity
 
     private Ventas productos; // Productos y resúmenes
 
-    private String provincia; // Provincia utilizada en la búsqueda; "" = todas las provincias
-
     private Boolean misProductos; // Para ver productos en venta
-
+    private String provincia; // Provincia utilizada en la búsqueda; "" = todas las provincias
+    private String metOrden; // Tipo de ordenación
     private Boolean buscar; // Opción de búsqueda
     private String busqueda; // Palabra a buscar
 
@@ -80,8 +79,9 @@ public class PantallaPrincipal extends AppCompatActivity
 
         productos = new Ventas();
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
-        provincia = ""; // Al principio se listan todos los productos
         misProductos = false;
+        provincia = ""; // Al principio se listan todos los productos
+        metOrden = "Fecha des";
         buscar = false;
         busqueda = null;
 
@@ -213,27 +213,22 @@ public class PantallaPrincipal extends AppCompatActivity
         queue.add(postRequest);
     }
 
-    private void listarProductos() { // TODO: Añadir listado para más de 25 productos
-        if (buscar && busqueda != null && busqueda.length() > 1) {
-            listarProductosBusqueda();
-        }
-        else if (misProductos)
+    private void listarProductos() { // TODO: Añadir listado para más de 25 productos y más filtros
+        if (misProductos) {
             listarProductosUsuario(un);
-        else
-            listarProductosCiudad();
-    }
+        }
+        else {
+            String url = Common.url + "/listarProductos?met=" + metOrden;// + "&id=" + productos.getIdMax(); // TODO: Problemas con id
 
-    private void listarProductosBusqueda() { // TODO: Añadir filtros
-        gestionarPeticionListar(Common.url + "/listarProductos?met=Coincidencias&ets=" + busqueda);
-    }
+            if (buscar && busqueda != null && busqueda.length() > 1) {
+                url += "&ets=" + busqueda;
+            }
+            if (!provincia.equals("")) {
+                url += "&pr=" + provincia;
+            }
 
-    private void listarProductosCiudad() {
-        Integer id = productos.getIdMax();
-
-        if (!provincia.equals(""))
-            gestionarPeticionListar(Common.url + "/listarProductosCiudad?id=" + id + "&ci=" + provincia);
-        else
-            gestionarPeticionListar(Common.url + "/listarPaginaPrincipal?id=" + id);
+            gestionarPeticionListar(url);
+        }
     }
 
     private void listarProductosUsuario(String usuario) {
@@ -328,8 +323,12 @@ public class PantallaPrincipal extends AppCompatActivity
 
                         if (productos.getTamanyo() > numProducto) {
                             productos.anyadirImagen(numProducto, StringToBitMap(response));
-                            SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-                            sa.notifyDataSetChanged();
+                            if (listaProductosListView != null) {
+                                SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
+                                if (sa != null) {
+                                    sa.notifyDataSetChanged();
+                                }
+                            }
                         }
                     }
                 },
@@ -407,8 +406,12 @@ public class PantallaPrincipal extends AppCompatActivity
                 provincia = data.getData().toString();
 
                 productos.clear();
-                SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-                sa.notifyDataSetChanged();
+                if (listaProductosListView != null) {
+                    SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
+                    if (sa != null) {
+                        sa.notifyDataSetChanged();
+                    }
+                }
                 listarProductos();
             }
             else if (resultCode == Common.RESULTADO_CANCELADO) {
@@ -420,8 +423,12 @@ public class PantallaPrincipal extends AppCompatActivity
 
     private void resetPantalla() {
         productos.clear();
-        SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
-        sa.notifyDataSetChanged();
+        if (listaProductosListView != null) {
+            SimpleAdapter sa = (SimpleAdapter) listaProductosListView.getAdapter();
+            if (sa != null) {
+                sa.notifyDataSetChanged();
+            }
+        }
         recuperarUsuario();
         listarProductos();
     }
