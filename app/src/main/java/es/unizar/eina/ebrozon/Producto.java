@@ -39,6 +39,7 @@ public class Producto extends AppCompatActivity {
 
     Switch ProductoSeguir;
     private boolean siguiendo; // Siguiendo producto
+    private Boolean seguimientos; // true: Pantalla de seguimientos; false: Listado de productos normal
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,9 @@ public class Producto extends AppCompatActivity {
         productos = new Ventas();
 
         // Recibe como atributo la posición de la venta
-        posVenta = (Integer) getIntent().getSerializableExtra("Venta");
+        posVenta = getIntent().getIntExtra("Venta", -1);
+        if (posVenta == -1) finish();
+        seguimientos = getIntent().getBooleanExtra("Seguimientos", false);
 
         final SharedPreferences sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         un = sharedpreferences.getString(Common.un, null);
@@ -195,7 +198,13 @@ public class Producto extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        setResult(Common.RESULTADO_NOK, new Intent());
+        if (!siguiendo && seguimientos) {
+            productos.eliminarVenta(posVenta);
+            setResult(Common.RESULTADO_OK, new Intent());
+        }
+        else {
+            setResult(Common.RESULTADO_NOK, new Intent());
+        }
         finish();
     }
 

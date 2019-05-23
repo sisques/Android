@@ -220,6 +220,7 @@ public class PantallaPrincipal extends AppCompatActivity
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 Intent intent = new Intent(PantallaPrincipal.this, Producto.class);
                 intent.putExtra("Venta", position);
+                intent.putExtra("Seguimientos", misSeguimientos);
                 startActivityForResult(intent, ACT_COMPRAR_PRODUCTO);
             }
         });
