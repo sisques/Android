@@ -151,6 +151,44 @@
         <item>Zaragoza</item>
     </string-array>
 
+    <string-array name="ListaOrdenacionFiltros">
+    <item>Más recientes primero</item>
+    <item>Más antiguos primero</item>
+    <item>Más baratos primero</item>
+    <item>Más caros primero</item>
+    <item>Más popular primero</item>
+    <item>Mejor coincidencia primero</item>
+    <item>Mejor valoración primero</item>
+    </string-array>
+
+    <string-array name="ListaCategoriasFiltros">
+    <item>Todas las categorías</item>
+    <item>Motor y accesorios</item>
+    <item>Tv, audio, foto y vídeo</item>
+    <item>Informática y electrónica</item>
+    <item>Cine, libros y música</item>
+    <item>Deporte y ocio</item>
+    <item>Hogar y jardín</item>
+    <item>Electrodomésticos</item>
+    <item>Moda y accesorios</item>
+    <item>Niños y bebés</item>
+    <item>Industria y agricultura</item>
+    <item>Empleo y servicios</item>
+    <item>Otros</item>
+    </string-array>
+
+    <string-array name="ListaTipoFiltros">
+        <item>Todos</item>
+        <item>Sólo ventas</item>
+        <item>Sólo subastas</item>
+    </string-array>
+
+    <string name="TextoOrdenacion">ORDEN</string>
+    <string name="TextoCategoria">CATEGORÍA</string>
+    <string name="TextoTipo">TIPO</string>
+    <string name="TextoPrecioMinimo">PRECIO MÍNIMO</string>
+    <string name="TextoPrecioMaximo">PRECIO MÁXIMO</string>
+
     <!-- Pantalla principal -->
     <string name="title_activity_pantalla_principal">PantallaPrincipal</string>
     <string name="SubirProducto">Subir producto</string>
@@ -227,14 +265,14 @@
 
 
     <string name="cat1">Motor y accesorios</string>
-    <string name="cat2">Tv, audio, foto y video</string>
+    <string name="cat2">Tv, audio, foto y vídeo</string>
     <string name="cat3">Informática y electrónica</string>
     <string name="cat4">Cine, libros y música</string>
     <string name="cat5">Deporte y ocio</string>
     <string name="cat6">Hogar y jardín</string>
     <string name="cat7">Electrodomésticos</string>
     <string name="cat8">Moda y accesorios</string>
-    <string name="cat9">Niños y bebes</string>
+    <string name="cat9">Niños y bebés</string>
     <string name="cat10">Industria y agricultura</string>
     <string name="cat11">Empleo y servicios</string>
     <string name="cat12">Otros</string>
