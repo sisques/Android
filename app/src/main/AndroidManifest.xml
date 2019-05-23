@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Chat"></activity>
+        <activity android:name=".ImagenPantalla"></activity>
+        <activity android:name=".Chat" />
         <activity android:name=".Mensajes" />
         <activity android:name=".Filtros" />
         <activity android:name=".Producto" />
