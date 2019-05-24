@@ -1,15 +1,19 @@
 package es.unizar.eina.ebrozon;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -36,7 +40,6 @@ public class Producto extends AppCompatActivity {
     private String vendedorUn; // vendedor
     private String precio = "";
     private String numProd = ""; // id producto
-
     Switch ProductoSeguir;
     private boolean siguiendo; // Siguiendo producto
     private Boolean seguimientos; // true: Pantalla de seguimientos; false: Listado de productos normal
@@ -47,6 +50,7 @@ public class Producto extends AppCompatActivity {
         setContentView(R.layout.activity_producto);
 
         productos = new Ventas();
+
 
         // Recibe como atributo la posición de la venta
         posVenta = getIntent().getIntExtra("Venta", -1);
@@ -188,6 +192,10 @@ public class Producto extends AppCompatActivity {
 
             // Switch seguir producto
             ProductoSeguir = (Switch) findViewById(R.id.ProductoSeguir);
+            if (vendedorUn.equals(un)) {
+                ProductoSeguir.setVisibility(View.INVISIBLE);
+                ProductoSeguir.setClickable(false);
+            }
             ProductoSeguir.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -210,7 +218,12 @@ public class Producto extends AppCompatActivity {
             oferta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //compra.ofertar( posVenta, Producto.this, precio,  sharedpreferences);
+                    PopupProducto popupProducto = new PopupProducto(Producto.this, numProd, precio, sharedpreferences);
+                    popupProducto.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    popupProducto.show();
+                   //   productos.eliminarVenta(posVenta);
+                   //   setResult(Common.RESULTADO_OK, new Intent());
+                  //    finish();
                 }
             });
         }
@@ -319,4 +332,7 @@ public class Producto extends AppCompatActivity {
         );
         queue.add(postRequest);
     }
+
+
+
 }
