@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -27,6 +29,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
@@ -211,19 +217,57 @@ public class Producto extends AppCompatActivity {
 
 
         Button oferta = findViewById(R.id.ProductoBotonOferta);
+        String subasta = "0";
+        String pinicial = "";
+        String pactual = "";
+        String finSubasta="";
+        try{
+            subasta = productos.getEsSubastaVenta(posVenta);
+            pinicial = productos.getPrecioInicial(posVenta);
+            pactual = productos.getPujaActual(posVenta);
+            String aux = productos.getFechaFin(posVenta);
+            String anyo = aux.substring(0,4);
+            String mes = aux.substring(5,7);
+            String dia = aux.substring(8,10);
+            String hora = String.valueOf(Integer.valueOf(aux.substring(11,13)) + 1);
+            String minuto = aux.substring(14,16);
+            finSubasta = dia + "/" + mes + "/" + anyo + " " + hora + ":" +minuto;
+
+
+        } catch(Exception ignored){}
+
+
+        TextView productoFecha = findViewById(R.id.ProductoFecha);
+
+
+        if(subasta.equals("0")){
+            productoFecha.setVisibility(View.GONE);
+        } else {
+            productoFecha.setText(finSubasta);
+            ProductoPrecio.setText(pactual);
+            productoFecha.setTextSize(15);
+            ProductoPrecio.setTextSize(15);
+            ProductoCiudad.setTextSize(15);
+            oferta.setText(R.string.puja);
+        }
+
+
         if (vendedorUn.equals(un)) {
             oferta.setVisibility(View.INVISIBLE);
             oferta.setClickable(false);
         } else{
+            final String finalSubasta = subasta;
+            final String finalPinicial = pinicial;
+            final String finalPactual = pactual;
             oferta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PopupProducto popupProducto = new PopupProducto(Producto.this, numProd, precio, sharedpreferences);
+                    PopupProducto popupProducto = new PopupProducto(Producto.this, numProd, precio,
+                            sharedpreferences, finalSubasta, finalPinicial, finalPactual);
                     popupProducto.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     popupProducto.show();
-                   //   productos.eliminarVenta(posVenta);
-                   //   setResult(Common.RESULTADO_OK, new Intent());
-                  //    finish();
+                    //  setResult(Common.RESULTADO_OK, new Intent());
+                    //  finish();
                 }
             });
         }
