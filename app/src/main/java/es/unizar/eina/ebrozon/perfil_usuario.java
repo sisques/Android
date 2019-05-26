@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,14 +25,17 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 
+import es.unizar.eina.ebrozon.lib.AdaptadorOpinion;
 import es.unizar.eina.ebrozon.lib.Common;
 
 public class perfil_usuario extends AppCompatActivity {
@@ -40,9 +44,12 @@ public class perfil_usuario extends AppCompatActivity {
     String urlNumeroVentasUusuario ="https://protected-caverns-60859.herokuapp.com/numeroVentasUsuario";
     String urlNumeroComprasUsuario ="https://protected-caverns-60859.herokuapp.com/numeroComprasUsuario";
     String urlLoadArchivoTemp ="http://protected-caverns-60859.herokuapp.com/loadArchivoTemp";
+    String urlListaOpinionesRecibidas ="http://protected-caverns-60859.herokuapp.com/loadArchivoTemp/listaOpinionesRecibidas";
+    String urlListaOpinionesHechas ="http://protected-caverns-60859.herokuapp.com/loadArchivoTemp/listaOpinionesHechas";
     String user_idPic = "";
 
     SharedPreferences sharedpreferences;
+    String currentUser;
 
     private TextView username;
     private TextView user_fullname;
@@ -66,6 +73,8 @@ public class perfil_usuario extends AppCompatActivity {
 
     private ImageView foto;
 
+    private ListView opinionsList;
+
     @Override
     public void onBackPressed() {
         finish();
@@ -75,6 +84,7 @@ public class perfil_usuario extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_usuario);
+        currentUser = sharedpreferences.getString(Common.un, null);
 
         username = findViewById(R.id.profileUsername);
         user_fullname = findViewById(R.id.profileFullName);
@@ -100,14 +110,14 @@ public class perfil_usuario extends AppCompatActivity {
         foto = findViewById(R.id.profilePic);
 
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
-
         recuperarUsuario();
+
+        opinionsList = findViewById(R.id.profileOpinionsList);
         recuperarValoracionesUsuarios();
     }
 
     private void recuperarUsuario() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String currentUser = sharedpreferences.getString(Common.un, null);
         String urlPetition1 = urlRecuperarUsuario+"?un="+currentUser;
         String urlPetition2 = urlNumeroComprasUsuario+"?un="+currentUser;
         String urlPetition3 = urlNumeroVentasUusuario+"?un="+currentUser;
@@ -258,12 +268,52 @@ public class perfil_usuario extends AppCompatActivity {
         }
     }
 
+    JSONArray getOpinions (boolean myOpinions) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String urlPetition;
+        if (myOpinions) {
+            urlPetition = urlListaOpinionesHechas+"?un="+currentUser;
+        }
+        else {
+            urlPetition = urlListaOpinionesRecibidas+"?un="+currentUser;
+        }
+        final JSONArray opinions = new JSONArray();
+
+        JsonArrayRequest postRequest = new JsonArrayRequest(urlPetition,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+                        for(int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                opinions.put(jsonObject);
+                            }
+                            catch(Exception e) {
+                                // ...
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.getMessage());
+                    }
+                });
+
+        queue.add(postRequest);
+        return opinions;
+    }
+
     private void recuperarValoracionesUsuarios() {
-        // Falta
+        JSONArray usersOpinions = getOpinions(false);
+        opinionsList.setAdapter(new AdaptadorOpinion(this,usersOpinions));
     }
 
     private void recuperarMisValoraciones() {
-        // Falta
+        JSONArray myOpinions = getOpinions(true);
+        opinionsList.setAdapter(new AdaptadorOpinion(this,myOpinions));
     }
 
     public void editarPerfil(View view) {
@@ -278,13 +328,17 @@ public class perfil_usuario extends AppCompatActivity {
 
     public void mostrarValoracionesUsuarios(View view) {
         verValoracionesUsuarios.setEnabled(false);
+        verMisValoraciones.setEnabled(false);
         recuperarValoracionesUsuarios();
         verValoracionesUsuarios.setEnabled(true);
+        verMisValoraciones.setEnabled(true);
     }
 
     public void mostrarMisValoraciones(View view) {
+        verValoracionesUsuarios.setEnabled(false);
         verMisValoraciones.setEnabled(false);
         recuperarMisValoraciones();
+        verValoracionesUsuarios.setEnabled(true);
         verMisValoraciones.setEnabled(true);
     }
 

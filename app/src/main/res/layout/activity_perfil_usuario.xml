@@ -357,7 +357,7 @@
         <TableRow
             android:id="@+id/profileOpinionsButtons"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/profileOpinionButton1"
@@ -391,9 +391,16 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/profileOpinionList"
+            android:id="@+id/profileOpinionsContent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+            <ListView
+                android:id="@+id/profileOpinionsList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </TableRow>
+
     </TableLayout>
 
 </android.support.constraint.ConstraintLayout>
