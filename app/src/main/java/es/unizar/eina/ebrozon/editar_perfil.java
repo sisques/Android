@@ -109,7 +109,8 @@ public class editar_perfil extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case 0:
-                                    editar_perfil.super.onBackPressed();
+                                    startActivity(new Intent(editar_perfil.this, perfil_usuario.class));
+                                    finish();
                                     break;
                                 case 1:
                                     dialog.dismiss();
@@ -352,6 +353,8 @@ public class editar_perfil extends AppCompatActivity {
                         // response
                         Log.d("Response", response);
                         Toast.makeText(editar_perfil.this, "Cambios aplicados", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(editar_perfil.this, perfil_usuario.class));
+                        finish();
                     }
                 },
                 new Response.ErrorListener() {
@@ -446,8 +449,6 @@ public class editar_perfil extends AppCompatActivity {
             )) {
                 actualizarUsuario(newPic, user_fullname.getText().toString().trim(), user_province.getText().toString().trim(), user_city.getText().toString().trim());
             }
-            startActivity(new Intent(editar_perfil.this, perfil_usuario.class));
-            finish();
         }
         confirm.setEnabled(true);
     }

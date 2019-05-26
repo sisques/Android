@@ -1,5 +1,6 @@
 package es.unizar.eina.ebrozon;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +34,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 
@@ -44,8 +47,8 @@ public class perfil_usuario extends AppCompatActivity {
     String urlNumeroVentasUusuario ="https://protected-caverns-60859.herokuapp.com/numeroVentasUsuario";
     String urlNumeroComprasUsuario ="https://protected-caverns-60859.herokuapp.com/numeroComprasUsuario";
     String urlLoadArchivoTemp ="http://protected-caverns-60859.herokuapp.com/loadArchivoTemp";
-    String urlListaOpinionesRecibidas ="http://protected-caverns-60859.herokuapp.com/loadArchivoTemp/listaOpinionesRecibidas";
-    String urlListaOpinionesHechas ="http://protected-caverns-60859.herokuapp.com/loadArchivoTemp/listaOpinionesHechas";
+    String urlListaOpinionesRecibidas ="http://protected-caverns-60859.herokuapp.com/listarOpinionesRecibidas";
+    String urlListaOpinionesHechas ="http://protected-caverns-60859.herokuapp.com/listarOpinionesHechas";
     String user_idPic = "";
 
     SharedPreferences sharedpreferences;
@@ -74,6 +77,8 @@ public class perfil_usuario extends AppCompatActivity {
     private ImageView foto;
 
     private ListView opinionsList;
+    private JSONArray jsonUsersOpinions = new JSONArray();
+    private JSONArray jsonMyOpinions = new JSONArray();
 
     @Override
     public void onBackPressed() {
@@ -84,7 +89,6 @@ public class perfil_usuario extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_usuario);
-        currentUser = sharedpreferences.getString(Common.un, null);
 
         username = findViewById(R.id.profileUsername);
         user_fullname = findViewById(R.id.profileFullName);
@@ -109,11 +113,22 @@ public class perfil_usuario extends AppCompatActivity {
 
         foto = findViewById(R.id.profilePic);
 
+        // Si se ha especificado un nombre, carga el perfil de otro usuario.
+        Intent intentAnterior = getIntent();
+        String name = intentAnterior.getStringExtra("username");
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+        currentUser = sharedpreferences.getString(Common.un, null);
+        if (!(name == null || currentUser.equals(name))) {
+            currentUser = name;
+            editar.setVisibility(View.GONE);
+            TextView titulo = findViewById(R.id.profileTitle);
+            titulo.setText("Perfil de "+currentUser);
+            verMisValoraciones.setText("VALORACIONES HECHAS");
+        }
         recuperarUsuario();
 
         opinionsList = findViewById(R.id.profileOpinionsList);
-        recuperarValoracionesUsuarios();
+        getOpinions(false);
     }
 
     private void recuperarUsuario() {
@@ -204,8 +219,6 @@ public class perfil_usuario extends AppCompatActivity {
                 }
         );
         queue.add(postRequest3);
-
-
     }
 
     private void dibujarEstrellas(double rating) {
@@ -268,7 +281,7 @@ public class perfil_usuario extends AppCompatActivity {
         }
     }
 
-    JSONArray getOpinions (boolean myOpinions) {
+    void getOpinions (final boolean myOpinions) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String urlPetition;
         if (myOpinions) {
@@ -277,43 +290,45 @@ public class perfil_usuario extends AppCompatActivity {
         else {
             urlPetition = urlListaOpinionesRecibidas+"?un="+currentUser;
         }
-        final JSONArray opinions = new JSONArray();
 
-        JsonArrayRequest postRequest = new JsonArrayRequest(urlPetition,
-                new Response.Listener<JSONArray>() {
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>()
+                {
                     @Override
-                    public void onResponse(JSONArray jsonArray) {
-                        for(int i = 0; i < jsonArray.length(); i++) {
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
                             try {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                opinions.put(jsonObject);
+                                if (myOpinions) {
+                                    jsonMyOpinions = new JSONArray(response);
+                                    if (jsonMyOpinions.length() != 0) {
+                                        opinionsList.setAdapter(new AdaptadorOpinion(perfil_usuario.this, jsonMyOpinions, true));
+                                    }
+                                }
+                                else {
+                                    jsonUsersOpinions = new JSONArray(response);
+                                    if (jsonUsersOpinions.length() != 0) {
+                                        opinionsList.setAdapter(new AdaptadorOpinion(perfil_usuario.this, jsonUsersOpinions, false));
+                                    }
+                                }
+                                verValoracionesUsuarios.setEnabled(true);
+                                verMisValoraciones.setEnabled(true);
                             }
-                            catch(Exception e) {
+                            catch (Exception e) {
                                 // ...
                             }
-                        }
                     }
                 },
-                new Response.ErrorListener() {
+                new Response.ErrorListener()
+                {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        Log.d("Error.Response", error.getMessage());
+                        Log.d("Error.Response",error.getMessage());
                     }
-                });
-
+                }
+        );
         queue.add(postRequest);
-        return opinions;
-    }
-
-    private void recuperarValoracionesUsuarios() {
-        JSONArray usersOpinions = getOpinions(false);
-        opinionsList.setAdapter(new AdaptadorOpinion(this,usersOpinions));
-    }
-
-    private void recuperarMisValoraciones() {
-        JSONArray myOpinions = getOpinions(true);
-        opinionsList.setAdapter(new AdaptadorOpinion(this,myOpinions));
     }
 
     public void editarPerfil(View view) {
@@ -329,17 +344,17 @@ public class perfil_usuario extends AppCompatActivity {
     public void mostrarValoracionesUsuarios(View view) {
         verValoracionesUsuarios.setEnabled(false);
         verMisValoraciones.setEnabled(false);
-        recuperarValoracionesUsuarios();
-        verValoracionesUsuarios.setEnabled(true);
-        verMisValoraciones.setEnabled(true);
+        verValoracionesUsuarios.setTextColor(Color.parseColor("#225896"));
+        verMisValoraciones.setTextColor(Color.parseColor("#2A6EBC"));
+        getOpinions(false);
     }
 
     public void mostrarMisValoraciones(View view) {
         verValoracionesUsuarios.setEnabled(false);
         verMisValoraciones.setEnabled(false);
-        recuperarMisValoraciones();
-        verValoracionesUsuarios.setEnabled(true);
-        verMisValoraciones.setEnabled(true);
+        verValoracionesUsuarios.setTextColor(Color.parseColor("#2A6EBC"));
+        verMisValoraciones.setTextColor(Color.parseColor("#225896"));
+        getOpinions(true);
     }
 
     public Bitmap StringToBitMap(String encodedString) {
