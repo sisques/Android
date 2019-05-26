@@ -24,6 +24,10 @@
                 android:id="@+id/nav_mensajes"
                 android:icon="@drawable/ic_menu_mensajes"
                 android:title="@string/Mensajes" />
+            <item
+                android:id="@+id/nav_ofertas_y_pujas"
+                android:icon="@drawable/ic_euro"
+                android:title="@string/ofertas_y_pujas_recibidas" />
         </menu>
     </item>
 
