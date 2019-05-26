@@ -61,6 +61,7 @@ public class PantallaPrincipal extends AppCompatActivity
     private Ventas productos; // Productos y resúmenes
 
     private Boolean misProductos; // Para ver productos en venta
+    private Boolean misSeguimientos; // Para ver productos seguidos
 
     // Listar productos
     private String provincia; // Provincia utilizada; "" = todas las provincias
@@ -94,6 +95,7 @@ public class PantallaPrincipal extends AppCompatActivity
         productos = new Ventas();
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         misProductos = false;
+        misSeguimientos = false;
 
         inicializarListView();
 
@@ -218,6 +220,7 @@ public class PantallaPrincipal extends AppCompatActivity
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 Intent intent = new Intent(PantallaPrincipal.this, Producto.class);
                 intent.putExtra("Venta", position);
+                intent.putExtra("Seguimientos", misSeguimientos);
                 startActivityForResult(intent, ACT_COMPRAR_PRODUCTO);
             }
         });
@@ -290,6 +293,17 @@ public class PantallaPrincipal extends AppCompatActivity
 
         if (misProductos) {
             url += "/listarProductosUsuario?un=" + un;
+
+            if (productos.getIdUltimo() > 0) {
+                url += "&id=" + productos.getIdUltimo();
+            }
+            else {
+                url += "&id=99999";
+            }
+        }
+
+        else if (misSeguimientos) {
+            url += "/listarVentasSeguidasUsuario?un=" + un;
 
             if (productos.getIdUltimo() > 0) {
                 url += "&id=" + productos.getIdUltimo();
@@ -459,10 +473,17 @@ public class PantallaPrincipal extends AppCompatActivity
             menuBusqueda.setVisibility(View.VISIBLE);
             buscar = true;
             misProductos = false;
+            misSeguimientos = false;
             resetPantalla();
         }
         else if (id == R.id.nav_siguiendo) {
-
+            botonFiltros.setVisibility(View.INVISIBLE);
+            botonFiltros.setClickable(false);
+            menuBusqueda.setVisibility(View.INVISIBLE);
+            buscar = false;
+            misProductos = false;
+            misSeguimientos = true;
+            resetPantalla();
         }
         else if (id == R.id.nav_en_venta) {
             botonFiltros.setVisibility(View.INVISIBLE);
@@ -470,6 +491,7 @@ public class PantallaPrincipal extends AppCompatActivity
             menuBusqueda.setVisibility(View.INVISIBLE);
             buscar = false;
             misProductos = true;
+            misSeguimientos = false;
             resetPantalla();
         }
         else if (id == R.id.nav_mensajes) {

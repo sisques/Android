@@ -1,16 +1,38 @@
 package es.unizar.eina.ebrozon;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
@@ -23,7 +45,10 @@ public class Producto extends AppCompatActivity {
     private String un; // usuario
     private String vendedorUn; // vendedor
     private String precio = "";
-    private String numProd = "";
+    private String numProd = ""; // id producto
+    Switch ProductoSeguir;
+    private boolean siguiendo; // Siguiendo producto
+    private Boolean seguimientos; // true: Pantalla de seguimientos; false: Listado de productos normal
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +57,11 @@ public class Producto extends AppCompatActivity {
 
         productos = new Ventas();
 
+
         // Recibe como atributo la posición de la venta
-        posVenta = (Integer) getIntent().getSerializableExtra("Venta");
+        posVenta = getIntent().getIntExtra("Venta", -1);
+        if (posVenta == -1) finish();
+        seguimientos = getIntent().getBooleanExtra("Seguimientos", false);
 
         final SharedPreferences sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         un = sharedpreferences.getString(Common.un, null);
@@ -95,13 +123,49 @@ public class Producto extends AppCompatActivity {
             productoBorrar.setClickable(false);
         }
 
+        // Imágenes
+        final ImageView[] ProductoImagenes = {
+                (ImageView) findViewById(R.id.ProductoImagen),
+                (ImageView) findViewById(R.id.ProductoImagen2),
+                (ImageView) findViewById(R.id.ProductoImagen3),
+                (ImageView) findViewById(R.id.ProductoImagen4)
+        };
 
-        // TODO: Preparar para varias imagenes
-        ImageView ProductoImagen = (ImageView) findViewById(R.id.ProductoImagen);
         Bitmap result = productos.getImagenResumen(posVenta);
         if (result != null) {
-            ProductoImagen.setImageBitmap(result);
+            ProductoImagenes[0].setImageBitmap(result);
         }
+
+        ProductoImagenes[1].setVisibility(View.INVISIBLE);
+        ProductoImagenes[2].setVisibility(View.INVISIBLE);
+        ProductoImagenes[3].setVisibility(View.INVISIBLE);
+
+        // Imágenes en grande
+        try {
+            final JSONArray imagenes = productos.getIdImagenesVenta(posVenta);
+            for (int i=0; i<imagenes.length(); i++) {
+                try {
+                    if (i > 0) {
+                        Common.establecerFotoServidor(getApplicationContext(), imagenes.getString(i),
+                                ProductoImagenes[i]);
+                        ProductoImagenes[i].setVisibility(View.VISIBLE);
+                    }
+
+                    final int finalI = i;
+                    ProductoImagenes[i].setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                Intent intent = new Intent(Producto.this, ImagenPantalla.class);
+                                intent.putExtra("Imagen", imagenes.getString(finalI));
+                                startActivity(intent);
+                            } catch (Exception ignored) { }
+                        }
+                    });
+                } catch (Exception ignored) { }
+            }
+        } catch (Exception ignored) { }
+
 
         TextView ProductoNombre = (TextView) findViewById(R.id.ProductoNombre);
         try {
@@ -129,22 +193,81 @@ public class Producto extends AppCompatActivity {
             ProductoCategoria.setText(productos.getCategoriaVenta(posVenta));
         } catch (Exception ignored) { }
 
-
-
         try {
             numProd = productos.getIdVenta(posVenta);
+
+            // Switch seguir producto
+            ProductoSeguir = (Switch) findViewById(R.id.ProductoSeguir);
+            if (vendedorUn.equals(un)) {
+                ProductoSeguir.setVisibility(View.INVISIBLE);
+                ProductoSeguir.setClickable(false);
+            }
+            ProductoSeguir.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (siguiendo != isChecked) {
+                        siguiendo = isChecked;
+                        seguirProducto();
+                    }
+                }
+            });
+
+            comprobarSiguiendoProducto();
         } catch (Exception ignored) { }
 
 
         Button oferta = findViewById(R.id.ProductoBotonOferta);
+        String subasta = "0";
+        String pinicial = "";
+        String pactual = "";
+        String finSubasta="";
+        try{
+            subasta = productos.getEsSubastaVenta(posVenta);
+            pinicial = productos.getPrecioInicial(posVenta);
+            pactual = productos.getPujaActual(posVenta);
+            String aux = productos.getFechaFin(posVenta);
+            String anyo = aux.substring(0,4);
+            String mes = aux.substring(5,7);
+            String dia = aux.substring(8,10);
+            String hora = String.valueOf(Integer.valueOf(aux.substring(11,13)) + 1);
+            String minuto = aux.substring(14,16);
+            finSubasta = dia + "/" + mes + "/" + anyo + " " + hora + ":" +minuto;
+
+
+        } catch(Exception ignored){}
+
+
+        TextView productoFecha = findViewById(R.id.ProductoFecha);
+
+
+        if(subasta.equals("0")){
+            productoFecha.setVisibility(View.GONE);
+        } else {
+            productoFecha.setText(finSubasta);
+            ProductoPrecio.setText(pactual);
+            productoFecha.setTextSize(15);
+            ProductoPrecio.setTextSize(15);
+            ProductoCiudad.setTextSize(15);
+            oferta.setText(R.string.puja);
+        }
+
+
         if (vendedorUn.equals(un)) {
             oferta.setVisibility(View.INVISIBLE);
             oferta.setClickable(false);
         } else{
+            final String finalSubasta = subasta;
+            final String finalPinicial = pinicial;
+            final String finalPactual = pactual;
             oferta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //compra.ofertar( posVenta, Producto.this, precio,  sharedpreferences);
+                    PopupProducto popupProducto = new PopupProducto(Producto.this, numProd, precio,
+                            sharedpreferences, finalSubasta, finalPinicial, finalPactual);
+                    popupProducto.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    popupProducto.show();
+                    //  setResult(Common.RESULTADO_OK, new Intent());
+                    //  finish();
                 }
             });
         }
@@ -164,13 +287,96 @@ public class Producto extends AppCompatActivity {
                 }
             });
         }
-
-
     }
 
     @Override
     public void onBackPressed() {
-        setResult(Common.RESULTADO_NOK, new Intent());
+        if (!siguiendo && seguimientos) {
+            productos.eliminarVenta(posVenta);
+            setResult(Common.RESULTADO_OK, new Intent());
+        }
+        else {
+            setResult(Common.RESULTADO_NOK, new Intent());
+        }
         finish();
     }
+
+    private void comprobarSiguiendoProducto() {
+        siguiendo = false;
+        String url = Common.url + "/listarSeguimientosUsuario?un=" + un;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        if (!response.equals("[]")) {
+                            try {
+                                JSONArray seguimiento = new JSONArray(response);
+                                for (int i=0; i<seguimiento.length(); i++) {
+                                    if (seguimiento.getJSONObject(i).getString("nventa").equals(numProd)) {
+                                        siguiendo = true;
+                                        break;
+                                    }
+                                }
+                            } catch (Exception ignored) { }
+                        }
+
+                        ProductoSeguir.setChecked(siguiendo);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error al recibir la lista de productos");
+                        ProductoSeguir.setChecked(siguiendo);
+                    }
+                }
+        );
+        queue.add(postRequest);
+    }
+
+    private void seguirProducto() {
+        String url = Common.url;
+        if (siguiendo) {
+            url += "/seguirProducto";
+        }
+        else {
+            url += "/dejarSeguirProducto";
+        }
+        url += "?un=" + un + "&nv=" + numProd;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error al recibir la lista de productos");
+                        siguiendo = !siguiendo;
+                        ProductoSeguir.setChecked(siguiendo);
+                    }
+                }
+        );
+        queue.add(postRequest);
+    }
+
+
+
 }
