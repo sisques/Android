@@ -225,6 +225,16 @@
     <string name="Perfil">Perfil</string>
     <string name="Ajustes">Ajustes</string>
     <string name="Cerrar_sesion">Cerrar sesión</string>
+
+
+    <string name="ofertas_y_pujas_recibidas">Ofertas recibidas y compras pendientes</string>
+    <string name="tipo_oferta_recibida">Oferta</string>
+    <string name="tipo_compra_pendiente">Compra pendiente</string>
+    <string name="boton_aceptar_oferta">Aceptar oferta</string>
+    <string name="boton_rechazar_oferta">Rechazar oferta</string>
+    <string name="boton_aceptar_pago">Confirmar pago</string>
+    <string name="boton_rechazar_pago">Reabrir venta</string>
+
     <string name="precio_de_venta_instantanea">Precio de venta instantanea</string>
     <string name="precio_inicial_del_producto">PRECIO INICIAL DEL PRODUCTO</string>
     <string name="fecha_limite_subasta">FECHA LIMITE SUBASTA</string>
@@ -280,7 +290,13 @@
 
 
     <string name="oferta">Proponer un precio</string>
+    <string name="puja">Realizar puja</string>
     <string name="compra">Comprar a precio completo</string>
+    <string name="precioOfrecido">Ofrecer esta cantidad</string>
+    <string name="pujaOfrecida">Pujar esta cantidad</string>
+    <string name="elVendedorPide">El vendedor pide X </string>
+    <string name="cancelar">Cancelar</string>
+
 
     <string-array name="ListaCiudades">
         <item>Almería</item>

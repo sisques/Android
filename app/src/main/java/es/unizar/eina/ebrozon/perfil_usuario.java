@@ -1,5 +1,6 @@
 package es.unizar.eina.ebrozon;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,14 +27,18 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 
+import es.unizar.eina.ebrozon.lib.AdaptadorOpinion;
 import es.unizar.eina.ebrozon.lib.Common;
 
 public class perfil_usuario extends AppCompatActivity {
@@ -40,9 +47,12 @@ public class perfil_usuario extends AppCompatActivity {
     String urlNumeroVentasUusuario ="https://protected-caverns-60859.herokuapp.com/numeroVentasUsuario";
     String urlNumeroComprasUsuario ="https://protected-caverns-60859.herokuapp.com/numeroComprasUsuario";
     String urlLoadArchivoTemp ="http://protected-caverns-60859.herokuapp.com/loadArchivoTemp";
+    String urlListaOpinionesRecibidas ="http://protected-caverns-60859.herokuapp.com/listarOpinionesRecibidas";
+    String urlListaOpinionesHechas ="http://protected-caverns-60859.herokuapp.com/listarOpinionesHechas";
     String user_idPic = "";
 
     SharedPreferences sharedpreferences;
+    String currentUser;
 
     private TextView username;
     private TextView user_fullname;
@@ -65,6 +75,10 @@ public class perfil_usuario extends AppCompatActivity {
     private ImageView star5;
 
     private ImageView foto;
+
+    private ListView opinionsList;
+    private JSONArray jsonUsersOpinions = new JSONArray();
+    private JSONArray jsonMyOpinions = new JSONArray();
 
     @Override
     public void onBackPressed() {
@@ -99,15 +113,26 @@ public class perfil_usuario extends AppCompatActivity {
 
         foto = findViewById(R.id.profilePic);
 
+        // Si se ha especificado un nombre, carga el perfil de otro usuario.
+        Intent intentAnterior = getIntent();
+        String name = intentAnterior.getStringExtra("username");
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
-
+        currentUser = sharedpreferences.getString(Common.un, null);
+        if (!(name == null || currentUser.equals(name))) {
+            currentUser = name;
+            editar.setVisibility(View.GONE);
+            TextView titulo = findViewById(R.id.profileTitle);
+            titulo.setText("Perfil de "+currentUser);
+            verMisValoraciones.setText("VALORACIONES HECHAS");
+        }
         recuperarUsuario();
-        recuperarValoracionesUsuarios();
+
+        opinionsList = findViewById(R.id.profileOpinionsList);
+        getOpinions(false);
     }
 
     private void recuperarUsuario() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String currentUser = sharedpreferences.getString(Common.un, null);
         String urlPetition1 = urlRecuperarUsuario+"?un="+currentUser;
         String urlPetition2 = urlNumeroComprasUsuario+"?un="+currentUser;
         String urlPetition3 = urlNumeroVentasUusuario+"?un="+currentUser;
@@ -194,8 +219,6 @@ public class perfil_usuario extends AppCompatActivity {
                 }
         );
         queue.add(postRequest3);
-
-
     }
 
     private void dibujarEstrellas(double rating) {
@@ -258,12 +281,54 @@ public class perfil_usuario extends AppCompatActivity {
         }
     }
 
-    private void recuperarValoracionesUsuarios() {
-        // Falta
-    }
+    void getOpinions (final boolean myOpinions) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String urlPetition;
+        if (myOpinions) {
+            urlPetition = urlListaOpinionesHechas+"?un="+currentUser;
+        }
+        else {
+            urlPetition = urlListaOpinionesRecibidas+"?un="+currentUser;
+        }
 
-    private void recuperarMisValoraciones() {
-        // Falta
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                            try {
+                                if (myOpinions) {
+                                    jsonMyOpinions = new JSONArray(response);
+                                    if (jsonMyOpinions.length() != 0) {
+                                        opinionsList.setAdapter(new AdaptadorOpinion(perfil_usuario.this, jsonMyOpinions, true));
+                                    }
+                                }
+                                else {
+                                    jsonUsersOpinions = new JSONArray(response);
+                                    if (jsonUsersOpinions.length() != 0) {
+                                        opinionsList.setAdapter(new AdaptadorOpinion(perfil_usuario.this, jsonUsersOpinions, false));
+                                    }
+                                }
+                                verValoracionesUsuarios.setEnabled(true);
+                                verMisValoraciones.setEnabled(true);
+                            }
+                            catch (Exception e) {
+                                // ...
+                            }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response",error.getMessage());
+                    }
+                }
+        );
+        queue.add(postRequest);
     }
 
     public void editarPerfil(View view) {
@@ -278,14 +343,18 @@ public class perfil_usuario extends AppCompatActivity {
 
     public void mostrarValoracionesUsuarios(View view) {
         verValoracionesUsuarios.setEnabled(false);
-        recuperarValoracionesUsuarios();
-        verValoracionesUsuarios.setEnabled(true);
+        verMisValoraciones.setEnabled(false);
+        verValoracionesUsuarios.setTextColor(Color.parseColor("#225896"));
+        verMisValoraciones.setTextColor(Color.parseColor("#2A6EBC"));
+        getOpinions(false);
     }
 
     public void mostrarMisValoraciones(View view) {
+        verValoracionesUsuarios.setEnabled(false);
         verMisValoraciones.setEnabled(false);
-        recuperarMisValoraciones();
-        verMisValoraciones.setEnabled(true);
+        verValoracionesUsuarios.setTextColor(Color.parseColor("#2A6EBC"));
+        verMisValoraciones.setTextColor(Color.parseColor("#225896"));
+        getOpinions(true);
     }
 
     public Bitmap StringToBitMap(String encodedString) {

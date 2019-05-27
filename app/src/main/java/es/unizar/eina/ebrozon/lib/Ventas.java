@@ -22,7 +22,8 @@ public class Ventas {
     private final static String[] atributos =
             {"identificador", "usuario", "fechainicio", "fechaventa", "producto", "descripcion",
              "precio", "preciofinal", "comprador", "fechapago", "tienearchivo", "activa",
-             "es_subasta", "ciudad", "provincia", "user", "archivos", "categoria"};
+             "es_subasta", "ciudad", "provincia", "user", "archivos", "categoria", "precioinicial",
+             "pujaactual", "fechafin"};
 
     public void clear() {
         ventas.clear();
@@ -136,7 +137,11 @@ public class Ventas {
     }
 
     public String getNombreVenta(int index) throws JSONException {
-        return ventas.get(index).get(atributos[4]).toString();
+        String nombre = ventas.get(index).get(atributos[4]).toString();
+        if (nombre.length() > 25){
+            nombre = nombre.substring(0, 22) + "...";
+        }
+        return nombre;
     }
 
     public String getDescripcionVenta(int index) throws JSONException {
@@ -193,5 +198,16 @@ public class Ventas {
 
     public String getCategoriaVenta(int index) throws JSONException {
         return ventas.get(index).get(atributos[17]).toString();
+    }
+
+    public String getPrecioInicial(int index) throws JSONException {
+        return ventas.get(index).get(atributos[18]).toString();
+    }
+
+    public String getPujaActual(int index) throws JSONException {
+        return ventas.get(index).get(atributos[19]).toString();
+    }
+    public String getFechaFin(int index) throws JSONException {
+        return ventas.get(index).get(atributos[20]).toString();
     }
 }

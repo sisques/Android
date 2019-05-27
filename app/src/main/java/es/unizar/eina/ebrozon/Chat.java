@@ -195,7 +195,7 @@ public class Chat extends AppCompatActivity {
                             mTimer.schedule((new TimerTask() {
                                 public void run() {
                                     listarChat(false, false, false);
-                                } }), 0, 1000);
+                                } }), 0, 500);
                         }
                     }
             );
@@ -245,7 +245,7 @@ public class Chat extends AppCompatActivity {
                             mTimer.schedule((new TimerTask() {
                                 public void run() {
                                     listarChat(false, false, false);
-                                } }), 0, 1000);
+                                } }), 0, 500);
                         }
                     }
                 },
@@ -261,7 +261,7 @@ public class Chat extends AppCompatActivity {
                             mTimer.schedule((new TimerTask() {
                                 public void run() {
                                     listarChat(false, false, false);
-                                } }), 0, 1000);
+                                } }), 0, 500);
                         }
                     }
                 }

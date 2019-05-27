@@ -134,6 +134,7 @@
         android:textStyle="bold" />
 
     <LinearLayout
+        android:id="@+id/Layout_compra"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -153,6 +154,20 @@
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/ProductoFecha"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/calendar"
+            android:drawablePadding="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/Ejemplo"
+            android:textAlignment="textEnd"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/ProductoCiudad"

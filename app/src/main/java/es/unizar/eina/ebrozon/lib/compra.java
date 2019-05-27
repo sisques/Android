@@ -80,8 +80,7 @@ public  class compra {
                 params.put("nv",  idProducto);
 
                 params.put("can", precio);
-                //params.put("nv",  "44");
-                //params.put("can", "30");
+
 
 
 
@@ -98,6 +97,66 @@ public  class compra {
         queue.add(postRequest);
     }
 
+
+    public static void  pujar(final String idProducto, final Context context,final String precio,  final SharedPreferences sharedpreferences) {
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+
+        String urlPetition = Common.url + "/realizarPuja";
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        response = response.replace("{", "").replace("}", "").replace("\"", "");
+                        String estado = response.split(":")[0];
+                        String msg = response.replace(estado + ":", "");
+                        gestionPeticion(estado, msg, context);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        String msg = "Error desconocido";
+                        if (error.getMessage() != null) {
+                            msg = error.getMessage();
+                        }
+                        Log.d("Error.Response", msg);
+                        Toast.makeText(context, "Error al subir: " + msg, Toast.LENGTH_LONG).show();
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+
+                String uName = sharedpreferences.getString(Common.un, "usuario");
+
+
+                params.put("un", uName);
+                params.put("id",  idProducto);
+
+                params.put("ct", precio);
+
+
+
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return super.getHeaders();
+            }
+
+
+        };
+        queue.add(postRequest);
+    }
 
 
 }

@@ -497,6 +497,9 @@ public class PantallaPrincipal extends AppCompatActivity
         else if (id == R.id.nav_mensajes) {
             startActivity(new Intent(PantallaPrincipal.this, Mensajes.class));
         }
+        else if (id == R.id.nav_ofertas_y_pujas) {
+            startActivity(new Intent(PantallaPrincipal.this, ofertasYCompras.class));
+        }
         else if (id == R.id.nav_perfil) {
             startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
         }
