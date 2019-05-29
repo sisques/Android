@@ -227,7 +227,13 @@
     <string name="Cerrar_sesion">Cerrar sesión</string>
 
 
-    <string name="ofertas_y_pujas_recibidas">Ofertas recibidas y compras pendientes</string>
+    <string name="ofertas_y_pujas_enviadas">Ofertas y compras enviadas</string>
+    <string name="boton_cancelar_oferta">Cancelar oferta</string>
+    <string name="boton_cancelar_compra">Cancelar compra</string>
+    <string name="boton_iniciar_chat">Chatear con el vendedor</string>
+
+
+    <string name="ofertas_y_pujas_recibidas">Ofertas y compras recibidas</string>
     <string name="tipo_oferta_recibida">Oferta</string>
     <string name="tipo_compra_pendiente">Compra pendiente</string>
     <string name="boton_aceptar_oferta">Aceptar oferta</string>

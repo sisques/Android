@@ -23,6 +23,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".ofertasYCompras"></activity>
+        <activity android:name=".ofertasYComprasEnviadas"></activity>
         <activity android:name=".ImagenPantalla" />
         <activity android:name=".Chat" />
         <activity android:name=".Mensajes" />

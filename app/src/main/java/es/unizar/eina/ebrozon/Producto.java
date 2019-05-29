@@ -73,6 +73,14 @@ public class Producto extends AppCompatActivity {
         try {
             vendedorUn = productos.getUsuarioVenta(posVenta);
             vendedorUsuario.setText(vendedorUn);
+            vendedorUsuario.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Producto.this, perfil_usuario.class);
+                    intent.putExtra("username", vendedorUn);
+                    startActivity(intent);
+                }
+            } );
         } catch (Exception ignored) { }
 
         ImageView vendedorImagen = (ImageView) findViewById(R.id.ProductoVendedorImagen);
@@ -290,9 +298,7 @@ public class Producto extends AppCompatActivity {
 
 
                     Intent intent = new Intent(Producto.this, Chat.class);
-                    try {
-                        mensajeExterno("Hola, estoy interesado en tu producto " + finalNombreProd, un, vendedorUn);
-                    } catch (Exception ignored) {}
+                    mensajeExterno("Hola, estoy interesado en tu producto " + finalNombreProd+".", un, vendedorUn);
                     intent.putExtra("usuarioComunica", vendedorUn);
                     startActivity(intent);
                 }

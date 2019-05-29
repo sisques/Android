@@ -97,10 +97,12 @@ public class PantallaPrincipal extends AppCompatActivity
 
         productos = new Ventas();
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+
         String uName = sharedpreferences.getString(Common.un, "usuario");
         gps g = new gps(this, uName );
         g.init();
         g.startRepeatingTask();
+
         misProductos = false;
         misSeguimientos = false;
 
@@ -506,6 +508,9 @@ public class PantallaPrincipal extends AppCompatActivity
         }
         else if (id == R.id.nav_ofertas_y_pujas) {
             startActivity(new Intent(PantallaPrincipal.this, ofertasYCompras.class));
+        }
+        else if (id == R.id.nav_ofertas_y_pujas_enviadas) {
+            startActivity(new Intent(PantallaPrincipal.this, ofertasYComprasEnviadas.class));
         }
         else if (id == R.id.nav_perfil) {
             startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
