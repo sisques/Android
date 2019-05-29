@@ -322,8 +322,8 @@ public class Registro extends AppCompatActivity {
             editor.commit();
 
 
-
-            startActivity(new Intent(Registro.this, PantallaPrincipal.class));
+            Toast.makeText(getApplicationContext(),"Se ha enviado un correo a la cuenta introducida, activa tu cuenta e inicia sesión.", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(Registro.this, InicioSesion.class));
             finish();
         }
         else if (estado.equals("E")){
