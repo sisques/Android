@@ -70,6 +70,7 @@ public class PantallaPrincipal extends AppCompatActivity
     private Integer tipoVenta; // Tipo de venta; -1 = todos los tipos
     private Double precioMinimo; // Precio mínimo; -1.0 = sin precio mínimo
     private Double precioMaximo; // Precio máximo; -1.0 = sin precio máximo
+    private Double distMaxima; // Distancia máxima: -1.0 = sin distancia máxima
 
     private Integer ultimoIdListado;
 
@@ -105,6 +106,7 @@ public class PantallaPrincipal extends AppCompatActivity
         tipoVenta = -1;
         precioMinimo = -1.0;
         precioMaximo = -1.0;
+        distMaxima = -1.0;
 
         ultimoIdListado = 0;
 
@@ -123,6 +125,7 @@ public class PantallaPrincipal extends AppCompatActivity
                 i.putExtra("TipoVentaFiltros", tipoVenta);
                 i.putExtra("PrecioMinimoFiltros", precioMinimo);
                 i.putExtra("PrecioMaximoFiltros", precioMaximo);
+                i.putExtra("DistMaximaFiltros", distMaxima);
                 startActivityForResult(i, ACT_FILTROS);
             }
         });
@@ -335,6 +338,19 @@ public class PantallaPrincipal extends AppCompatActivity
                 case 6 :
                     url += "Valoraciones";
                     break;
+                case 7 :
+                    url += "Distancia&lat=";
+                    url += 0.0; //TODO: Sustituir 0.0 por latitud
+                    url += "&lon=";
+                    url += 0.0; //TODO: Sustituir 0.0 por longitud
+
+                    if (distMaxima > 0.0) {
+                        url += "&maxd=" + distMaxima;
+                    }
+                    else {
+                        url += "&maxd=999999.0";
+                    }
+                    break;
                 default :
                     url += "Fecha des";
                     break;
@@ -529,6 +545,15 @@ public class PantallaPrincipal extends AppCompatActivity
                 tipoVenta = data.getIntExtra("TipoVentaFiltros", -1);
                 precioMinimo = data.getDoubleExtra("PrecioMinimoFiltros", -1.0);
                 precioMaximo = data.getDoubleExtra("PrecioMaximoFiltros", -1.0);
+                distMaxima = data.getDoubleExtra("DistMaximaFiltros", -1.0);
+
+                // TODO: Activar gps solo si
+                /*if (orden.equals(7)) {
+                    activarGps();
+                }
+                else {
+                    desactivarGps();
+                }*/
 
                 resetPantalla();
             }
@@ -539,6 +564,7 @@ public class PantallaPrincipal extends AppCompatActivity
                 tipoVenta = -1;
                 precioMinimo = -1.0;
                 precioMaximo = -1.0;
+                distMaxima = -1.0;
 
                 resetPantalla();
             }
