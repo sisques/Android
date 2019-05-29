@@ -30,10 +30,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="35dp">
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/FiltroProvinciaTexto"
@@ -41,7 +42,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/TextoProvincia"
             android:text="@string/TextoProvincia"
-            android:textColor="#2a6ebc"/>
+            android:textColor="#2a6ebc" />
 
         <Spinner
             android:id="@+id/FiltroListaProvincias"
@@ -56,10 +57,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="35dp">
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/FiltroOrdenacionTexto"
@@ -67,7 +68,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/TextoOrdenacion"
             android:text="@string/TextoOrdenacion"
-            android:textColor="#2a6ebc"/>
+            android:textColor="#2a6ebc" />
 
         <Spinner
             android:id="@+id/FiltroListaOrdenacion"
@@ -82,10 +83,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="35dp">
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/FiltroCategoriasTexto"
@@ -93,7 +94,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/TextoCategoria"
             android:text="@string/TextoCategoria"
-            android:textColor="#2a6ebc"/>
+            android:textColor="#2a6ebc" />
 
         <Spinner
             android:id="@+id/FiltroListaCategoria"
@@ -151,7 +152,7 @@
             android:id="@+id/FiltroPrecioMinimo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="34dp"
             android:layout_weight="1"
             android:autofillHints=""
             android:drawableEnd="@drawable/ic_euro"
@@ -164,10 +165,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="35dp">
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/FiltroPrecioMaximoTexto"
@@ -175,13 +176,13 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/TextoPrecioMaximo"
             android:text="@string/TextoPrecioMaximo"
-            android:textColor="#2a6ebc"/>
+            android:textColor="#2a6ebc" />
 
         <EditText
             android:id="@+id/FiltroPrecioMaximo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="30dp"
             android:layout_weight="1"
             android:autofillHints=""
             android:drawableEnd="@drawable/ic_euro"
@@ -191,12 +192,43 @@
             tools:targetApi="o" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/FiltroDistanciaLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/FiltroDistanciaMaximaTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/TextoDistanciaMaxima"
+            android:text="@string/TextoDistanciaMaxima"
+            android:textColor="#2a6ebc" />
+
+        <EditText
+            android:id="@+id/FiltroDistanciaMaxima"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:drawableEnd="@drawable/ic_km"
+            android:ems="10"
+            android:hint="@string/TextoDistanciaMaxima"
+            android:inputType="numberDecimal"
+            tools:targetApi="o" />
+    </LinearLayout>
+
     <Space
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="4"
         android:focusable="true"
-        android:focusableInTouchMode="true"/>
+        android:focusableInTouchMode="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
