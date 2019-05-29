@@ -144,6 +144,12 @@ public class Ventas {
         return nombre;
     }
 
+
+    public String getNombreVentaLargo(int index) throws JSONException {
+        return  ventas.get(index).get(atributos[4]).toString();
+
+    }
+
     public String getDescripcionVenta(int index) throws JSONException {
         return ventas.get(index).get(atributos[5]).toString();
     }

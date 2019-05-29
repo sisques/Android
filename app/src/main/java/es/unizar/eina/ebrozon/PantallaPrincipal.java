@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
+import es.unizar.eina.ebrozon.lib.gps;
 
 import static es.unizar.eina.ebrozon.lib.Common.StringToBitMap;
 
@@ -92,8 +93,14 @@ public class PantallaPrincipal extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         productos = new Ventas();
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+        String uName = sharedpreferences.getString(Common.un, "usuario");
+        gps g = new gps(this, uName );
+        g.init();
+        g.startRepeatingTask();
         misProductos = false;
         misSeguimientos = false;
 

@@ -297,6 +297,10 @@
     <string name="elVendedorPide">El vendedor pide X </string>
     <string name="cancelar">Cancelar</string>
 
+    <string name="iniciarChat">¿Quieres iniciar un chat con </string>
+    <string name="dialogSi">Si</string>
+    <string name="dialogNo">No</string>
+
 
     <string-array name="ListaCiudades">
         <item>Almería</item>
