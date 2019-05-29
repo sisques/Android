@@ -43,9 +43,9 @@ public class InicioSesion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_sesion);
-        userName = findViewById(R.id.UserName_login);
+        userName = findViewById(R.id.userName );
         password = findViewById(R.id.Password_login);
-        iniciar = findViewById(R.id.LogIn);
+        iniciar = findViewById(R.id.enviarMail );
         olvidar = findViewById(R.id.forgotPassword_login);
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
@@ -181,6 +181,14 @@ public class InicioSesion extends AppCompatActivity {
 
         iniciar.setEnabled(false);
         doPost(uname, passwd) ;
+
+
+
+    }
+
+
+    public void aiMamaMeOlvideLaContra(View view){
+        startActivity(new Intent(InicioSesion.this, aiMamaMeOlvideLaContra.class));
 
 
 
