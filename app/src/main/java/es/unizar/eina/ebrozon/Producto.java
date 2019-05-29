@@ -204,6 +204,27 @@ public class Producto extends AppCompatActivity {
             ProductoCategoria.setText(productos.getCategoriaVenta(posVenta));
         } catch (Exception ignored) { }
 
+        TextView ProductoTipo = (TextView) findViewById(R.id.ProductoTipo);
+        try {
+            if (productos.getEsSubastaVenta(posVenta).equals("0")) {
+                ProductoTipo.setText("VENTA");
+            }
+            else {
+                ProductoTipo.setText("SUBASTA");
+            }
+        } catch (Exception ignored) { }
+
+        TextView ProductoDistancia = (TextView) findViewById(R.id.ProductoDistancia);
+        try {
+            if (productos.getDistanciaVenta(posVenta).equals("999999.0")) {
+                ProductoDistancia.setVisibility(View.INVISIBLE);
+            }
+            else {
+                ProductoDistancia.setText(productos.getDistanciaVenta(posVenta));
+            }
+        } catch (Exception ignored) { }
+
+
         try {
             numProd = productos.getIdVenta(posVenta);
 

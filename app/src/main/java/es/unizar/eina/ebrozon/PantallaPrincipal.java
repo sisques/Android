@@ -349,9 +349,9 @@ public class PantallaPrincipal extends AppCompatActivity
                     break;
                 case 7 :
                     url += "Distancia&lat=";
-                    url += 0.0; //TODO: Sustituir 0.0 por latitud
+                    url += sharedpreferences.getString(Common.lat, "0.0");
                     url += "&lon=";
-                    url += 0.0; //TODO: Sustituir 0.0 por longitud
+                    url += sharedpreferences.getString(Common.lon, "0.0");
 
                     if (distMaxima > 0.0) {
                         url += "&maxd=" + distMaxima;
@@ -558,14 +558,6 @@ public class PantallaPrincipal extends AppCompatActivity
                 precioMinimo = data.getDoubleExtra("PrecioMinimoFiltros", -1.0);
                 precioMaximo = data.getDoubleExtra("PrecioMaximoFiltros", -1.0);
                 distMaxima = data.getDoubleExtra("DistMaximaFiltros", -1.0);
-
-                // TODO: Activar gps solo si
-                /*if (orden.equals(7)) {
-                    activarGps();
-                }
-                else {
-                    desactivarGps();
-                }*/
 
                 resetPantalla();
             }
