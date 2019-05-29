@@ -203,6 +203,7 @@ public class Chat extends AppCompatActivity {
         }
     }
 
+
     // Si all, lista todos los mensajes, si no, añade a la lista los mensajes desde idMax
     // Si lastMsg, se posiciona al final del chat, si no, donde estaba
     // Si initTimer, inicia el timer

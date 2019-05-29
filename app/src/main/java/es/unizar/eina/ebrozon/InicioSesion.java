@@ -99,8 +99,7 @@ public class InicioSesion extends AppCompatActivity {
             editor.putString(Common.cp, cp);
             editor.putString(Common.ci, ci);
             editor.putString(Common.pr, pr);
-            editor.putString(Common.lat, lat);
-            editor.putString(Common.lon, lon);
+
             editor.putString(Common.im, im);
             editor.commit();
 

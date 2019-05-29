@@ -160,11 +160,11 @@ public class adaptadorOfertasCompras extends BaseAdapter {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         String e = "Error desconocido";
-                        if (error != null){
+                        if (error.getMessage() != null){
                             e = error.getMessage();
                         }
                         Log.d("Error.Response", e);
-                        String response = error.getMessage().replace("{", "").replace("}", "").replace("\"", "");
+                        String response = e.replace("{", "").replace("}", "").replace("\"", "");
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado + ":", "");
                         gestionRespuesta(estado, msg);
@@ -200,11 +200,11 @@ public class adaptadorOfertasCompras extends BaseAdapter {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         String e = "Error desconocido";
-                        if (error != null){
+                        if (error.getMessage() != null){
                             e = error.getMessage();
                         }
                         Log.d("Error.Response", e);
-                        String response = error.getMessage().replace("{", "").replace("}", "").replace("\"", "");
+                        String response = e.replace("{", "").replace("}", "").replace("\"", "");
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado + ":", "");
                         gestionRespuesta(estado, msg);
