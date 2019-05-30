@@ -109,7 +109,9 @@ public class Producto extends AppCompatActivity {
             productoEditar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // TODO: editar producto
+                    Intent intent = new Intent(Producto.this, SubirProd1_3.class);
+                    intent.putExtra("posVenta", posVenta);
+                    startActivity(intent);
                 }
             });
         }
@@ -203,6 +205,27 @@ public class Producto extends AppCompatActivity {
         try {
             ProductoCategoria.setText(productos.getCategoriaVenta(posVenta));
         } catch (Exception ignored) { }
+
+        TextView ProductoTipo = (TextView) findViewById(R.id.ProductoTipo);
+        try {
+            if (productos.getEsSubastaVenta(posVenta).equals("0")) {
+                ProductoTipo.setText("VENTA");
+            }
+            else {
+                ProductoTipo.setText("SUBASTA");
+            }
+        } catch (Exception ignored) { }
+
+        TextView ProductoDistancia = (TextView) findViewById(R.id.ProductoDistancia);
+        try {
+            if (productos.getDistanciaVenta(posVenta).equals("999999.0")) {
+                ProductoDistancia.setVisibility(View.INVISIBLE);
+            }
+            else {
+                ProductoDistancia.setText(productos.getDistanciaVenta(posVenta));
+            }
+        } catch (Exception ignored) { }
+
 
         try {
             numProd = productos.getIdVenta(posVenta);

@@ -22,6 +22,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +31,7 @@ import java.util.Map;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.ResultIPC;
+import es.unizar.eina.ebrozon.lib.Ventas;
 
 public class SubirProd3_3 extends AppCompatActivity {
 
@@ -62,6 +65,8 @@ public class SubirProd3_3 extends AppCompatActivity {
                                 "Otros"
                             };
     int categoria = 0;
+
+    private Integer posVenta; // Posición de la venta
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,8 +181,81 @@ public class SubirProd3_3 extends AppCompatActivity {
             }
         });
 
+        // Editar
+        posVenta = getIntent().getIntExtra("posVenta", -1);
+        try {
+            if (posVenta != -1) {
+                Ventas productos = new Ventas();
+
+                Intent intentAnterior = getIntent();
+                String producto = intentAnterior.getStringExtra("nombreProducto");
+                String descripcion = intentAnterior.getStringExtra("descripcionProducto");
+                int sync = getIntent().getIntExtra("bigdata:synccode", -1);
+                final List<Object> datos = ResultIPC.get().getLargeData(sync);
+
+                Bitmap imagen1_bm = ( Bitmap )datos.get(0);
+                Bitmap imagen2_bm = ( Bitmap )datos.get(1);
+                Bitmap imagen3_bm = ( Bitmap )datos.get(2);
+                Bitmap imagen4_bm = ( Bitmap )datos.get(3);
+
+                String precio = intentAnterior.getStringExtra("precioProducto");
+                Long fechaLimite = intentAnterior.getLongExtra("fechaLimite",0);
+                String precioInicial = intentAnterior.getStringExtra("precioInicial");
+
+                ProgressDialog dialog = ProgressDialog.show(SubirProd3_3.this, "",
+                        "Subiendo...", true);
 
 
+                String url = Common.url;
+                if (productos.getEsSubastaVenta(posVenta).equals("0")) {
+                    url += "/actualizarVenta?id=";
+                } else {
+                    url += "/actualizarSubasta?pin=" + precioInicial + "&end=" + fechaLimite + "&id=";
+                }
+                url += productos.getIdVenta(posVenta) + "&prod=" + producto + "&desc=" + descripcion
+                        + "&pre=" + precio;
+
+                JSONArray imagenes = productos.getIdImagenesVenta(posVenta);
+
+                if (imagen1_bm != null) {
+                    url += "&arc1=" + BitMapToString(imagen1_bm); // TODO: problema
+                }
+                if (imagen2_bm != null) {
+                    url += "&arc2=" + BitMapToString(imagen2_bm);
+                }
+                if (imagen3_bm != null) {
+                    url += "&arc3=" + BitMapToString(imagen3_bm);
+                }
+                if (imagen4_bm != null) {
+                    url += "&arc4=" + BitMapToString(imagen4_bm);
+                }
+
+                RequestQueue queue = Volley.newRequestQueue(this);
+
+                StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                // response
+                                Log.d("Response", response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // error
+                                Log.d("Error.Response", "Error al recibir la lista de productos");
+                            }
+                        }
+                );
+                queue.add(postRequest);
+
+                volverPrincipal(dialog);
+            }
+        }
+        catch (Exception e) {
+            pasoAnterior();
+        }
     }
 
     private void elegirCategoria(int cat){

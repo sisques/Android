@@ -23,7 +23,7 @@ public class Ventas {
             {"identificador", "usuario", "fechainicio", "fechaventa", "producto", "descripcion",
              "precio", "preciofinal", "comprador", "fechapago", "tienearchivo", "activa",
              "es_subasta", "ciudad", "provincia", "user", "archivos", "categoria", "precioinicial",
-             "pujaactual", "fechafin"};
+             "pujaactual", "fechafin", "distancia"};
 
     public void clear() {
         ventas.clear();
@@ -213,7 +213,12 @@ public class Ventas {
     public String getPujaActual(int index) throws JSONException {
         return ventas.get(index).get(atributos[19]).toString();
     }
+
     public String getFechaFin(int index) throws JSONException {
         return ventas.get(index).get(atributos[20]).toString();
+    }
+
+    public String getDistanciaVenta(int index) throws JSONException {
+        return ventas.get(index).get(atributos[21]).toString();
     }
 }
