@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import es.unizar.eina.ebrozon.lib.Common;
+import es.unizar.eina.ebrozon.lib.Ventas;
 
 public class SubirProd2_3 extends AppCompatActivity {
     private final int ACT_SIGUIENTE = 999;
@@ -57,6 +58,8 @@ public class SubirProd2_3 extends AppCompatActivity {
 
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog.OnTimeSetListener timeSetListener;
+
+    private Integer posVenta; // Posición de la venta
 
 
     @Override
@@ -189,10 +192,50 @@ public class SubirProd2_3 extends AppCompatActivity {
             }
         });
 
+        // Editar
+        posVenta = getIntent().getIntExtra("posVenta", -1);
+        if (posVenta != -1) {
+            Ventas productos = new Ventas();
 
+            // Precio
+            try {
+                precioProducto.setText(productos.getPrecioVenta(posVenta));
+            } catch (Exception ignored) {}
 
+            // Es venta o subasta
+            try {
+                if (!productos.getEsSubastaVenta(posVenta).equals("0")) { // Subasta
+                    esSubasta.setChecked(true);
+                    cambiar(true);
+                    subasta = true;
 
+                    // Precio inicial
+                    try {
+                        precioInicial.setText(productos.getPrecioInicial(posVenta));
+                    } catch (Exception ignored) {}
 
+                    // Hora
+                    try {
+                        String _aux = productos.getFechaFin(posVenta);
+                        String _anyo = _aux.substring(0,4);
+                        String _mes = _aux.substring(5,7);
+                        String _dia = _aux.substring(8,10);
+                        String _hora = String.valueOf(Integer.valueOf(_aux.substring(11,13)) + 1);
+                        String _minuto = _aux.substring(14,16);
+
+                        fechaSet = true;
+                        fecha.setText(_dia + "/" + _mes + "/" + _anyo);
+
+                        horaSet = true;
+                        hora.setText(_hora + ":" + _minuto);
+                    } catch (Exception ignored) {}
+                }
+                esSubasta.setClickable(false);
+                esSubasta.setFocusable(false);
+            } catch (Exception ignored) {}
+
+            siguiente.setEnabled(true);
+        }
     }
 
     private TextWatcher uploadProductTextWatcher = new TextWatcher() {
@@ -258,6 +301,10 @@ public class SubirProd2_3 extends AppCompatActivity {
             if (fechaLimite != null){ f = fechaLimite.getTime();}
 
             intent.putExtra("fechaLimite", f);
+
+            if (posVenta != -1) {
+                intent.putExtra("posVenta", posVenta);
+            }
 
             startActivityForResult(intent, ACT_SIGUIENTE);
         }

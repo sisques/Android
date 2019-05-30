@@ -109,7 +109,9 @@ public class Producto extends AppCompatActivity {
             productoEditar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // TODO: editar producto
+                    Intent intent = new Intent(Producto.this, SubirProd1_3.class);
+                    intent.putExtra("posVenta", posVenta);
+                    startActivity(intent);
                 }
             });
         }

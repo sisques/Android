@@ -23,6 +23,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +34,7 @@ import java.util.List;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.ResultIPC;
+import es.unizar.eina.ebrozon.lib.Ventas;
 
 
 public class SubirProd1_3 extends AppCompatActivity {
@@ -68,6 +71,8 @@ public class SubirProd1_3 extends AppCompatActivity {
     String IMAGE_DIRECTORY = "/Ebrozon_app";
     List<Object> datos = new ArrayList<Object>();
 
+    private Integer posVenta; // Posición de la venta
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,43 @@ public class SubirProd1_3 extends AppCompatActivity {
 
         siguiente.setEnabled(false);
         anterior.setEnabled(true);
+
+        // Editar
+        posVenta = getIntent().getIntExtra("posVenta", -1);
+        if (posVenta != -1) {
+            Ventas productos = new Ventas();
+
+            // Imágenes
+            final ImageView[] ProductoImagenes = {
+                    foto1, foto2, foto3, foto4
+            };
+
+            imagen1_bm = productos.getImagenResumen(posVenta);
+
+            try {
+                final JSONArray imagenes = productos.getIdImagenesVenta(posVenta);
+                for (int i=0; i<imagenes.length(); i++) {
+                    try {
+                        Common.establecerFotoServidor(getApplicationContext(), imagenes.getString(i),
+                                ProductoImagenes[i]);
+                    } catch (Exception ignored) {}
+                }
+            } catch (Exception ignored) {}
+
+            // Nombre
+            try {
+                nombreProducto.setText(productos.getNombreVenta(posVenta));
+            } catch (Exception ignored) {}
+
+            // Descripción
+            try {
+                descripcionProducto.setText(productos.getDescripcionVenta(posVenta));
+            } catch (Exception ignored) {}
+
+            siguiente.setEnabled(true);
+            prodNameCheckLength = true;
+            prodDescCheckLength = true;
+        }
 
         siguiente.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +226,9 @@ public class SubirProd1_3 extends AppCompatActivity {
             int sync = ResultIPC.get().setLargeData(datos);
             intent.putExtra("bigdata:synccode", sync);
 
+            if (posVenta != -1) {
+                intent.putExtra("posVenta", posVenta);
+            }
             startActivityForResult(intent, ACT_SIGUIENTE);
         }
     }
