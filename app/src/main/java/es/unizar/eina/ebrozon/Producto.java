@@ -126,6 +126,8 @@ public class Producto extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     borrarProducto();
+                    setResult(Common.RESULTADO_OK, new Intent());
+                    finish();
                 }
             });
         }
@@ -300,8 +302,7 @@ public class Producto extends AppCompatActivity {
                             sharedpreferences, finalSubasta, finalPinicial, finalPactual);
                     popupProducto.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     popupProducto.show();
-                    //  setResult(Common.RESULTADO_OK, new Intent());
-                    //  finish();
+
                 }
             });
         }
