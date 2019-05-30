@@ -76,6 +76,14 @@ public class Chat extends AppCompatActivity {
 
         TextView nombreUsuarioComunica = (TextView) findViewById(R.id.chatUsuario);
         nombreUsuarioComunica.setText(usuarioComunica);
+        nombreUsuarioComunica.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent( Chat.this, perfil_usuario.class);
+                intent.putExtra("username", usuarioComunica);
+                Chat.this.startActivity(intent);
+            }
+        } );
 
         // Enviar mensajes
         final EditText mensaje = (EditText) findViewById(R.id.chatEscribir);

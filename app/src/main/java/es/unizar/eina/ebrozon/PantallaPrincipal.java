@@ -100,9 +100,9 @@ public class PantallaPrincipal extends AppCompatActivity
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
         String uName = sharedpreferences.getString(Common.un, "usuario");
-        gps g = new gps(this, uName );
+        gps g = new gps(this, this);
         g.init();
-        g.startRepeatingTask();
+
 
         misProductos = false;
         misSeguimientos = false;
