@@ -49,10 +49,10 @@ public class SubirProd1_3 extends AppCompatActivity {
     Button siguiente;
     Button anterior;
 
-    Bitmap imagen1_bm;
-    Bitmap imagen2_bm;
-    Bitmap imagen3_bm;
-    Bitmap imagen4_bm;
+    Bitmap imagen1_bm = null;
+    Bitmap imagen2_bm = null;
+    Bitmap imagen3_bm = null;
+    Bitmap imagen4_bm = null;
 
     Bitmap placeholder;
 
@@ -109,6 +109,7 @@ public class SubirProd1_3 extends AppCompatActivity {
                 final JSONArray imagenes = productos.getIdImagenesVenta(posVenta);
                 for (int i=0; i<imagenes.length(); i++) {
                     try {
+                        ProductoImagenes[i].setDrawingCacheEnabled(true);
                         Common.establecerFotoServidor(getApplicationContext(), imagenes.getString(i),
                                 ProductoImagenes[i]);
                     } catch (Exception ignored) {}
@@ -219,10 +220,34 @@ public class SubirProd1_3 extends AppCompatActivity {
             intent.putExtra("descripcionProducto", descripcion);
 
 
-            datos.add( imagen1_bm );
-            datos.add( imagen2_bm );
-            datos.add( imagen3_bm );
-            datos.add( imagen4_bm );
+            if (imagen1_bm == null) {
+                datos.add(foto1.getDrawingCache());
+            }
+            else {
+                datos.add( imagen1_bm );
+            }
+
+            if (imagen2_bm == null) {
+                datos.add(foto2.getDrawingCache());
+            }
+            else {
+                datos.add( imagen2_bm );
+            }
+
+            if (imagen3_bm == null) {
+                datos.add(foto3.getDrawingCache());
+            }
+            else {
+                datos.add( imagen3_bm );
+            }
+
+            if (imagen4_bm == null) {
+                datos.add(foto4.getDrawingCache());
+            }
+            else {
+                datos.add( imagen4_bm );
+            }
+
             int sync = ResultIPC.get().setLargeData(datos);
             intent.putExtra("bigdata:synccode", sync);
 
