@@ -408,4 +408,35 @@
 
     </TableLayout>
 
+    <Button
+        android:id="@+id/profileChat"
+        style="@style/AppTheme.RoundedCornerMaterialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/BotonChat"
+        android:onClick="iniciarChat"
+        android:text="@string/BotonChat"
+        app:layout_constraintEnd_toStartOf="@+id/profileReport"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/profileTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/BotonChat" />
+
+    <Button
+        android:id="@+id/profileReport"
+        style="@style/AppTheme.RoundedCornerMaterialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/BotonInformar"
+        android:onClick="reportar"
+        android:text="@string/BotonInformar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/BotonInformar" />
+
 </android.support.constraint.ConstraintLayout>

@@ -181,12 +181,27 @@
         app:layout_constraintTop_toBottomOf="@+id/editSettingsTitle">
 
         <Button
+            android:id="@+id/editUpdateLocation"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="actualizarVentas"
+            android:text="@string/ActualizarPosicion"
+            tools:text="@string/ActualizarPosicion" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <Button
             android:id="@+id/editPassword"
-            style="@style/Widget.AppCompat.Button.Colored"
+            style="@style/AppTheme.RoundedCornerMaterialButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorPrimary"
+            android:onClick="cambiarContraseña"
             android:text="@string/CambiarContraseña" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
