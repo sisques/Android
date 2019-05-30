@@ -21,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import es.unizar.eina.ebrozon.R;
+import es.unizar.eina.ebrozon.ValorarUusuario;
 import es.unizar.eina.ebrozon.perfil_usuario;
 
 public class adaptadorOfertasCompras extends BaseAdapter {
@@ -77,6 +78,7 @@ public class adaptadorOfertasCompras extends BaseAdapter {
         no.setText(datos[i][6]);
         final String id = datos[i][7];
         final String a = datos[i][1];
+        final String us = datos[i][3];
 
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +89,10 @@ public class adaptadorOfertasCompras extends BaseAdapter {
                 }else{
                     confirmarPagoVenta(id);
                 }
+                Intent intent = new Intent(contexto, ValorarUusuario.class);
+                intent.putExtra("username",us);
+                intent.putExtra("mode","opinion");
+                contexto.startActivity(intent);
             }
         });
 
