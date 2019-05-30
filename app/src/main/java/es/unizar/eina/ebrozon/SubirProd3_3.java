@@ -34,8 +34,6 @@ import es.unizar.eina.ebrozon.lib.ResultIPC;
 import es.unizar.eina.ebrozon.lib.Ventas;
 
 public class SubirProd3_3 extends AppCompatActivity {
-
-
     Button siguiente;
     Button anterior;
     ImageButton motor;
@@ -66,6 +64,7 @@ public class SubirProd3_3 extends AppCompatActivity {
                             };
     int categoria = 0;
 
+    Ventas productos = new Ventas();
     private Integer posVenta; // Posición de la venta
 
     @Override
@@ -181,77 +180,114 @@ public class SubirProd3_3 extends AppCompatActivity {
             }
         });
 
-        // Editar
         posVenta = getIntent().getIntExtra("posVenta", -1);
+        if (posVenta != -1) {
+            try {
+                for (int i = 0; i < categorias.length; i++) {
+                    if (categorias[i].equals(productos.getCategoriaVenta(posVenta))) {
+                        elegirCategoria(i+1);
+                    }
+                }
+            } catch (Exception ignored) { }
+        }
+    }
+
+    private void editar() {
+        // Editar
         try {
-            if (posVenta != -1) {
-                Ventas productos = new Ventas();
+            final Intent intentAnterior = getIntent();
+            int sync = getIntent().getIntExtra("bigdata:synccode", -1);
+            List<Object> datos = ResultIPC.get().getLargeData(sync);
 
-                Intent intentAnterior = getIntent();
-                String producto = intentAnterior.getStringExtra("nombreProducto");
-                String descripcion = intentAnterior.getStringExtra("descripcionProducto");
-                int sync = getIntent().getIntExtra("bigdata:synccode", -1);
-                final List<Object> datos = ResultIPC.get().getLargeData(sync);
+            final Bitmap imagen1_bm = (Bitmap) datos.get(0);
+            final Bitmap imagen2_bm = (Bitmap) datos.get(1);
+            final Bitmap imagen3_bm = (Bitmap) datos.get(2);
+            final Bitmap imagen4_bm = (Bitmap) datos.get(3);
 
-                Bitmap imagen1_bm = ( Bitmap )datos.get(0);
-                Bitmap imagen2_bm = ( Bitmap )datos.get(1);
-                Bitmap imagen3_bm = ( Bitmap )datos.get(2);
-                Bitmap imagen4_bm = ( Bitmap )datos.get(3);
+            final ProgressDialog dialog = ProgressDialog.show(SubirProd3_3.this, "",
+                    "Guardando cambios...", true);
 
-                String precio = intentAnterior.getStringExtra("precioProducto");
-                Long fechaLimite = intentAnterior.getLongExtra("fechaLimite",0);
-                String precioInicial = intentAnterior.getStringExtra("precioInicial");
+            RequestQueue queue = Volley.newRequestQueue(this);
 
-                ProgressDialog dialog = ProgressDialog.show(SubirProd3_3.this, "",
-                        "Subiendo...", true);
-
-
-                String url = Common.url;
-                if (productos.getEsSubastaVenta(posVenta).equals("0")) {
-                    url += "/actualizarVenta?id=";
-                } else {
-                    url += "/actualizarSubasta?pin=" + precioInicial + "&end=" + fechaLimite + "&id=";
-                }
-                url += productos.getIdVenta(posVenta) + "&prod=" + producto + "&desc=" + descripcion
-                        + "&pre=" + precio;
-
-                JSONArray imagenes = productos.getIdImagenesVenta(posVenta);
-
-                if (imagen1_bm != null) {
-                    url += "&arc1=" + BitMapToString(imagen1_bm); // TODO: problema
-                }
-                if (imagen2_bm != null) {
-                    url += "&arc2=" + BitMapToString(imagen2_bm);
-                }
-                if (imagen3_bm != null) {
-                    url += "&arc3=" + BitMapToString(imagen3_bm);
-                }
-                if (imagen4_bm != null) {
-                    url += "&arc4=" + BitMapToString(imagen4_bm);
-                }
-
-                RequestQueue queue = Volley.newRequestQueue(this);
-
-                StringRequest postRequest = new StringRequest(Request.Method.POST, url,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                // response
-                                Log.d("Response", response);
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // error
-                                Log.d("Error.Response", "Error al recibir la lista de productos");
-                            }
-                        }
-                );
-                queue.add(postRequest);
-
-                volverPrincipal(dialog);
+            String url = Common.url;
+            if (productos.getEsSubastaVenta(posVenta).equals("0")) {
+                url += "/actualizarVenta";
+            } else {
+                url += "/actualizarSubasta";
             }
+
+            StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            // response
+                            Log.d("Response", response);
+                            response = response.replace("{", "").replace("}", "").replace("\"", "");
+                            String estado = response.split(":")[0];
+                            String msg = response.replace(estado + ":", "");
+                            gestionPeticion(estado, msg, dialog);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // error
+                            String msg = "Error desconocido";
+                            if (error.getMessage() != null) {
+                                msg = error.getMessage();
+                            }
+                            Log.d("Error.Response", msg);
+                            Toast.makeText(SubirProd3_3.this, "Error al subir: " + msg, Toast.LENGTH_LONG).show();
+                            volverPrincipal(dialog);
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+
+                    try {
+                        String foto1 = BitMapToString(imagen1_bm);
+                        String foto2 = BitMapToString(imagen2_bm);
+                        String foto3 = BitMapToString(imagen3_bm);
+                        String foto4 = BitMapToString(imagen4_bm);
+
+
+                        params.put("id", productos.getIdVenta(posVenta));
+                        params.put("prod", intentAnterior.getStringExtra("nombreProducto"));
+                        params.put("desc", intentAnterior.getStringExtra("descripcionProducto"));
+                        params.put("pre", intentAnterior.getStringExtra("precioProducto"));
+
+                        params.put("arc1", foto1);
+
+                        if (imagen2_bm != null && !foto2.isEmpty())
+                            params.put("arc2", foto2);
+                        if (imagen3_bm != null && !foto3.isEmpty())
+                            params.put("arc3", foto3);
+                        if (imagen4_bm != null && !foto4.isEmpty())
+                            params.put("arc4", foto4);
+
+                        if (!productos.getEsSubastaVenta(posVenta).equals("0")) {
+                            params.put("pin", intentAnterior.getStringExtra("precioInicial"));
+                            params.put("end", String.valueOf(intentAnterior.getLongExtra("fechaLimite",0)));
+                        }
+
+                        params.put("cat", categorias[categoria-1]);
+                    } catch (Exception ignored) { }
+
+
+                    return params;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    return super.getHeaders();
+                }
+
+
+            };
+            queue.add(postRequest);
+
+            volverPrincipal(dialog);
         }
         catch (Exception e) {
             pasoAnterior();
@@ -341,40 +377,37 @@ public class SubirProd3_3 extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
     private void siguientePaso() {
-
         siguiente.setEnabled(false);
-        Intent intentAnterior = getIntent();
-        String producto = intentAnterior.getStringExtra("nombreProducto");
-        String descripcion = intentAnterior.getStringExtra("descripcionProducto");
-        int sync = getIntent().getIntExtra("bigdata:synccode", -1);
-        final List<Object> datos = ResultIPC.get().getLargeData(sync);
+
+        if (posVenta != -1) {
+            editar();
+        }
+        else {
+            Intent intentAnterior = getIntent();
+            String producto = intentAnterior.getStringExtra("nombreProducto");
+            String descripcion = intentAnterior.getStringExtra("descripcionProducto");
+            int sync = getIntent().getIntExtra("bigdata:synccode", -1);
+            final List<Object> datos = ResultIPC.get().getLargeData(sync);
 
 
-        Bitmap imagen1_bm = ( Bitmap )datos.get(0);
-        Bitmap imagen2_bm = ( Bitmap )datos.get(1);
-        Bitmap imagen3_bm = ( Bitmap )datos.get(2);
-        Bitmap imagen4_bm = ( Bitmap )datos.get(3);
+            Bitmap imagen1_bm = (Bitmap) datos.get(0);
+            Bitmap imagen2_bm = (Bitmap) datos.get(1);
+            Bitmap imagen3_bm = (Bitmap) datos.get(2);
+            Bitmap imagen4_bm = (Bitmap) datos.get(3);
 
-        String precio = intentAnterior.getStringExtra("precioProducto");
-        Boolean esSubasta = intentAnterior.getBooleanExtra("esSubasta", false);
-        Long fechaLimite = intentAnterior.getLongExtra("fechaLimite",0);
-        String precioInicial = intentAnterior.getStringExtra("precioInicial");
-
-
-
-        ProgressDialog dialog = ProgressDialog.show(SubirProd3_3.this, "",
-                "Subiendo...", true);
-
-        subirProducto(producto, descripcion, imagen1_bm, imagen2_bm, imagen3_bm, imagen4_bm,
-                precio, esSubasta, fechaLimite, precioInicial, categoria, dialog);
+            String precio = intentAnterior.getStringExtra("precioProducto");
+            Boolean esSubasta = intentAnterior.getBooleanExtra("esSubasta", false);
+            Long fechaLimite = intentAnterior.getLongExtra("fechaLimite", 0);
+            String precioInicial = intentAnterior.getStringExtra("precioInicial");
 
 
+            ProgressDialog dialog = ProgressDialog.show(SubirProd3_3.this, "",
+                    "Subiendo...", true);
+
+            subirProducto(producto, descripcion, imagen1_bm, imagen2_bm, imagen3_bm, imagen4_bm,
+                    precio, esSubasta, fechaLimite, precioInicial, categoria, dialog);
+        }
     }
 
     private void pasoAnterior() {
@@ -490,7 +523,6 @@ public class SubirProd3_3 extends AppCompatActivity {
         };
         queue.add(postRequest);
     }
-
 
     public String BitMapToString(Bitmap bitmap){
         if(bitmap == null){
