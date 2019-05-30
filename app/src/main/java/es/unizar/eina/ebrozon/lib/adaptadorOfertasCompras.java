@@ -21,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import es.unizar.eina.ebrozon.R;
+import es.unizar.eina.ebrozon.perfil_usuario;
 
 public class adaptadorOfertasCompras extends BaseAdapter {
 
@@ -54,6 +55,15 @@ public class adaptadorOfertasCompras extends BaseAdapter {
         TextView tipo = (TextView) vista.findViewById(R.id.OPTipo);
         TextView importe = (TextView) vista.findViewById(R.id.OPImporte);
         TextView usuario = (TextView) vista.findViewById(R.id.OPUsuario);
+        final String vendedorUn = datos[i][3];
+        usuario.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent( contexto, perfil_usuario.class);
+                intent.putExtra("username", vendedorUn);
+                contexto.startActivity(intent);
+            }
+        } );
         TextView fecha = (TextView) vista.findViewById(R.id.OPFecha);
         Button yes = (Button) vista.findViewById(R.id.OPsi);
         Button no = (Button) vista.findViewById(R.id.OPno);
