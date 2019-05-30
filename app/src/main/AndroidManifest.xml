@@ -9,6 +9,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
     <application
         android:allowBackup="true"
@@ -19,9 +22,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
         <activity android:name=".CambiarContra"></activity>
         <activity android:name=".ValorarUusuario" />
         <activity android:name=".ofertasYCompras" />
+        <activity android:name=".aiMamaMeOlvideLaContra"></activity>
+        <activity android:name=".ofertasYComprasEnviadas" />
         <activity android:name=".ImagenPantalla" />
         <activity android:name=".Chat" />
         <activity android:name=".Mensajes" />

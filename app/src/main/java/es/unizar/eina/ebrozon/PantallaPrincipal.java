@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
+import es.unizar.eina.ebrozon.lib.gps;
 
 import static es.unizar.eina.ebrozon.lib.Common.StringToBitMap;
 
@@ -93,8 +94,16 @@ public class PantallaPrincipal extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         productos = new Ventas();
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+
+        String uName = sharedpreferences.getString(Common.un, "usuario");
+        gps g = new gps(this, this);
+        g.init();
+
+
         misProductos = false;
         misSeguimientos = false;
 
@@ -340,9 +349,9 @@ public class PantallaPrincipal extends AppCompatActivity
                     break;
                 case 7 :
                     url += "Distancia&lat=";
-                    url += 0.0; //TODO: Sustituir 0.0 por latitud
+                    url += sharedpreferences.getString(Common.lat, "0.0");
                     url += "&lon=";
-                    url += 0.0; //TODO: Sustituir 0.0 por longitud
+                    url += sharedpreferences.getString(Common.lon, "0.0");
 
                     if (distMaxima > 0.0) {
                         url += "&maxd=" + distMaxima;
@@ -516,6 +525,9 @@ public class PantallaPrincipal extends AppCompatActivity
         else if (id == R.id.nav_ofertas_y_pujas) {
             startActivity(new Intent(PantallaPrincipal.this, ofertasYCompras.class));
         }
+        else if (id == R.id.nav_ofertas_y_pujas_enviadas) {
+            startActivity(new Intent(PantallaPrincipal.this, ofertasYComprasEnviadas.class));
+        }
         else if (id == R.id.nav_perfil) {
             startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
         }
@@ -547,14 +559,6 @@ public class PantallaPrincipal extends AppCompatActivity
                 precioMaximo = data.getDoubleExtra("PrecioMaximoFiltros", -1.0);
                 distMaxima = data.getDoubleExtra("DistMaximaFiltros", -1.0);
 
-                // TODO: Activar gps solo si
-                /*if (orden.equals(7)) {
-                    activarGps();
-                }
-                else {
-                    desactivarGps();
-                }*/
-
                 resetPantalla();
             }
             else if (resultCode == Common.RESULTADO_CANCELADO) {
@@ -573,6 +577,9 @@ public class PantallaPrincipal extends AppCompatActivity
         else if (requestCode == ACT_COMPRAR_PRODUCTO) {
             if (resultCode == Common.RESULTADO_OK) {
                 simpleAdapter.notifyDataSetChanged();
+            }
+            else if (resultCode == Common.RESULTADO_CANCELADO) {
+                resetPantalla();
             }
         }
 

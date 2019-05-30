@@ -23,6 +23,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +34,7 @@ import java.util.List;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.ResultIPC;
+import es.unizar.eina.ebrozon.lib.Ventas;
 
 
 public class SubirProd1_3 extends AppCompatActivity {
@@ -46,10 +49,10 @@ public class SubirProd1_3 extends AppCompatActivity {
     Button siguiente;
     Button anterior;
 
-    Bitmap imagen1_bm;
-    Bitmap imagen2_bm;
-    Bitmap imagen3_bm;
-    Bitmap imagen4_bm;
+    Bitmap imagen1_bm = null;
+    Bitmap imagen2_bm = null;
+    Bitmap imagen3_bm = null;
+    Bitmap imagen4_bm = null;
 
     Bitmap placeholder;
 
@@ -67,6 +70,8 @@ public class SubirProd1_3 extends AppCompatActivity {
 
     String IMAGE_DIRECTORY = "/Ebrozon_app";
     List<Object> datos = new ArrayList<Object>();
+
+    private Integer posVenta; // Posición de la venta
 
 
     @Override
@@ -87,6 +92,44 @@ public class SubirProd1_3 extends AppCompatActivity {
 
         siguiente.setEnabled(false);
         anterior.setEnabled(true);
+
+        // Editar
+        posVenta = getIntent().getIntExtra("posVenta", -1);
+        if (posVenta != -1) {
+            Ventas productos = new Ventas();
+
+            // Imágenes
+            final ImageView[] ProductoImagenes = {
+                    foto1, foto2, foto3, foto4
+            };
+
+            imagen1_bm = productos.getImagenResumen(posVenta);
+
+            try {
+                final JSONArray imagenes = productos.getIdImagenesVenta(posVenta);
+                for (int i=0; i<imagenes.length(); i++) {
+                    try {
+                        ProductoImagenes[i].setDrawingCacheEnabled(true);
+                        Common.establecerFotoServidor(getApplicationContext(), imagenes.getString(i),
+                                ProductoImagenes[i]);
+                    } catch (Exception ignored) {}
+                }
+            } catch (Exception ignored) {}
+
+            // Nombre
+            try {
+                nombreProducto.setText(productos.getNombreVenta(posVenta));
+            } catch (Exception ignored) {}
+
+            // Descripción
+            try {
+                descripcionProducto.setText(productos.getDescripcionVenta(posVenta));
+            } catch (Exception ignored) {}
+
+            siguiente.setEnabled(true);
+            prodNameCheckLength = true;
+            prodDescCheckLength = true;
+        }
 
         siguiente.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,13 +220,40 @@ public class SubirProd1_3 extends AppCompatActivity {
             intent.putExtra("descripcionProducto", descripcion);
 
 
-            datos.add( imagen1_bm );
-            datos.add( imagen2_bm );
-            datos.add( imagen3_bm );
-            datos.add( imagen4_bm );
+            if (imagen1_bm == null) {
+                datos.add(foto1.getDrawingCache());
+            }
+            else {
+                datos.add( imagen1_bm );
+            }
+
+            if (imagen2_bm == null) {
+                datos.add(foto2.getDrawingCache());
+            }
+            else {
+                datos.add( imagen2_bm );
+            }
+
+            if (imagen3_bm == null) {
+                datos.add(foto3.getDrawingCache());
+            }
+            else {
+                datos.add( imagen3_bm );
+            }
+
+            if (imagen4_bm == null) {
+                datos.add(foto4.getDrawingCache());
+            }
+            else {
+                datos.add( imagen4_bm );
+            }
+
             int sync = ResultIPC.get().setLargeData(datos);
             intent.putExtra("bigdata:synccode", sync);
 
+            if (posVenta != -1) {
+                intent.putExtra("posVenta", posVenta);
+            }
             startActivityForResult(intent, ACT_SIGUIENTE);
         }
     }
