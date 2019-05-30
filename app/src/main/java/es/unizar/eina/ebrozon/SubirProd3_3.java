@@ -258,9 +258,13 @@ public class SubirProd3_3 extends AppCompatActivity {
                         params.put("pre", intentAnterior.getStringExtra("precioProducto"));
 
                         params.put("arc1", foto1);
-                        params.put("arc2", foto2);
-                        params.put("arc3", foto3);
-                        params.put("arc4", foto4);
+
+                        if (imagen2_bm != null && !foto2.isEmpty())
+                            params.put("arc2", foto2);
+                        if (imagen3_bm != null && !foto3.isEmpty())
+                            params.put("arc3", foto3);
+                        if (imagen4_bm != null && !foto4.isEmpty())
+                            params.put("arc4", foto4);
 
                         if (!productos.getEsSubastaVenta(posVenta).equals("0")) {
                             params.put("pin", intentAnterior.getStringExtra("precioInicial"));

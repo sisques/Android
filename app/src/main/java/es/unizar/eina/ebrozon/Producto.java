@@ -111,7 +111,7 @@ public class Producto extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(Producto.this, SubirProd1_3.class);
                     intent.putExtra("posVenta", posVenta);
-                    startActivity(intent);
+                    startActivityForResult(intent, Common.RESULTADO_CANCELADO);
                 }
             });
         }
@@ -126,6 +126,8 @@ public class Producto extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     borrarProducto();
+
+                    productos.eliminarVenta(posVenta);
                     setResult(Common.RESULTADO_OK, new Intent());
                     finish();
                 }
@@ -320,11 +322,13 @@ public class Producto extends AppCompatActivity {
 
                     productos.eliminarVenta(posVenta);
 
-
                     Intent intent = new Intent(Producto.this, Chat.class);
                     mensajeExterno("Hola, estoy interesado en tu producto " + finalNombreProd+".", un, vendedorUn);
                     intent.putExtra("usuarioComunica", vendedorUn);
                     startActivity(intent);
+
+                    setResult(Common.RESULTADO_OK, new Intent());
+                    finish();
                 }
             });
         }
@@ -472,8 +476,11 @@ public class Producto extends AppCompatActivity {
         queue.add(postRequest);
     }
 
-
-
-
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Common.RESULTADO_CANCELADO) {
+            setResult(Common.RESULTADO_CANCELADO, new Intent());
+            finish();
+        }
+    }
 }

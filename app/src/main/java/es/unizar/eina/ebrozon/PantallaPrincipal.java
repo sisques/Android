@@ -578,6 +578,9 @@ public class PantallaPrincipal extends AppCompatActivity
             if (resultCode == Common.RESULTADO_OK) {
                 simpleAdapter.notifyDataSetChanged();
             }
+            else if (resultCode == Common.RESULTADO_CANCELADO) {
+                resetPantalla();
+            }
         }
 
         else if (requestCode == ACT_SUBIR_PRODUCTO) {
