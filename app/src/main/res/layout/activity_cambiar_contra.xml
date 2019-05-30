@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/password"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorFondo"
+    tools:context=".CambiarContra">
+
+    <Button
+        android:id="@+id/passwordSend"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:contentDescription="@string/BotonContra"
+        android:onClick="cambiarcontra"
+        android:text="@string/BotonContra"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/BotonContra" />
+
+    <TextView
+        android:id="@+id/passwordTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/TituloContra"
+        android:text="@string/TituloContra"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/TituloContra" />
+
+    <LinearLayout
+        android:id="@+id/passwordForms"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/passwordOldTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/TituloContraAntigua"
+            android:text="@string/TituloContraAntigua"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            tools:text="@string/TituloContraAntigua" />
+
+        <LinearLayout
+            android:id="@+id/passwordOld"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/passwordOldText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPassword" />
+
+            <ImageButton
+                android:id="@+id/passwordOldButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:background="@null"
+                android:onClick="verContraActual"
+                app:srcCompat="@android:drawable/ic_menu_view" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/passwordNewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/TituloContraNueva"
+            android:text="@string/TituloContraNueva"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            tools:text="@string/TituloContraNueva" />
+
+        <LinearLayout
+            android:id="@+id/passwordNew"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/passwordNewText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPassword" />
+
+            <ImageButton
+                android:id="@+id/passwordNewButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:background="@null"
+                android:onClick="verContraNueva"
+                app:srcCompat="@android:drawable/ic_menu_view" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/passwordConfirmTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/TituloContraConfirmar"
+            android:text="@string/TituloContraConfirmar"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            tools:text="@string/TituloContraConfirmar" />
+
+        <LinearLayout
+            android:id="@+id/passwordConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/passwordConfirmText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPassword" />
+
+            <ImageButton
+                android:id="@+id/passwordConfirmButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:background="@null"
+                android:onClick="verContraConfirmar"
+                app:srcCompat="@android:drawable/ic_menu_view" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

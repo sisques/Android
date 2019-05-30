@@ -19,7 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ofertasYCompras"></activity>
+        <activity android:name=".CambiarContra"></activity>
+        <activity android:name=".ValorarUusuario" />
+        <activity android:name=".ofertasYCompras" />
         <activity android:name=".ImagenPantalla" />
         <activity android:name=".Chat" />
         <activity android:name=".Mensajes" />

@@ -263,6 +263,8 @@
     <string name="CiudadPerfil">CIUDAD</string>
     <string name="VentasRealizadas">Ventas: </string>
     <string name="ComprasRealizadas">Compras: </string>
+    <string name="BotonChat">Chat</string>
+    <string name="BotonInformar">Informar</string>
 
     <string name="BotonValoraciones2">Mis Valoraciones</string>
     <string name="BotonValoraciones1">Valoraciones de usuarios</string>
@@ -271,9 +273,10 @@
     <string name="title_activity_editarperfil">Edita tu perfil</string>
     <string name="TituloEditarPerfil">Edita tu perfil</string>
     <string name="TituloEditarInfo">Información</string>
-    <string name="TituloEditarAjustes">Ajustes de seguridad</string>
+    <string name="TituloEditarAjustes">Ajustes</string>
     <string name="BotonConfirmarEditar">Aplicar cambios</string>
     <string name="EditarFoto">FOTO DE PERFIL</string>
+    <string name="ActualizarPosicion">Actualizar posición ventas</string>
     <string name="CambiarContraseña">Cambiar tu contraseña</string>
 
 
@@ -585,4 +588,28 @@
         <item>Torcal de Antequera</item>
         <item>Talavera de la Reina</item>
     </string-array>
+
+    <!-- Hacer una valoración -->
+    <string name="TituloValoracion">Valora la transacción</string>
+    <string name="TituloValoracion2">Selecciona una puntuación y escribe tu opinión sobre </string>
+    <string name="BotonConfirmarValoracion">ENVIAR</string>
+    <string name="BotonOmitirValoracion">OMITIR</string>
+    <string name="hintValorarTexto">Escribe una breve valoración.</string>
+
+    <string-array name="ListaMotivosReporte">
+        <item>Nombre de usuario o foto de perfil inapropiada.</item>
+        <item>El usuario faltó al respeto a través del chat.</item>
+        <item>Spam a través del chat.</item>
+        <item>Producto con imágenes engañosas o que no corresponden con su descripción.</item>
+        <item>Producto con fotos o contenido inapropiado.</item>
+        <item>Abuso del sistema de compra.</item>
+        <item>Otro.</item>
+    </string-array>
+
+    <!-- Cambiar contraseña -->
+    <string name="TituloContra">Cambiar contraseña</string>
+    <string name="TituloContraAntigua">CONTRASEÑA ACTUAL</string>
+    <string name="TituloContraNueva">NUEVA CONTRASEÑA</string>
+    <string name="TituloContraConfirmar">CONFIRMAR NUEVA CONTRASEÑA</string>
+    <string name="BotonContra">Aplicar</string>
 </resources>
