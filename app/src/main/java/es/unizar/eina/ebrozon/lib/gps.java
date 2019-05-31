@@ -36,7 +36,7 @@ public class gps {
 
     private Context c;
     private Activity a;
-    private int INTERVAL = 1000 * 60;
+    private int INTERVAL = 1000 * 20;
     private double lat = 0;
     private double lon = 0;
     private LocationManager mLocationManager;
@@ -47,21 +47,21 @@ public class gps {
     public gps(Context ctx, Activity act) {
         a = act;
         c = ctx;
-        sharedpreferences = c.getSharedPreferences( Common.MyPreferences, c.MODE_PRIVATE );
+        sharedpreferences = c.getSharedPreferences(Common.MyPreferences, c.MODE_PRIVATE);
     }
 
 
     public void init() {
 
-        mLocationManager = (LocationManager) c.getSystemService( Context.LOCATION_SERVICE );
+        mLocationManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
         mLocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 lat = location.getLatitude();
                 lon = location.getLongitude();
                 SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString( Common.lat, Double.toString( lat ) );
-                editor.putString( Common.lon, Double.toString( lon ) );
+                editor.putString(Common.lat, Double.toString(lat));
+                editor.putString(Common.lon, Double.toString(lon));
                 editor.commit();
             }
 
@@ -77,8 +77,8 @@ public class gps {
 
             @Override
             public void onProviderDisabled(String provider) {
-                Intent i = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS );
-                c.startActivity( i );
+                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                c.startActivity(i);
             }
         };
         configurepPermissions();
@@ -86,75 +86,79 @@ public class gps {
 
     }
 
-    void configurepPermissions(){
-        if (    ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ){
+    void configurepPermissions() {
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(a, new String[]{
-                                Manifest.permission.ACCESS_FINE_LOCATION }
-                        ,10);
+                                Manifest.permission.ACCESS_FINE_LOCATION}
+                        , 10);
             }
         }
-        if (    ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ){
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(a, new String[]{
                                 Manifest.permission.ACCESS_COARSE_LOCATION}
-
-                        ,10);
+                        , 10);
             }
         }
-        if (    ActivityCompat.checkSelfPermission(c, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED ){
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(a, new String[]{
-                                Manifest.permission.INTERNET                        }
-                        ,10);
+                                Manifest.permission.INTERNET}
+                        , 9);
             }
         }
-        if (    ActivityCompat.checkSelfPermission(c, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED ){
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(a, new String[]{
                                 Manifest.permission.GET_ACCOUNTS
                         }
-                        ,10);
+                        , 8);
             }
         }
-        if (    ActivityCompat.checkSelfPermission(c, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED ){
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(a, new String[]{
                                 Manifest.permission.READ_CONTACTS
                         }
-                        ,10);
+                        , 7);
             }
         }
-        if (    ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ){
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(a, new String[]{
                                 Manifest.permission.CAMERA,
                         }
-                        ,10);
+                        , 6);
             }
         }
-        if (    ActivityCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ){
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(a, new String[]{
                                 Manifest.permission.READ_EXTERNAL_STORAGE
                         }
-                        ,10);
+                        , 5);
             }
         }
-        if (    ActivityCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(a, new String[]{
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE
                         }
-                        ,10);
+                        , 4);
             }
         }
-
-        mLocationManager.requestLocationUpdates("gps", INTERVAL, 50, mLocationListener);
     }
 
-
-
-
-
+    public void activarGps() {
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mLocationManager.requestLocationUpdates("gps", INTERVAL, 50, mLocationListener);
+    }
 }
