@@ -2,8 +2,6 @@ package es.unizar.eina.ebrozon.lib;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,11 +22,12 @@ import es.unizar.eina.ebrozon.R;
 import es.unizar.eina.ebrozon.ValorarUusuario;
 import es.unizar.eina.ebrozon.perfil_usuario;
 
+
 public class adaptadorOfertasCompras extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
     Context contexto;
-    String [][] datos;
+    private String [][] datos;
     int numElementos;
     String un;
 
@@ -38,7 +37,13 @@ public class adaptadorOfertasCompras extends BaseAdapter {
     private final String confirmarPago= "/confirmarPagoVenta";  //?id=  id venta
     private final String cancelarPago = "/cancelarPagoVenta";   //?id=  id venta
 
-
+    /**
+     * Constructor de la clase
+     * @param c Contexto sobre el que se ejecuta.
+     * @param d Datos a mostrar.
+     * @param ne Numero de elementos a mostrar.
+     * @param u Nombre de usuario
+     */
     public adaptadorOfertasCompras (Context c, String[][] d, int ne, String u){
         contexto = c;
         datos = d;
@@ -47,15 +52,22 @@ public class adaptadorOfertasCompras extends BaseAdapter {
         un = u;
     }
 
-
+    /**
+     *  Se Encarga de poblar los elementos del adaptador con la informacion recibida atraves de la
+     *  variable "datos".
+     * @param i
+     * @param convertView
+     * @param parent
+     * @return devuelve el adaptador recién creado para mostrarlo por pantalla
+     */
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
         final View vista = inflater.inflate(R.layout.content_ofertas_y_compras, null);
 
-        TextView nombreProd = (TextView) vista.findViewById(R.id.OPNombrePRod);
-        TextView tipo = (TextView) vista.findViewById(R.id.OPTipo);
-        TextView importe = (TextView) vista.findViewById(R.id.OPImporte);
-        TextView usuario = (TextView) vista.findViewById(R.id.OPUsuario);
+        TextView nombreProd =  vista.findViewById(R.id.OPNombrePRod);
+        TextView tipo =  vista.findViewById(R.id.OPTipo);
+        TextView importe =  vista.findViewById(R.id.OPImporte);
+        TextView usuario =  vista.findViewById(R.id.OPUsuario);
         final String vendedorUn = datos[i][3];
         usuario.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -65,9 +77,9 @@ public class adaptadorOfertasCompras extends BaseAdapter {
                 contexto.startActivity(intent);
             }
         } );
-        TextView fecha = (TextView) vista.findViewById(R.id.OPFecha);
-        Button yes = (Button) vista.findViewById(R.id.OPsi);
-        Button no = (Button) vista.findViewById(R.id.OPno);
+        TextView fecha =  vista.findViewById(R.id.OPFecha);
+        Button yes =  vista.findViewById(R.id.OPsi);
+        Button no = vista.findViewById(R.id.OPno);
 
         nombreProd.setText(datos[i][0]);
         tipo.setText(datos[i][1]);
@@ -110,6 +122,10 @@ public class adaptadorOfertasCompras extends BaseAdapter {
         return vista;
     }
 
+    /**
+     * Envía la petición al servidor para confirmar el pago de la venta con identificador id
+     * @param id
+     */
     private void confirmarPagoVenta(final String id) {
 
         RequestQueue queue = Volley.newRequestQueue(contexto);
@@ -150,7 +166,10 @@ public class adaptadorOfertasCompras extends BaseAdapter {
     }
 
 
-
+    /**
+     * Envía la petición al servidor para cancelar el pago de la venta con identificador id
+     * @param id
+     */
     private void cancelarPagoVenta(final String id) {
 
         RequestQueue queue = Volley.newRequestQueue(contexto);
@@ -190,7 +209,10 @@ public class adaptadorOfertasCompras extends BaseAdapter {
         queue.add(postRequest);
     }
 
-
+    /**
+     * Envía la petición al servidor para aceptar el pago de la oferta con identificador id
+     * @param id
+     */
     private void aceptarOferta(final String id) {
 
         RequestQueue queue = Volley.newRequestQueue(contexto);
@@ -230,6 +252,10 @@ public class adaptadorOfertasCompras extends BaseAdapter {
         queue.add(postRequest);
     }
 
+    /**
+     * Envía la petición al servidor para rechazar el pago de la oferta con identificador id
+     * @param id
+     */
     private void rechazarOferta(final String id) {
 
         RequestQueue queue = Volley.newRequestQueue(contexto);
@@ -259,7 +285,7 @@ public class adaptadorOfertasCompras extends BaseAdapter {
                             e = error.getMessage();
                         }
                         Log.d("Error.Response", e);
-                        String response = error.getMessage().replace("{", "").replace("}", "").replace("\"", "");
+                        String response = e.replace("{", "").replace("}", "").replace("\"", "");
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado + ":", "");
                         gestionRespuesta(estado, msg);

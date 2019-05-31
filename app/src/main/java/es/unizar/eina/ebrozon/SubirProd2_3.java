@@ -28,7 +28,11 @@ import java.util.Date;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
-
+/**
+ * Segunda etapa de la subida de producto, en esta etapa se solicitan el precio del producto y si
+ * va a ser subasta o no, en el caso de que sea subasta también se solicita el precio de inicio de la
+ * subasta, la hora de fin y el dia de fin de la subasta
+ */
 public class SubirProd2_3 extends AppCompatActivity {
     private final int ACT_SIGUIENTE = 999;
 

@@ -50,7 +50,10 @@ public class gps {
         sharedpreferences = c.getSharedPreferences(Common.MyPreferences, c.MODE_PRIVATE);
     }
 
-
+    /**
+     * Función que configura el location listener para que este actualice los valores lat y lon cada
+     * 20 segundos o cada 50 metros.
+     */
     public void init() {
 
         mLocationManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
@@ -86,6 +89,10 @@ public class gps {
 
     }
 
+    /**
+     * Función que se encarga de comprobar que permisos han sido otorgados a la aplicación y cuales
+     * deben ser concedidos.
+     */
     void configurepPermissions() {
         if (ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -150,6 +157,11 @@ public class gps {
         }
     }
 
+
+    /**
+     * Función que inicia las funcionalidades gps si y solo si los permmisos de localización estan
+     * otorgados a la aplicación
+     */
     public void activarGps() {
         if (ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(c, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // here to request the missing permissions, and then overriding

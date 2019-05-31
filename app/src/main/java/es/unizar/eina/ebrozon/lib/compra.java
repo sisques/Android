@@ -36,7 +36,13 @@ public  class compra {
         }
     }
 
-
+    /**
+     * Envia una petición de oferta al servidor
+     * @param idProducto identificador del producto sobre el que se realiza la oferta
+     * @param context
+     * @param precio precio de la oferta
+     * @param sharedpreferences
+     */
     public static void  ofertar(final String idProducto, final Context context,final String precio,  final SharedPreferences sharedpreferences) {
 
         RequestQueue queue = Volley.newRequestQueue(context);

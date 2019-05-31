@@ -35,7 +35,13 @@ public class adaptadorOfertasComprasEnviadas extends BaseAdapter {
     private final String cancelarOferta =  "/retirarOferta";  //?id=   id oferta
 
 
-
+    /**
+     * Constructor de la clase
+     * @param c Contexto sobre el que se ejecuta.
+     * @param d Datos a mostrar.
+     * @param ne Numero de elementos a mostrar.
+     * @param u Nombre de usuario
+     */
     public adaptadorOfertasComprasEnviadas(Context c, String[][] d, int ne, String u){
         contexto = c;
         datos = d;
@@ -45,6 +51,14 @@ public class adaptadorOfertasComprasEnviadas extends BaseAdapter {
     }
 
 
+    /**
+     *  Se Encarga de poblar los elementos del adaptador con la informacion recibida atraves de la
+     *  variable "datos".
+     * @param i
+     * @param convertView
+     * @param parent
+     * @return devuelve el adaptador recién creado para mostrarlo por pantalla
+     */
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
         final View vista = inflater.inflate(R.layout.content_ofertas_y_compras, null);
@@ -101,7 +115,12 @@ public class adaptadorOfertasComprasEnviadas extends BaseAdapter {
         return vista;
     }
 
-
+    /**
+     * Inicia un chat
+     * @param mensaje Mensaje a enviar por el chat
+     * @param origen emisor del mensaje
+     * @param destino receptor del mensaje
+     */
     private void iniciarChat(String mensaje, String origen, String destino) {
         String urlPetition = Common.url + "/mandarMensaje?em=" + origen + "&re=" + destino
                 + "&con=" + mensaje;
@@ -131,7 +150,11 @@ public class adaptadorOfertasComprasEnviadas extends BaseAdapter {
 
 
 
-
+    /**
+     * Envía la petición al servidor para rechazar la oferta con identificador id
+     * @param id
+     * @param oferta indica si el elemento a rechazar es una oferta o una compra directa.
+     */
     private void rechazarOferta(final String id, final boolean oferta) {
 
         RequestQueue queue = Volley.newRequestQueue(contexto);

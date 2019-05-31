@@ -36,7 +36,10 @@ import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.ResultIPC;
 import es.unizar.eina.ebrozon.lib.Ventas;
 
-
+/**
+ * Primera etapa de la subida de producto, se solicitan al menos 1 imagen, descripción y nombre
+ * del producto.
+ */
 public class SubirProd1_3 extends AppCompatActivity {
     private final int ACT_SIGUIENTE = 999;
 
