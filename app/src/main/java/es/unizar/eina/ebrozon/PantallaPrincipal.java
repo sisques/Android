@@ -87,6 +87,8 @@ public class PantallaPrincipal extends AppCompatActivity
     private SimpleAdapter simpleAdapter; // Adapter del ListView
     private SearchView menuBusqueda;
 
+    private gps g;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +102,7 @@ public class PantallaPrincipal extends AppCompatActivity
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
         String uName = sharedpreferences.getString(Common.un, "usuario");
-        gps g = new gps(this, this);
+        g = new gps(this, this);
         g.init();
 
 
@@ -595,5 +597,12 @@ public class PantallaPrincipal extends AppCompatActivity
         ultimoIdListado = 0;
         simpleAdapter.notifyDataSetChanged();
         listarProductos();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 10) {
+            g.activarGps();
+        }
     }
 }

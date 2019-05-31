@@ -497,7 +497,7 @@ public class editar_perfil extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("un",currentUser);
                 params.put("lat",lat);
-                params.put("long",lon);
+                params.put("lon",lon);
                 return params;
             }
         };
