@@ -53,6 +53,7 @@ public class perfil_usuario extends AppCompatActivity {
 
     SharedPreferences sharedpreferences;
     String currentUser;
+    String appUser;
 
     private TextView username;
     private TextView user_fullname;
@@ -67,6 +68,8 @@ public class perfil_usuario extends AppCompatActivity {
     private ImageButton editar;
     private Button verValoracionesUsuarios;
     private Button verMisValoraciones;
+    private Button chat;
+    private Button informar;
 
     private ImageView star1;
     private ImageView star2;
@@ -104,6 +107,8 @@ public class perfil_usuario extends AppCompatActivity {
         verMisValoraciones = findViewById(R.id.profileOpinionButton2);
         verValoracionesUsuarios.setPaintFlags(verValoracionesUsuarios.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         verMisValoraciones.setPaintFlags(verMisValoraciones.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        chat = findViewById(R.id.profileChat);
+        informar = findViewById(R.id.profileReport);
 
         star1 = findViewById(R.id.profileStar1);
         star2 = findViewById(R.id.profileStar2);
@@ -117,13 +122,20 @@ public class perfil_usuario extends AppCompatActivity {
         Intent intentAnterior = getIntent();
         String name = intentAnterior.getStringExtra("username");
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
-        currentUser = sharedpreferences.getString(Common.un, null);
-        if (!(name == null || currentUser.equals(name))) {
+        appUser = sharedpreferences.getString(Common.un, null);
+        if (!(name == null || appUser.equals(name))) {
             currentUser = name;
             editar.setVisibility(View.GONE);
             TextView titulo = findViewById(R.id.profileTitle);
-            titulo.setText("Perfil de "+currentUser);
+            titulo.setText("Perfil");
             verMisValoraciones.setText("VALORACIONES HECHAS");
+        }
+        else {
+            currentUser = appUser;
+            chat.setEnabled(false);
+            informar.setEnabled(false);
+            chat.setVisibility(View.GONE);
+            informar.setVisibility(View.GONE);
         }
         recuperarUsuario();
 
@@ -355,6 +367,22 @@ public class perfil_usuario extends AppCompatActivity {
         verValoracionesUsuarios.setTextColor(Color.parseColor("#2A6EBC"));
         verMisValoraciones.setTextColor(Color.parseColor("#225896"));
         getOpinions(true);
+    }
+
+    public void iniciarChat(View view) {
+        chat.setEnabled(false);
+        Intent intent = new Intent(perfil_usuario.this, Chat.class);
+        intent.putExtra("usuarioComunica", currentUser);
+        startActivity(intent);
+        chat.setEnabled(true);
+        finish();
+    }
+
+    public void reportar(View view) {
+        Intent intent = new Intent(perfil_usuario.this, ValorarUusuario.class);
+        intent.putExtra("username", currentUser);
+        intent.putExtra("mode","report");
+        startActivity(intent);
     }
 
     public Bitmap StringToBitMap(String encodedString) {

@@ -43,9 +43,9 @@ public class InicioSesion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_sesion);
-        userName = findViewById(R.id.UserName_login);
+        userName = findViewById(R.id.userName );
         password = findViewById(R.id.Password_login);
-        iniciar = findViewById(R.id.LogIn);
+        iniciar = findViewById(R.id.enviarMail );
         olvidar = findViewById(R.id.forgotPassword_login);
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
@@ -84,8 +84,8 @@ public class InicioSesion extends AppCompatActivity {
             String cp = "";
             String ci = "";
             String pr = "";
-            String lat = "";
-            String lon = "";
+            String lat = "41.673379";
+            String lon = "-0.829330";
             String im = "";
 
 
@@ -101,6 +101,7 @@ public class InicioSesion extends AppCompatActivity {
             editor.putString(Common.pr, pr);
             editor.putString(Common.lat, lat);
             editor.putString(Common.lon, lon);
+
             editor.putString(Common.im, im);
             editor.commit();
 
@@ -182,6 +183,14 @@ public class InicioSesion extends AppCompatActivity {
 
         iniciar.setEnabled(false);
         doPost(uname, passwd) ;
+
+
+
+    }
+
+
+    public void aiMamaMeOlvideLaContra(View view){
+        startActivity(new Intent(InicioSesion.this, aiMamaMeOlvideLaContra.class));
 
 
 

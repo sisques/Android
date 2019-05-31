@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.Ventas;
+import es.unizar.eina.ebrozon.lib.gps;
 
 import static es.unizar.eina.ebrozon.lib.Common.StringToBitMap;
 
@@ -70,6 +71,7 @@ public class PantallaPrincipal extends AppCompatActivity
     private Integer tipoVenta; // Tipo de venta; -1 = todos los tipos
     private Double precioMinimo; // Precio mínimo; -1.0 = sin precio mínimo
     private Double precioMaximo; // Precio máximo; -1.0 = sin precio máximo
+    private Double distMaxima; // Distancia máxima: -1.0 = sin distancia máxima
 
     private Integer ultimoIdListado;
 
@@ -85,6 +87,8 @@ public class PantallaPrincipal extends AppCompatActivity
     private SimpleAdapter simpleAdapter; // Adapter del ListView
     private SearchView menuBusqueda;
 
+    private gps g;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +96,16 @@ public class PantallaPrincipal extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         productos = new Ventas();
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+
+        String uName = sharedpreferences.getString(Common.un, "usuario");
+        g = new gps(this, this);
+        g.init();
+
+
         misProductos = false;
         misSeguimientos = false;
 
@@ -105,6 +117,7 @@ public class PantallaPrincipal extends AppCompatActivity
         tipoVenta = -1;
         precioMinimo = -1.0;
         precioMaximo = -1.0;
+        distMaxima = -1.0;
 
         ultimoIdListado = 0;
 
@@ -123,6 +136,7 @@ public class PantallaPrincipal extends AppCompatActivity
                 i.putExtra("TipoVentaFiltros", tipoVenta);
                 i.putExtra("PrecioMinimoFiltros", precioMinimo);
                 i.putExtra("PrecioMaximoFiltros", precioMaximo);
+                i.putExtra("DistMaximaFiltros", distMaxima);
                 startActivityForResult(i, ACT_FILTROS);
             }
         });
@@ -335,6 +349,19 @@ public class PantallaPrincipal extends AppCompatActivity
                 case 6 :
                     url += "Valoraciones";
                     break;
+                case 7 :
+                    url += "Distancia&lat=";
+                    url += sharedpreferences.getString(Common.lat, "0.0");
+                    url += "&lon=";
+                    url += sharedpreferences.getString(Common.lon, "0.0");
+
+                    if (distMaxima > 0.0) {
+                        url += "&maxd=" + distMaxima;
+                    }
+                    else {
+                        url += "&maxd=999999.0";
+                    }
+                    break;
                 default :
                     url += "Fecha des";
                     break;
@@ -500,6 +527,9 @@ public class PantallaPrincipal extends AppCompatActivity
         else if (id == R.id.nav_ofertas_y_pujas) {
             startActivity(new Intent(PantallaPrincipal.this, ofertasYCompras.class));
         }
+        else if (id == R.id.nav_ofertas_y_pujas_enviadas) {
+            startActivity(new Intent(PantallaPrincipal.this, ofertasYComprasEnviadas.class));
+        }
         else if (id == R.id.nav_perfil) {
             startActivity(new Intent(PantallaPrincipal.this, perfil_usuario.class));
         }
@@ -529,6 +559,7 @@ public class PantallaPrincipal extends AppCompatActivity
                 tipoVenta = data.getIntExtra("TipoVentaFiltros", -1);
                 precioMinimo = data.getDoubleExtra("PrecioMinimoFiltros", -1.0);
                 precioMaximo = data.getDoubleExtra("PrecioMaximoFiltros", -1.0);
+                distMaxima = data.getDoubleExtra("DistMaximaFiltros", -1.0);
 
                 resetPantalla();
             }
@@ -539,6 +570,7 @@ public class PantallaPrincipal extends AppCompatActivity
                 tipoVenta = -1;
                 precioMinimo = -1.0;
                 precioMaximo = -1.0;
+                distMaxima = -1.0;
 
                 resetPantalla();
             }
@@ -547,6 +579,9 @@ public class PantallaPrincipal extends AppCompatActivity
         else if (requestCode == ACT_COMPRAR_PRODUCTO) {
             if (resultCode == Common.RESULTADO_OK) {
                 simpleAdapter.notifyDataSetChanged();
+            }
+            else if (resultCode == Common.RESULTADO_CANCELADO) {
+                resetPantalla();
             }
         }
 
@@ -562,5 +597,12 @@ public class PantallaPrincipal extends AppCompatActivity
         ultimoIdListado = 0;
         simpleAdapter.notifyDataSetChanged();
         listarProductos();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 10) {
+            g.activarGps();
+        }
     }
 }

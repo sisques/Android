@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
@@ -72,6 +73,14 @@ public class Producto extends AppCompatActivity {
         try {
             vendedorUn = productos.getUsuarioVenta(posVenta);
             vendedorUsuario.setText(vendedorUn);
+            vendedorUsuario.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Producto.this, perfil_usuario.class);
+                    intent.putExtra("username", vendedorUn);
+                    startActivity(intent);
+                }
+            } );
         } catch (Exception ignored) { }
 
         ImageView vendedorImagen = (ImageView) findViewById(R.id.ProductoVendedorImagen);
@@ -100,7 +109,9 @@ public class Producto extends AppCompatActivity {
             productoEditar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // TODO: editar producto
+                    Intent intent = new Intent(Producto.this, SubirProd1_3.class);
+                    intent.putExtra("posVenta", posVenta);
+                    startActivityForResult(intent, Common.RESULTADO_CANCELADO);
                 }
             });
         }
@@ -114,7 +125,11 @@ public class Producto extends AppCompatActivity {
             productoBorrar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // TODO: borrar producto
+                    borrarProducto();
+
+                    productos.eliminarVenta(posVenta);
+                    setResult(Common.RESULTADO_OK, new Intent());
+                    finish();
                 }
             });
         }
@@ -168,7 +183,9 @@ public class Producto extends AppCompatActivity {
 
 
         TextView ProductoNombre = (TextView) findViewById(R.id.ProductoNombre);
+        String nombreProd="";
         try {
+            nombreProd = productos.getNombreVentaLargo(posVenta);
             ProductoNombre.setText(productos.getNombreVenta(posVenta));
         } catch (Exception ignored) { }
 
@@ -192,6 +209,27 @@ public class Producto extends AppCompatActivity {
         try {
             ProductoCategoria.setText(productos.getCategoriaVenta(posVenta));
         } catch (Exception ignored) { }
+
+        TextView ProductoTipo = (TextView) findViewById(R.id.ProductoTipo);
+        try {
+            if (productos.getEsSubastaVenta(posVenta).equals("0")) {
+                ProductoTipo.setText("VENTA");
+            }
+            else {
+                ProductoTipo.setText("SUBASTA");
+            }
+        } catch (Exception ignored) { }
+
+        TextView ProductoDistancia = (TextView) findViewById(R.id.ProductoDistancia);
+        try {
+            if (productos.getDistanciaVenta(posVenta).equals("999999.0")) {
+                ProductoDistancia.setVisibility(View.INVISIBLE);
+            }
+            else {
+                ProductoDistancia.setText(productos.getDistanciaVenta(posVenta));
+            }
+        } catch (Exception ignored) { }
+
 
         try {
             numProd = productos.getIdVenta(posVenta);
@@ -266,8 +304,7 @@ public class Producto extends AppCompatActivity {
                             sharedpreferences, finalSubasta, finalPinicial, finalPactual);
                     popupProducto.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     popupProducto.show();
-                    //  setResult(Common.RESULTADO_OK, new Intent());
-                    //  finish();
+
                 }
             });
         }
@@ -277,11 +314,19 @@ public class Producto extends AppCompatActivity {
             comprar.setVisibility(View.INVISIBLE);
             comprar.setClickable(false);
         } else{
-            comprar.setOnClickListener(new View.OnClickListener() {
+            final String finalNombreProd = nombreProd;
+            comprar.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     compra.ofertar( numProd, Producto.this,precio,  sharedpreferences);
+
                     productos.eliminarVenta(posVenta);
+
+                    Intent intent = new Intent(Producto.this, Chat.class);
+                    mensajeExterno("Hola, estoy interesado en tu producto " + finalNombreProd+".", un, vendedorUn);
+                    intent.putExtra("usuarioComunica", vendedorUn);
+                    startActivity(intent);
+
                     setResult(Common.RESULTADO_OK, new Intent());
                     finish();
                 }
@@ -377,6 +422,65 @@ public class Producto extends AppCompatActivity {
         queue.add(postRequest);
     }
 
+    private void borrarProducto() {
+        String url = Common.url + "/desactivarVenta?id=" + numProd;
+    RequestQueue queue = Volley.newRequestQueue(this);
 
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error al recibir la lista de productos");
+                        siguiendo = !siguiendo;
+                        ProductoSeguir.setChecked(siguiendo);
+                    }
+                }
+        );
+        queue.add(postRequest);
+    }
 
+    private void mensajeExterno(String mensaje, String origen, String destino) {
+        String urlPetition = Common.url + "/mandarMensaje?em=" + origen + "&re=" + destino
+                + "&con=" + mensaje;
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", "Error al recibir la lista de ofertas");
+                    }
+                }
+        );
+        queue.add(postRequest);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Common.RESULTADO_CANCELADO) {
+            setResult(Common.RESULTADO_CANCELADO, new Intent());
+            finish();
+        }
+    }
 }

@@ -83,6 +83,7 @@ public class editar_perfil extends AppCompatActivity {
 
     private Button confirm;
     private Button changePassword;
+    private Button updateLocation;
 
     private String currentUser;
     // Anteriores
@@ -188,6 +189,7 @@ public class editar_perfil extends AppCompatActivity {
         bajarFotoServidor(id);
 
         changePassword = findViewById(R.id.editPassword);
+        updateLocation = findViewById(R.id.editUpdateLocation);
         uploadPicture = findViewById(R.id.editPic);
 
 
@@ -354,6 +356,9 @@ public class editar_perfil extends AppCompatActivity {
                         Log.d("Response", response);
                         Toast.makeText(editar_perfil.this, "Cambios aplicados", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(editar_perfil.this, perfil_usuario.class));
+                        updateLocation.setEnabled(true);
+                        confirm.setEnabled(true);
+                        changePassword.setEnabled(true);
                         finish();
                     }
                 },
@@ -421,6 +426,8 @@ public class editar_perfil extends AppCompatActivity {
 
     public void subirCambios(View view) {
         confirm.setEnabled(false);
+        updateLocation.setEnabled(false);
+        changePassword.setEnabled(false);
         String n = user_fullname.getText().toString();
         String p = user_province.getText().toString();
         String c = user_city.getText().toString();
@@ -450,6 +457,83 @@ public class editar_perfil extends AppCompatActivity {
                 actualizarUsuario(newPic, user_fullname.getText().toString().trim(), user_province.getText().toString().trim(), user_city.getText().toString().trim());
             }
         }
+    }
+
+    public void cambiarContraseña(View view) {
+        updateLocation.setEnabled(false);
+        changePassword.setEnabled(false);
+        confirm.setEnabled(false);
+        startActivity(new Intent(editar_perfil.this, CambiarContra.class));
+        updateLocation.setEnabled(true);
+        changePassword.setEnabled(true);
+        confirm.setEnabled(true);
+    }
+
+    private void peticionVentas (final String lat, final String lon) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, urlPetition,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                        Toast.makeText(editar_perfil.this, "Localización actualizada.", Toast.LENGTH_SHORT).show();
+                        updateLocation.setEnabled(true);
+                        confirm.setEnabled(true);
+                        changePassword.setEnabled(true);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.getMessage());
+                        Toast.makeText(editar_perfil.this, "Se ha producido un error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("un",currentUser);
+                params.put("lat",lat);
+                params.put("lon",lon);
+                return params;
+            }
+        };
+        queue.add(postRequest);
+    }
+
+    public void actualizarVentas(View view) {
+        changePassword.setEnabled(false);
+        updateLocation.setEnabled(false);
+        confirm.setEnabled(false);
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Se actualizará la localización de todos tus productos.");
+        String[] pictureDialogItems = {
+                "Actualizar",
+                "Cancelar"};
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
+                                String lat = sharedpreferences.getString(Common.lat, null);
+                                String lon = sharedpreferences.getString(Common.lon, null);
+                                peticionVentas(lat,lon);
+                                dialog.dismiss();
+                                break;
+                            case 1:
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+        changePassword.setEnabled(true);
+        updateLocation.setEnabled(true);
         confirm.setEnabled(true);
     }
 }

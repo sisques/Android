@@ -159,6 +159,7 @@
         <item>Más popular primero</item>
         <item>Mejor coincidencia primero</item>
         <item>Mejor valoración primero</item>
+        <item>Más cercanos primero</item>
     </string-array>
 
     <string-array name="ListaCategoriasFiltros">
@@ -188,6 +189,7 @@
     <string name="TextoTipo">TIPO</string>
     <string name="TextoPrecioMinimo">PRECIO MÍNIMO</string>
     <string name="TextoPrecioMaximo">PRECIO MÁXIMO</string>
+    <string name="TextoDistanciaMaxima">DISTANCIA MÁXIMA</string>
 
     <!-- Pantalla principal -->
     <string name="title_activity_pantalla_principal">PantallaPrincipal</string>
@@ -210,7 +212,7 @@
     <string name="Icono">Icono</string>
     <string name="Aplicar">Aplicar</string>
     <string name="Restablecer">Restablecer</string>
-    <string name="FiltroTexto">Filtros para la búsqueda de productos.</string>
+    <string name="FiltroTexto">Filtros disponibles.</string>
     <string name="FiltroTodos">Mostrar productos de todas las ciudades</string>
 
     <string name="Seguir">Seguir</string>
@@ -227,7 +229,13 @@
     <string name="Cerrar_sesion">Cerrar sesión</string>
 
 
-    <string name="ofertas_y_pujas_recibidas">Ofertas recibidas y compras pendientes</string>
+    <string name="ofertas_y_pujas_enviadas">Ofertas y compras enviadas</string>
+    <string name="boton_cancelar_oferta">Cancelar oferta</string>
+    <string name="boton_cancelar_compra">Cancelar compra</string>
+    <string name="boton_iniciar_chat">Chatear con el vendedor</string>
+
+
+    <string name="ofertas_y_pujas_recibidas">Ofertas y compras recibidas</string>
     <string name="tipo_oferta_recibida">Oferta</string>
     <string name="tipo_compra_pendiente">Compra pendiente</string>
     <string name="boton_aceptar_oferta">Aceptar oferta</string>
@@ -261,6 +269,8 @@
     <string name="CiudadPerfil">CIUDAD</string>
     <string name="VentasRealizadas">Ventas: </string>
     <string name="ComprasRealizadas">Compras: </string>
+    <string name="BotonChat">Chat</string>
+    <string name="BotonInformar">Informar</string>
 
     <string name="BotonValoraciones2">Mis Valoraciones</string>
     <string name="BotonValoraciones1">Valoraciones de usuarios</string>
@@ -269,9 +279,10 @@
     <string name="title_activity_editarperfil">Edita tu perfil</string>
     <string name="TituloEditarPerfil">Edita tu perfil</string>
     <string name="TituloEditarInfo">Información</string>
-    <string name="TituloEditarAjustes">Ajustes de seguridad</string>
+    <string name="TituloEditarAjustes">Ajustes</string>
     <string name="BotonConfirmarEditar">Aplicar cambios</string>
     <string name="EditarFoto">FOTO DE PERFIL</string>
+    <string name="ActualizarPosicion">Actualizar posición ventas</string>
     <string name="CambiarContraseña">Cambiar tu contraseña</string>
 
 
@@ -296,6 +307,10 @@
     <string name="pujaOfrecida">Pujar esta cantidad</string>
     <string name="elVendedorPide">El vendedor pide X </string>
     <string name="cancelar">Cancelar</string>
+
+    <string name="iniciarChat">¿Quieres iniciar un chat con </string>
+    <string name="dialogSi">Si</string>
+    <string name="dialogNo">No</string>
 
 
     <string-array name="ListaCiudades">
@@ -583,4 +598,28 @@
         <item>Torcal de Antequera</item>
         <item>Talavera de la Reina</item>
     </string-array>
+
+    <!-- Hacer una valoración -->
+    <string name="TituloValoracion">Valora la transacción</string>
+    <string name="TituloValoracion2">Selecciona una puntuación y escribe tu opinión sobre </string>
+    <string name="BotonConfirmarValoracion">ENVIAR</string>
+    <string name="BotonOmitirValoracion">OMITIR</string>
+    <string name="hintValorarTexto">Escribe una breve valoración.</string>
+
+    <string-array name="ListaMotivosReporte">
+        <item>Nombre de usuario o foto de perfil inapropiada.</item>
+        <item>El usuario faltó al respeto a través del chat.</item>
+        <item>Spam a través del chat.</item>
+        <item>Producto con imágenes engañosas o que no corresponden con su descripción.</item>
+        <item>Producto con fotos o contenido inapropiado.</item>
+        <item>Abuso del sistema de compra.</item>
+        <item>Otro.</item>
+    </string-array>
+
+    <!-- Cambiar contraseña -->
+    <string name="TituloContra">Cambiar contraseña</string>
+    <string name="TituloContraAntigua">CONTRASEÑA ACTUAL</string>
+    <string name="TituloContraNueva">NUEVA CONTRASEÑA</string>
+    <string name="TituloContraConfirmar">CONFIRMAR NUEVA CONTRASEÑA</string>
+    <string name="BotonContra">Aplicar</string>
 </resources>

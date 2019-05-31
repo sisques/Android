@@ -28,6 +28,10 @@
                 android:id="@+id/nav_ofertas_y_pujas"
                 android:icon="@drawable/ic_euro"
                 android:title="@string/ofertas_y_pujas_recibidas" />
+            <item
+                android:id="@+id/nav_ofertas_y_pujas_enviadas"
+                android:icon="@drawable/ic_euro"
+                android:title="@string/ofertas_y_pujas_enviadas" />
         </menu>
     </item>
 

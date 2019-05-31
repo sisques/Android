@@ -31,7 +31,7 @@ public class PreLogin extends AppCompatActivity {
             startActivity(new Intent(PreLogin.this, PantallaPrincipal.class));
         }
 
-        iniciar = findViewById(R.id.LogIn);
+        iniciar = findViewById(R.id.enviarMail );
         registrar = findViewById(R.id.registrar);
 
     }

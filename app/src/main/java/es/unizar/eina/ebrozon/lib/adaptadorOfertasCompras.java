@@ -21,6 +21,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import es.unizar.eina.ebrozon.R;
+import es.unizar.eina.ebrozon.ValorarUusuario;
+import es.unizar.eina.ebrozon.perfil_usuario;
 
 public class adaptadorOfertasCompras extends BaseAdapter {
 
@@ -54,6 +56,15 @@ public class adaptadorOfertasCompras extends BaseAdapter {
         TextView tipo = (TextView) vista.findViewById(R.id.OPTipo);
         TextView importe = (TextView) vista.findViewById(R.id.OPImporte);
         TextView usuario = (TextView) vista.findViewById(R.id.OPUsuario);
+        final String vendedorUn = datos[i][3];
+        usuario.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent( contexto, perfil_usuario.class);
+                intent.putExtra("username", vendedorUn);
+                contexto.startActivity(intent);
+            }
+        } );
         TextView fecha = (TextView) vista.findViewById(R.id.OPFecha);
         Button yes = (Button) vista.findViewById(R.id.OPsi);
         Button no = (Button) vista.findViewById(R.id.OPno);
@@ -67,6 +78,7 @@ public class adaptadorOfertasCompras extends BaseAdapter {
         no.setText(datos[i][6]);
         final String id = datos[i][7];
         final String a = datos[i][1];
+        final String us = datos[i][3];
 
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +89,10 @@ public class adaptadorOfertasCompras extends BaseAdapter {
                 }else{
                     confirmarPagoVenta(id);
                 }
+                Intent intent = new Intent(contexto, ValorarUusuario.class);
+                intent.putExtra("username",us);
+                intent.putExtra("mode","opinion");
+                contexto.startActivity(intent);
             }
         });
 
@@ -160,11 +176,11 @@ public class adaptadorOfertasCompras extends BaseAdapter {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         String e = "Error desconocido";
-                        if (error != null){
+                        if (error.getMessage() != null){
                             e = error.getMessage();
                         }
                         Log.d("Error.Response", e);
-                        String response = error.getMessage().replace("{", "").replace("}", "").replace("\"", "");
+                        String response = e.replace("{", "").replace("}", "").replace("\"", "");
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado + ":", "");
                         gestionRespuesta(estado, msg);
@@ -200,11 +216,11 @@ public class adaptadorOfertasCompras extends BaseAdapter {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         String e = "Error desconocido";
-                        if (error != null){
+                        if (error.getMessage() != null){
                             e = error.getMessage();
                         }
                         Log.d("Error.Response", e);
-                        String response = error.getMessage().replace("{", "").replace("}", "").replace("\"", "");
+                        String response = e.replace("{", "").replace("}", "").replace("\"", "");
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado + ":", "");
                         gestionRespuesta(estado, msg);
