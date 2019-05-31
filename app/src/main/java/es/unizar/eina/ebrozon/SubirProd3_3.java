@@ -32,7 +32,11 @@ import java.util.Map;
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.ResultIPC;
 import es.unizar.eina.ebrozon.lib.Ventas;
-
+/**
+ * Tercera y ultima etapa de la subida de producto, en esta etapa se solicita al usuario que seleccione
+ * la categoría en la que se mostrara el producto a subir, adicionalmente, se enviará al servidor toda
+ * la información suministrada a lo largo del proceso de subida de producto.
+ */
 public class SubirProd3_3 extends AppCompatActivity {
     Button siguiente;
     Button anterior;

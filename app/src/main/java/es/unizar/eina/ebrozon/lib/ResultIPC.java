@@ -3,7 +3,10 @@ package es.unizar.eina.ebrozon.lib;
 import java.util.List;
 
 public class ResultIPC {
-
+    /**
+     * Clase utilizada para pasar datos de gran tamaño entre Intents, principalmente usada para
+     * pasar las imágenes de la primera etapa de subida de producto a la ultima.
+     */
     private static ResultIPC instance;
 
     public synchronized static ResultIPC get() {

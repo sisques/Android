@@ -39,6 +39,9 @@ public class ofertasYComprasEnviadas extends AppCompatActivity {
 
 
     private int ne;
+    /**
+     * String con datos que seran enviados al adaptador
+     */
     private String[][] datos = new String[50][9];
                                 //[x][0] = nombre prod
                                 //[x][1] = tipo
@@ -85,7 +88,9 @@ public class ofertasYComprasEnviadas extends AppCompatActivity {
 
 
 
-
+    /**
+     * Solicita al servidor todas las ofertas enviadas por el usuario un.
+     */
     private void obtenerOfertas() {
         String urlPetition = Common.url + ofertas + "?un=" + un;
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -118,7 +123,9 @@ public class ofertasYComprasEnviadas extends AppCompatActivity {
         );
         queue.add(postRequest);
     }
-
+    /**
+     * Solicita al servidor todas las compras enviadas por el usuario un.
+     */
     private void obtenerCompras() {
         String urlPetition = Common.url + compras + "?un=" + un;
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -151,6 +158,10 @@ public class ofertasYComprasEnviadas extends AppCompatActivity {
         queue.add(postRequest);
     }
 
+    /**
+     * Añade las ofertas enviadas por el usuario a un vector de datos, que es el que se envia al
+     * adaptador de compras y ofertas.
+     */
     private void anyadirOfertas(JSONArray JSONelementos) {
         JSONObject JSONelemento;
 
@@ -188,6 +199,10 @@ public class ofertasYComprasEnviadas extends AppCompatActivity {
         }
     }
 
+    /**
+     * Añade las compras enviadas por el usuario a un vector de datos, que es el que se envia al
+     * adaptador de compras y ofertas.
+     */
     private void anyadirCompras(JSONArray JSONelementos) {
         JSONObject JSONelemento;
         int neInit = ne;
