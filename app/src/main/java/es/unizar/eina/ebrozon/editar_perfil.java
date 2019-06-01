@@ -64,33 +64,37 @@ import es.unizar.eina.ebrozon.lib.Common;
 
 public class editar_perfil extends AppCompatActivity {
 
+    // Actividad de editar el perfil de usuario.
+
     String urlPetition = "https://protected-caverns-60859.herokuapp.com/actualizarUsuario";
 
     SharedPreferences sharedpreferences;
 
-    private String[] cities;
-    private String[] provinces;
+    private String[] cities;        // Lista de ciudades posibles.
+    private String[] provinces;     // Lista de provincias posibles.
 
-    private ImageButton uploadPicture;
+    private ImageButton uploadPicture;  // Botón de actualizar foto de perfil del usuario.
     private int GALLERY = 5;
     private int CAMERA = 1;
     private String IMAGE_DIRECTORY = "/";
-    private Bitmap newPic;
+    private Bitmap newPic;              // Nueva foto del usuario.
 
-    private AutoCompleteTextView user_province;
-    private AutoCompleteTextView user_city;
-    private EditText user_fullname;
+    private AutoCompleteTextView user_province; // Campo de texto de provincia.
+    private AutoCompleteTextView user_city;     // Campo de texto de ciudad.
+    private EditText user_fullname;             // Campo de texto de nombre completo.
 
-    private Button confirm;
-    private Button changePassword;
-    private Button updateLocation;
+    private Button confirm;                 // Botón de confirmar cambios.
+    private Button changePassword;          // Botón de cambiar contraseña.
+    private Button updateLocation;          // Botón de actualizar localización.
 
-    private String currentUser;
-    // Anteriores
+    private String currentUser;  // Usuario actual utilizando la aplicación.
+    // Datos actuales del usuario.
     private String name;
     private String province;
     private String city;
 
+    // Si no se ha cambiado nada, se finaliza la actividad.
+    // Si se ha cambiado algo pide confirmación para cancelar los cambios.
     @Override
     public void onBackPressed() {
         if (!(
@@ -132,9 +136,11 @@ public class editar_perfil extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
 
+        // Obtener el nombre del usuario actual.
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         currentUser = sharedpreferences.getString(Common.un, null);
 
+        // Asignar todos los elementos de la vista y listeners a los campos.
         confirm = findViewById(R.id.editConfirm);
         confirm.setEnabled(false);
 
@@ -176,6 +182,7 @@ public class editar_perfil extends AppCompatActivity {
 
         });
 
+        // Obtener los datos del intent.
         Intent intentAnterior = getIntent();
         name = intentAnterior.getStringExtra("user_fullname");
         province = intentAnterior.getStringExtra("user_province");
@@ -345,6 +352,7 @@ public class editar_perfil extends AppCompatActivity {
         return encodedImage;
     }
 
+    // Petición al servidor para actualizar la información del usuario.
     private void actualizarUsuario(final Bitmap foto, final String fullname, final String province, final String city) {
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -389,6 +397,7 @@ public class editar_perfil extends AppCompatActivity {
         queue.add(postRequest);
     }
 
+    // Recupera un string en base64 mediante una petición al servidor.
     private void bajarFotoServidor(String id) {
         confirm.setEnabled(false);
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -424,6 +433,7 @@ public class editar_perfil extends AppCompatActivity {
         return set.contains(targetValue);
     }
 
+    // Hace la petición comprobando todos los parámetros, si no muestra el error.
     public void subirCambios(View view) {
         confirm.setEnabled(false);
         updateLocation.setEnabled(false);
@@ -459,6 +469,7 @@ public class editar_perfil extends AppCompatActivity {
         }
     }
 
+    // Llama a la actividad de cambiar contraseña.
     public void cambiarContraseña(View view) {
         updateLocation.setEnabled(false);
         changePassword.setEnabled(false);
@@ -469,6 +480,7 @@ public class editar_perfil extends AppCompatActivity {
         confirm.setEnabled(true);
     }
 
+    // Petición para actualizar la posición (latitud y longitud) del usuario.
     private void peticionVentas (final String lat, final String lon) {
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -504,6 +516,7 @@ public class editar_perfil extends AppCompatActivity {
         queue.add(postRequest);
     }
 
+    // Hace la petición si el usuario lo confirma.
     public void actualizarVentas(View view) {
         changePassword.setEnabled(false);
         updateLocation.setEnabled(false);

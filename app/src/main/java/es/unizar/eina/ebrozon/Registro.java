@@ -36,54 +36,62 @@ import es.unizar.eina.ebrozon.lib.Common;
 
 public class Registro extends AppCompatActivity {
 
+    // Actividad de registro de un usuario.
+
     String url = Common.url + "/registrar";
 
-    private Button registrar;
+    private Button registrar;   // Botón de registrar usuario.
 
     SharedPreferences sharedpreferences;
 
-    private EditText fullName;
-    private EditText userName;
-    private EditText mail;
-    private EditText password;
-    private EditText confirmPassword;
+    private EditText fullName;          // Campo de nombre completo.
+    private EditText userName;          // Campo de nombre de usuario.
+    private EditText mail;              // Campo de correo.
+    private EditText password;          // Campo de contraseña.
+    private EditText confirmPassword;   // Campo de confirmar contraseña.
 
-    private Spinner city;
+    private Spinner city;               // Campo de provincia.
 
     private Boolean mostrandoPass1 = false;
     private Boolean mostrandoPass2 = false;
 
+    // Comprobaciones de longitud de los campos del registro.
     private Boolean fullNameCheckLength = false;
     private Boolean userNameCheckLength = false;
     private Boolean passwordCheckLength = false;
     private Boolean mailCheckLength = false;
 
+    // Comprobación de que las dos contraseñas son iguales.
     private Boolean confirmCheck = false;
 
+    // Comprobaciones de patrones y caracteres de los campos del registro.
     private Boolean fullNameCheckValue = false;
     private Boolean userNameCheckValue = false;
     private Boolean passwordCheckValue = false;
     private Boolean mailCheckValue = false;
 
+    // Comprobación de selección de una provincia de la lista.
     private Boolean cityCheck = false;
 
+    // Comprobación de que no hay ningún campo vacío.
     private Boolean fullNameEmpty = true;
     private Boolean userNameEmpty = true;
     private Boolean passwordEmpty = true;
     private Boolean confirmEmpty = true;
     private Boolean mailEmpty = true;
 
-    private TextView limitFullName;
-    private TextView limitUserName;
-    private TextView limitMail;
-    private TextView limitPass;
-    private TextView limitPass2;
+    private TextView limitFullName; // Límite de caracteres del nombre completo.
+    private TextView limitUserName; // Límite de caracteres del nombre de usuario.
+    private TextView limitMail;     // Límite de caracteres del correo.
+    private TextView limitPass;     // Límite de caracteres de la contraseña.
+    private TextView limitPass2;    // Límite de caracteres de confirmar contraseña.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
 
+        // Asignar los elementos de la vista.
         registrar = findViewById(R.id.registrar);
         fullName = findViewById(R.id.Fullname_register);
         userName = findViewById(R.id.Username_register);
@@ -98,6 +106,7 @@ public class Registro extends AppCompatActivity {
         limitPass2 = findViewById(R.id.limContra2);
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
 
+        // Añadir listeners para los campos de texto y la lista de provincias.
         fullName.addTextChangedListener(registerTextWatcher);
         userName.addTextChangedListener(registerTextWatcher);
         mail.addTextChangedListener(registerTextWatcher);
@@ -134,6 +143,7 @@ public class Registro extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // Se obtiene el texto, y se calcula un nuevo límite de caracteres.
             fullname = fullName.getText().toString().trim();
             uname = userName.getText().toString().trim();
             passwd = password.getText().toString().trim();
@@ -217,6 +227,8 @@ public class Registro extends AppCompatActivity {
         }
     };
 
+    // Botones de mostrar contraseña.
+
     public void mostrar1_register(View view){
         if (mostrandoPass1){
             password.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -239,6 +251,7 @@ public class Registro extends AppCompatActivity {
         }
     }
 
+    // Se registra el usuario si se cumplen todos los requisitos, si no se muestra el error.
     public void registrarCuenta(View view){
 
         if (!fullNameCheckLength) {
@@ -334,6 +347,7 @@ public class Registro extends AppCompatActivity {
         }
     }
 
+    // Generar la url de la petición al servidor de registro.
     public String parseParams(String un, String pass, String nom, String ap, String corr, String prov){
         String aux = url;
         un = Uri.encode(un);
