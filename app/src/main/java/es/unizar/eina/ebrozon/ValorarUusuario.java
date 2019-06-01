@@ -34,42 +34,46 @@ import es.unizar.eina.ebrozon.lib.Common;
 
 public class ValorarUusuario extends AppCompatActivity {
 
+    // Hacer una valoración a un usuario tras una venta o informar sobre un usuario.
+
     private String urlValoracion = "https://protected-caverns-60859.herokuapp.com/mandarOpinion";
     private String urlReport = "https://protected-caverns-60859.herokuapp.com/mandarReport";
 
     SharedPreferences sharedpreferences;
-    String currentUser;
-    String opinionUser;
-    String modo;
+    String currentUser; // El propio usuario que está utilizando la app.
+    String opinionUser; // El usuario a valorar o informar.
+    String modo;        // Si es report => la actividad es informar un usuario.
 
-    private Button send;
-    private Button dismiss;
+    private Button send;    // Botón enviar valoración o reporte.
+    private Button dismiss; // Botón cancelar.
 
-    private Spinner reportList;
+    private Spinner reportList; // Lista de motivos del reporte.
 
-    private ImageView star1;
-    private ImageView star2;
-    private ImageView star3;
-    private ImageView star4;
-    private ImageView star5;
+    private ImageView star1; // Botón de valorar 1 estrella.
+    private ImageView star2; // Botón de valorar 2 estrellas.
+    private ImageView star3; // Botón de valorar 3 estrellas.
+    private ImageView star4; // Botón de valorar 4 estrellas.
+    private ImageView star5; // Botón de valorar 5 estrellas.
 
-    private EditText content;
-    private TextView contentLimit;
-    private TextView title;
-    private TextView titleActivity;
+    private EditText content;       // Texto de valoración o reporte.
+    private TextView contentLimit;  // Límite de caracteres de content.
+    private TextView title;         // Información sobre el reporte o valoración.
+    private TextView titleActivity; // Título de la actividad.
 
-    private Integer rating = 0;
+    private Integer rating = 0; // Estrellas que se mandan al servidor.
 
-    private Boolean opinionCheck = false;
+    private Boolean opinionCheck = false; // Si es false -> send desactivado.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_valorar_uusuario);
 
+        // Obtener el usuario que está utilizando la app.
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         currentUser = sharedpreferences.getString(Common.un, null);
 
+        // Asociar todos los elementos de la actividad con los atributos.
         send = findViewById(R.id.makeOpinionConfirm);
         dismiss = findViewById(R.id.makeOpinionDismiss);
         content = findViewById(R.id.makeOpinionText);
@@ -83,6 +87,8 @@ public class ValorarUusuario extends AppCompatActivity {
         title = findViewById(R.id.makeOpinionTitle2);
         reportList = findViewById(R.id.makeOpinionReportList);
 
+        // Recuperar el modo para desactivar todos los elementos que correspondan dependiendo de si
+        // es reporte o valorar.
         Intent intentAnterior = getIntent();
         opinionUser = intentAnterior.getStringExtra("username");
         modo = intentAnterior.getStringExtra("mode");
@@ -189,6 +195,7 @@ public class ValorarUusuario extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // Actualizar el límite de caracteres.
             contentText = content.getText().toString();
             Integer sizeContent = contentText.length();
             if (500 - sizeContent < 0) {
@@ -203,6 +210,7 @@ public class ValorarUusuario extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
+            // Comprobar si se puede mandar el reporte o valoración y activar el botón.
             contentText = content.getText().toString();
             if (modo.equals("report")) {
                 opinionCheck = (!contentText.isEmpty() && !(contentText.length() > 500));
@@ -214,6 +222,7 @@ public class ValorarUusuario extends AppCompatActivity {
         }
     };
 
+    // Realiza la petición al servidor de informar de un usuario.
     private void peticionReporte() {
         RequestQueue queue = Volley.newRequestQueue(this);
         final String opinionText = content.getText().toString();
@@ -254,6 +263,7 @@ public class ValorarUusuario extends AppCompatActivity {
         queue.add(postRequest);
     }
 
+    // Realiza la petición al servidor de valorar un usuario.
     private void peticionValoracion() {
         RequestQueue queue = Volley.newRequestQueue(this);
         final String opinionText = content.getText().toString();
@@ -294,6 +304,7 @@ public class ValorarUusuario extends AppCompatActivity {
         queue.add(postRequest);
     }
 
+    // Botón de valorar, hace la petición correspondiente según el modo.
     public void enviarValoracion(View view) {
         send.setEnabled(false);
         dismiss.setEnabled(false);
@@ -305,10 +316,12 @@ public class ValorarUusuario extends AppCompatActivity {
         }
     }
 
+    // Botón de cancelar el reporte o omitir la valoración, termina la actividad.
     public void omitirValoracion(View view) {
         finish();
     }
 
+    // Dibuja las estrellas en los botones según cuantas se seleccionen.
     private void dibujarEstrellas(Integer stars) {
         switch (stars) {
             case 1:

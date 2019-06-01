@@ -43,6 +43,8 @@ import es.unizar.eina.ebrozon.lib.Common;
 
 public class perfil_usuario extends AppCompatActivity {
 
+    // Actividad del perfil del usuario que está usando la aplicación o de otro usuario.
+
     String urlRecuperarUsuario ="https://protected-caverns-60859.herokuapp.com/recuperarUsuario";
     String urlNumeroVentasUusuario ="https://protected-caverns-60859.herokuapp.com/numeroVentasUsuario";
     String urlNumeroComprasUsuario ="https://protected-caverns-60859.herokuapp.com/numeroComprasUsuario";
@@ -52,33 +54,35 @@ public class perfil_usuario extends AppCompatActivity {
     String user_idPic = "";
 
     SharedPreferences sharedpreferences;
-    String currentUser;
-    String appUser;
+    String currentUser;         // El ususario del perfil de la actividad.
+    String appUser;             // El propio usuario que está utilizando la app.
 
-    private TextView username;
-    private TextView user_fullname;
-    private TextView user_email;
-    private TextView user_province;
-    private TextView user_city;
-    private TextView ventas;
-    private TextView compras;
+    private TextView username;      // Nombre de usuario.
+    private TextView user_fullname; // Nombre completo del usuario.
+    private TextView user_email;    // Correo del usuario.
+    private TextView user_province; // Provincia del usuario.
+    private TextView user_city;     // Ciudad del usuario.
+    private TextView ventas;        // Número de ventas hechas por el usuario.
+    private TextView compras;       // Número de compras hechas por el usuario.
 
-    private double user_rating;
+    private double user_rating;     // Puntuación del usuario.
 
-    private ImageButton editar;
-    private Button verValoracionesUsuarios;
-    private Button verMisValoraciones;
-    private Button chat;
-    private Button informar;
+    private ImageButton editar;     // Botón que lleva a la actividad de editar perfil.
+    private Button verValoracionesUsuarios; // Botón que muestra las valoraciones de los usuarios.
+    private Button verMisValoraciones;      // Botón que muestras las valoraciones hechas.
+    private Button chat;                    // Botón para hablar con el usuario del perfil.
+    private Button informar;                // Botón para reportar al usuario del perfil.
 
+    // Estrellas del usuario del perfil.
     private ImageView star1;
     private ImageView star2;
     private ImageView star3;
     private ImageView star4;
     private ImageView star5;
 
-    private ImageView foto;
+    private ImageView foto; // Foto de perfil del usuario.
 
+    // Lista de valoraciones.
     private ListView opinionsList;
     private JSONArray jsonUsersOpinions = new JSONArray();
     private JSONArray jsonMyOpinions = new JSONArray();
@@ -93,6 +97,7 @@ public class perfil_usuario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_usuario);
 
+        // Asociar cada elemento de la vista.
         username = findViewById(R.id.profileUsername);
         user_fullname = findViewById(R.id.profileFullName);
         user_email = findViewById(R.id.profileEmail);
@@ -118,7 +123,7 @@ public class perfil_usuario extends AppCompatActivity {
 
         foto = findViewById(R.id.profilePic);
 
-        // Si se ha especificado un nombre, carga el perfil de otro usuario.
+        // Si se ha especificado un nombre en el intent, carga el perfil de otro usuario.
         Intent intentAnterior = getIntent();
         String name = intentAnterior.getStringExtra("username");
         sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
@@ -139,10 +144,12 @@ public class perfil_usuario extends AppCompatActivity {
         }
         recuperarUsuario();
 
+        // Carga las opiniones de otros usuarios.
         opinionsList = findViewById(R.id.profileOpinionsList);
         getOpinions(false);
     }
 
+    // Recupera toda la información necesaria del usuario, haciendo 3 peticiones al servidor.
     private void recuperarUsuario() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String urlPetition1 = urlRecuperarUsuario+"?un="+currentUser;
@@ -233,6 +240,7 @@ public class perfil_usuario extends AppCompatActivity {
         queue.add(postRequest3);
     }
 
+    // Dibuja las estrellas según la puntuación del usuario.
     private void dibujarEstrellas(double rating) {
         if (rating == 0) {}
         else if (rating >=1 && rating < 1.5) {
@@ -293,6 +301,7 @@ public class perfil_usuario extends AppCompatActivity {
         }
     }
 
+    // Peitición al servidor para obtener las opiniones de los usuarios o las hechas.
     void getOpinions (final boolean myOpinions) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String urlPetition;
@@ -343,6 +352,7 @@ public class perfil_usuario extends AppCompatActivity {
         queue.add(postRequest);
     }
 
+    // Llama a la actividad de editar perfil, pasando por intent todos los parámetros del perfil.
     public void editarPerfil(View view) {
         Intent intent = new Intent(perfil_usuario.this, editar_perfil.class);
         intent.putExtra("user_fullname", user_fullname.getText());
@@ -353,6 +363,7 @@ public class perfil_usuario extends AppCompatActivity {
         finish();
     }
 
+    // Carga las valoraciones de los usuarios en el perfil.
     public void mostrarValoracionesUsuarios(View view) {
         verValoracionesUsuarios.setEnabled(false);
         verMisValoraciones.setEnabled(false);
@@ -361,6 +372,7 @@ public class perfil_usuario extends AppCompatActivity {
         getOpinions(false);
     }
 
+    // Carga las valoraciones hechas por el usuario del perfil.
     public void mostrarMisValoraciones(View view) {
         verValoracionesUsuarios.setEnabled(false);
         verMisValoraciones.setEnabled(false);
@@ -369,6 +381,7 @@ public class perfil_usuario extends AppCompatActivity {
         getOpinions(true);
     }
 
+    // Llama a la actividad de chat con el usuario del perfil.
     public void iniciarChat(View view) {
         chat.setEnabled(false);
         Intent intent = new Intent(perfil_usuario.this, Chat.class);
@@ -378,6 +391,7 @@ public class perfil_usuario extends AppCompatActivity {
         finish();
     }
 
+    // Llama a la actividad de valorar (modo report) al usuario del perfil.
     public void reportar(View view) {
         Intent intent = new Intent(perfil_usuario.this, ValorarUusuario.class);
         intent.putExtra("username", currentUser);
@@ -385,6 +399,7 @@ public class perfil_usuario extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Convierte un string en base64 a una imágen.
     public Bitmap StringToBitMap(String encodedString) {
         try {
             byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
@@ -396,6 +411,7 @@ public class perfil_usuario extends AppCompatActivity {
         }
     }
 
+    // Recupera un string en base64 mediante una petición al servidor.
     private void bajarFotoUsuario(String id) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String urlPetition = urlLoadArchivoTemp + "?id=" + id;
