@@ -256,6 +256,7 @@ public class PantallaPrincipal extends AppCompatActivity
         });
     }
 
+    // Recupera la información del usuario un y la guarda en sharedpreferences
     private void recuperarUsuario() {
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -430,6 +431,7 @@ public class PantallaPrincipal extends AppCompatActivity
         queue.add(postRequest);
     }
 
+    // Descarga las imagenes principales de los productos de la lista
     private void descargarImagenesPrincipales() {
         String imagen;
         for (int i=0; i<productos.getTamanyo(); i++) {
@@ -441,6 +443,7 @@ public class PantallaPrincipal extends AppCompatActivity
         }
     }
 
+    // Descarga la imagen idImagen y la establece como principal del producto con posición numProducto
     private void descargarImagenPrincipal(final String idImagen, final int numProducto) {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String urlPetition = Common.url + "/loadArchivoTemp?id=" + idImagen;

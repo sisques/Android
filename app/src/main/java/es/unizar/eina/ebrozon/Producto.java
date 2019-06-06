@@ -346,6 +346,7 @@ public class Producto extends AppCompatActivity {
         finish();
     }
 
+    // Si el producto lo está siguiendo el usuario: siguiendo = true; en otro caso: siguiendo = false
     private void comprobarSiguiendoProducto() {
         siguiendo = false;
         String url = Common.url + "/listarSeguimientosUsuario?un=" + un;
@@ -449,6 +450,7 @@ public class Producto extends AppCompatActivity {
         queue.add(postRequest);
     }
 
+    // Manda el mensaje del usuario origen al usuario destino
     private void mensajeExterno(String mensaje, String origen, String destino) {
         String urlPetition = Common.url + "/mandarMensaje?em=" + origen + "&re=" + destino
                 + "&con=" + mensaje;
