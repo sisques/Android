@@ -22,6 +22,9 @@ import com.android.volley.toolbox.Volley;
 
 import es.unizar.eina.ebrozon.lib.Common;
 
+/**
+ * Clase que implementa la actividad para reestablecer la contraseña de una cuenta.
+ */
 public class aiMamaMeOlvideLaContra extends AppCompatActivity {
 
     private Button enviar;
@@ -56,6 +59,12 @@ public class aiMamaMeOlvideLaContra extends AppCompatActivity {
         }
     };
 
+    /**
+     * Función que realiza lo petición correspondiente para que el servidor reinicie la contraseña
+     * del usuario especificado en el cuadro de texto. Tras enviar ese mail, se notifica al usuario
+     * que debe mirar el correo electrónico proporcionado durante el registro para iniciar sesión
+     * @param view
+     */
     public void enviarMail(View view){
         RequestQueue queue = Volley.newRequestQueue(this);
         userName = uname.getText().toString().trim();
@@ -68,10 +77,11 @@ public class aiMamaMeOlvideLaContra extends AppCompatActivity {
                     public void onResponse(String response) {
                         // response
                         Log.d("Response", response);
-                        response = response.replace("{","").replace("}","").replace("\"","");
+                        response = response.replace("{","").replace("}",
+                                "").replace("\"","");
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado+":","");
-                        gestionLogin(estado, msg);
+                        gestionCntr(estado, msg);
                     }
                 },
                 new Response.ErrorListener()
@@ -80,17 +90,23 @@ public class aiMamaMeOlvideLaContra extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         Log.d("Error.Response", error.getMessage());
-                        String response = error.getMessage().replace("{","").replace("}","").replace("\"","");
+                        String response = error.getMessage().replace("{","")
+                                .replace("}","").replace("\"","");
                         String estado = response.split(":")[0];
                         String msg = response.replace(estado+":","");
-                        gestionLogin(estado, msg);
+                        gestionCntr(estado, msg);
                     }
                 }
         );
         queue.add(postRequest);
     }
 
-    private void gestionLogin (String  estado, String msg){
+    /**
+     *
+     * @param estado Respuesta del servidor.
+     * @param msg    Mensaje que se va a mostrar por pantalla.
+     */
+    private void gestionCntr (String  estado, String msg){
         if (estado.equals("O")){
             Toast.makeText(getApplicationContext(),"Correo enviado.", Toast.LENGTH_LONG).show();
             startActivity(new Intent(aiMamaMeOlvideLaContra.this, InicioSesion.class));

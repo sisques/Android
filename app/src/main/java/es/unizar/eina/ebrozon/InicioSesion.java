@@ -53,6 +53,10 @@ public class InicioSesion extends AppCompatActivity {
         password.addTextChangedListener(loginTextWatcher);
     }
 
+    /**
+     * Se encarga de comprobar si hay algo escrito en los campos nombre de usuario y contraseña, para
+     * desactivar el boton
+     */
     private TextWatcher loginTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -72,6 +76,12 @@ public class InicioSesion extends AppCompatActivity {
         }
     };
 
+    /**
+     * En caso de que el servidor responda "O", se añadirán los valores pertinentes a las
+     * sharedPreferences para que estos sean persistentes.
+     * @param estado respuesta del servidor
+     * @param msg mensaje a mostar
+     */
     private void gestionLogin (String  estado, String msg){
         if (estado.equals("O")){
             // Utilizando notación Documentacion/Peticiones back end.txt
@@ -118,6 +128,11 @@ public class InicioSesion extends AppCompatActivity {
         }
     }
 
+    /**
+     * @param un nombre de usuario
+     * @param pass contraseña del usuario
+     * @return devuelve la url a la que se enviara la petición http
+     */
     public String parseParams(String un, String pass){
         String aux = url;
         un = un.replace(" ","%20");
@@ -126,6 +141,14 @@ public class InicioSesion extends AppCompatActivity {
         return aux;
     }
 
+
+    /**
+     * Envia la petición de inicio de sesión, donde uName es el nombre de usuario con el que se
+     * iniciará la sesión y passwd la contraseña de este usuario. En caso de exito se invoca la función
+     * gestionLogin.
+     * @param uName
+     * @param passwd
+     */
     private void doPost(final String uName, final String passwd) {
 
     RequestQueue queue = Volley.newRequestQueue(this);
@@ -162,6 +185,10 @@ public class InicioSesion extends AppCompatActivity {
         queue.add(postRequest);
 }
 
+    /**
+     * Muestra la contraseña en caso de que el usuario pulse el boton indicado
+     * @param view
+     */
     public void mostrar(View view){
         if (mostrandoPasswd){
             password.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -174,7 +201,11 @@ public class InicioSesion extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Envia la petición de inicio de sesión al servidor en caso de que el usuario pulse el boton
+     * indicado
+     * @param view
+     */
     public void iniciarSesion(View view){
 
 
@@ -189,6 +220,10 @@ public class InicioSesion extends AppCompatActivity {
     }
 
 
+    /**
+     * Inicia la actividad de reseteo de contraseña en caso de que el usario pulse el boton indicado
+     * @param view
+     */
     public void aiMamaMeOlvideLaContra(View view){
         startActivity(new Intent(InicioSesion.this, aiMamaMeOlvideLaContra.class));
 

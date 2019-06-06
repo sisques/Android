@@ -49,6 +49,7 @@ public final class Common {
         }
     }
 
+    // Descarga la foto con identificador id del servidor y la establece en imagen
     public static void establecerFotoServidor(final Context context, final String id, final ImageView imagen) {
         RequestQueue queue = Volley.newRequestQueue(context);
         String urlPetition = Common.url + "/loadArchivoTemp?id=" + id;
@@ -77,6 +78,7 @@ public final class Common {
         queue.add(postRequest);
     }
 
+    // Descarga la foto del usuario un del servidor y la establece en imagen
     public static void establecerFotoUsuarioServidor(Context context, String un, final ImageView imagen) {
         RequestQueue queue = Volley.newRequestQueue(context);
         String urlPetition = Common.url + "/loadArchivoUsuario?un=" + un;

@@ -21,12 +21,15 @@ import static android.support.v4.content.ContextCompat.startActivity;
 
 public class AdaptadorOpinion extends BaseAdapter {
 
+    // Adaptador para mostrar una lista de opiniones en el perfil de usuario.
+
     private static LayoutInflater inflater = null;
 
-    private Context context;
-    private static JSONArray opinions = new JSONArray();
-    private boolean mine;
+    private Context context;    // Contexto del perfil de usuario.
+    private static JSONArray opinions = new JSONArray(); // Lista de opiniones del usuario.
+    private boolean mine;       // Si es true -> son opiniones hechas por el propio usuario que utiliza la aplicación.
 
+    // Constructor, se le pasa el contexto, la lista y si son suyas.
     public AdaptadorOpinion (Context context, JSONArray opinions, boolean mine) {
         this.context = context;
         this.opinions = opinions;
@@ -34,6 +37,7 @@ public class AdaptadorOpinion extends BaseAdapter {
         inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
 
+    // Asociar cada elemento de cada valoración.
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
         final View view = inflater.inflate(R.layout.content_opinion, null);
@@ -49,6 +53,8 @@ public class AdaptadorOpinion extends BaseAdapter {
         try {
             JSONObject opinion = opinions.getJSONObject(i);
             Integer rating;
+            // Si las valoraciones son hechas por otros usuarios, el usuario que se muestra es el
+            // autor, si no se muestra el receptor de la valoración del usuario.
             if (mine) {
                 author.setText(opinion.getString("receptor"));
             }
@@ -57,6 +63,7 @@ public class AdaptadorOpinion extends BaseAdapter {
             }
             content.setText(opinion.getString("contenido"));
             rating = opinion.getInt("estrellas");
+            // Dibujar las estrellas correspondientes la valoración.
             switch (rating) {
                 case 1:
                     star1.setImageResource(android.R.drawable.star_big_on);
@@ -92,6 +99,7 @@ public class AdaptadorOpinion extends BaseAdapter {
         author.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Va al perfil del usuario de la valoración al hacer click en su nombre.
                 Intent intent = new Intent(context, perfil_usuario.class);
                 intent.putExtra("username", author.getText());
                 context.startActivity(intent);

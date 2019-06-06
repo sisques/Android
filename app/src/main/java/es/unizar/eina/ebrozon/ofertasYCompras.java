@@ -1,41 +1,23 @@
 package es.unizar.eina.ebrozon;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.Switch;
-import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import es.unizar.eina.ebrozon.lib.Common;
 import es.unizar.eina.ebrozon.lib.adaptadorOfertasCompras;
 
-import static java.lang.Thread.sleep;
 
 public class ofertasYCompras extends AppCompatActivity {
     private ListView lista;
@@ -43,18 +25,12 @@ public class ofertasYCompras extends AppCompatActivity {
 
 
     private String un;
-    private String id;
-
-    private final String ofertas =  "/listarOfertasRecibidas";  //?un=  nombre usuario
-    private final String confirmarOferta =  "/aceptarOferta";  //?id=   id oferta
-    private final String cancelarOferta =  "/rechazarOferta";  //?id=   id oferta
-
-    private final String compras =  "/listarOfertasRecibidasAceptadasPendientes";   //?un=  nombre usuario
-    private final String confirmarPago= "/confirmarPagoVenta";  //?id=  id venta
-    private final String cancelarPago = "/cancelarPagoVenta";   //?id=  id venta
 
 
     private int ne;
+    /**
+     * String con datos que seran enviados al adaptador
+     */
     private String[][] datos = new String[50][9];
                                 //[x][0] = nombre prod
                                 //[x][1] = tipo
@@ -81,7 +57,7 @@ public class ofertasYCompras extends AppCompatActivity {
                  }
         });
 
-        lista = (ListView) findViewById(R.id.listaOfertasCompras);
+        lista = findViewById(R.id.listaOfertasCompras);
         SharedPreferences sharedpreferences = getSharedPreferences(Common.MyPreferences, Context.MODE_PRIVATE);
         un = sharedpreferences.getString(Common.un, null);
         ne = 0;
@@ -95,11 +71,12 @@ public class ofertasYCompras extends AppCompatActivity {
     }
 
 
-
-
-
-
+    /**
+     * Solicita al servidor todas las ofertas recibidas por el usuario un.
+     */
     private void obtenerOfertas() {
+        //?un=  nombre usuario
+        String ofertas = "/listarOfertasRecibidas";
         String urlPetition = Common.url + ofertas + "?un=" + un;
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -131,8 +108,12 @@ public class ofertasYCompras extends AppCompatActivity {
         );
         queue.add(postRequest);
     }
-
+    /**
+     * Solicita al servidor todas las compras recibidas por el usuario un.
+     */
     private void obtenerCompras() {
+        //?un=  nombre usuario
+        String compras = "/listarOfertasRecibidasAceptadasPendientes";
         String urlPetition = Common.url + compras + "?un=" + un;
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -164,6 +145,10 @@ public class ofertasYCompras extends AppCompatActivity {
         queue.add(postRequest);
     }
 
+    /**
+     * Añade las ofertas recibidas por el usuario a un vector de datos, que es el que se envia al
+     * adaptador de compras y ofertas.
+     */
     private void anyadirOfertas(JSONArray JSONelementos) {
         JSONObject JSONelemento;
 
@@ -201,6 +186,10 @@ public class ofertasYCompras extends AppCompatActivity {
         }
     }
 
+    /**
+     * Añade las compras recibidas por el usuario a un vector de datos, que es el que se envia al
+     * adaptador de compras y ofertas.
+     */
     private void anyadirCompras(JSONArray JSONelementos) {
         JSONObject JSONelemento;
         int neInit = ne;
